@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Champion Coach">
-  <title>Champion Coach v0.6.1</title>
+  <title>Champion Coach v0.6.2</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -15,7 +15,7 @@
   <header class="topbar">
     <div>
       <p class="eyebrow">Pokémon Champions 復帰支援</p>
-      <h1>Champion Coach <span class="version-badge" id="appVersionBadge">v0.6.1</span></h1>
+      <h1>Champion Coach <span class="version-badge" id="appVersionBadge">v0.6.2</span></h1>
     </div>
     <button id="openSettings" class="icon-btn" aria-label="設定">⚙</button>
   </header>
@@ -71,7 +71,7 @@
         <p class="muted">相手6体を入れるだけで、まず警戒する相手と展開を基本ガイドから整理します。自分の対策メモは必須ではありません。</p>
         <form id="assistForm" novalidate>
           <div class="two-col">
-            <label>形式<select id="assistFormat"><option value="double">ダブル</option><option value="single">シングル</option></select></label>
+            <label>形式<select id="assistFormat"><option value="single">シングル</option><option value="double">ダブル</option></select></label>
             <label>自分の構築<span class="hint">構築画面から自動取得</span><input id="assistOwnTeam" readonly placeholder="構築を登録してください"></label>
           </div>
           <div class="picker-field">
@@ -124,7 +124,7 @@
         <form id="matchForm" novalidate>
           <div class="two-col">
             <label>日付<input id="matchDate" type="date"></label>
-            <label>形式<select id="matchFormat"><option value="double">ダブル</option><option value="single">シングル</option></select></label>
+            <label>形式<select id="matchFormat"><option value="single">シングル</option><option value="double">ダブル</option></select></label>
           </div>
           <div class="picker-field">
             <div class="picker-field-head"><span>相手の6体</span><span id="logOpponentCount" class="hint">0/6</span></div>
@@ -193,7 +193,7 @@
           <p class="muted">名前やタイプを覚えていなくても大丈夫です。画像とタイプを見て1体選び、残りは役割の偏りが少なくなるよう仮組みできます。</p>
         </div>
         <form id="teamForm">
-          <div class="two-col"><label>構築名<input id="teamName" placeholder="例：復帰用バランス"></label><label>主に使う形式<select id="teamFormat"><option value="double">ダブル</option><option value="single">シングル</option></select></label></div>
+          <div class="two-col"><label>構築名<input id="teamName" placeholder="例：復帰用バランス"></label><label>主に使う形式<select id="teamFormat"><option value="single">シングル</option><option value="double">ダブル</option></select></label></div>
           <div class="picker-field">
             <div class="picker-field-head"><span>構築メンバー</span><span id="teamMemberCount" class="hint">0/6</span></div>
             <div id="teamMemberBuilder" class="team-slots"></div>
@@ -221,7 +221,7 @@
 
       <section id="teamTrainingPanel" class="panel training-panel">
         <div class="panel-head"><div><span class="section-kicker">STARTER BUILDS</span><h2>育成スターター</h2></div><span id="teamTrainingMeta" class="tag mid">M-C</span></div>
-        <p class="muted">ダブルの持ち物・技はReg M-Cの実戦データを優先します。シングルは信頼できる現行データがない場合、持ち物・性格・能力ポイントだけスターター案を出し、技は断定しません。能力ポイントは1能力最大32・合計66です。</p>
+        <p class="muted">シングルを主対象とし、現行Reg M-Cのシングル育成例があるポケモンは持ち物・技・性格・能力ポイントを優先表示します。データがないポケモンは一般的な役割からスターター案を出します。能力ポイントは1能力最大32・合計66です。</p>
         <div id="teamTrainingCards" class="training-grid"></div>
       </section>
 
@@ -265,6 +265,7 @@
 
   <script src="pokemon-data.js"></script>
   <script src="competitive-data.js"></script>
+  <script src="single-competitive-data.js"></script>
   <script src="core.js"></script>
   <script src="app.js"></script>
 </body>
