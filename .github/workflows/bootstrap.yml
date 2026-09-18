@@ -1,4 +1,4 @@
-name: Bootstrap Champion Coach repository
+name: Restore exact Champion Coach repository
 
 on:
   push:
@@ -20,57 +20,63 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Reassemble repository payload
+
+      - name: Verify and restore exact payload
         shell: bash
         run: |
           set -euo pipefail
-          cat             .bootstrap/payload.00 .bootstrap/payload.01 .bootstrap/payload.02 .bootstrap/payload.03             .bootstrap/tail.00 .bootstrap/tail.01 .bootstrap/tail.02 .bootstrap/tail.03 .bootstrap/tail.04             > /tmp/champion-coach.b64
-          base64 --decode /tmp/champion-coach.b64 > /tmp/champion-coach.xz
-          xz --test /tmp/champion-coach.xz
+          test -d .bootstrap2
+          count="$(find .bootstrap2 -maxdepth 1 -type f -name 'chunk.*' | wc -l | tr -d ' ')"
+          test "$count" = "23"
+
+          cat .bootstrap2/chunk.* > /tmp/champion-coach.b64
+          size="$(wc -c < /tmp/champion-coach.b64 | tr -d ' ')"
+          test "$size" = "88044"
+
+          base64 --decode /tmp/champion-coach.b64 > /tmp/champion-coach.tar.xz
+          echo "a5b57b560701be79bc0d57b986004e8c30704e79db7d74bf9174e538c40f71dc  /tmp/champion-coach.tar.xz" | sha256sum --check -
+          xz --test /tmp/champion-coach.tar.xz
+
+          rm -rf /tmp/champion-coach-restore
           mkdir -p /tmp/champion-coach-restore
-          xz --decompress --stdout /tmp/champion-coach.xz > /tmp/champion-coach.payload
-          if tar --list --file=/tmp/champion-coach.payload >/tmp/champion-coach-files.txt 2>/dev/null; then
-            tar --extract --file=/tmp/champion-coach.payload --directory=/tmp/champion-coach-restore
-          else
-            echo "Decoded payload is not a tar archive."
-            file /tmp/champion-coach.payload || true
-            exit 1
-          fi
-          echo "Archive entries:"
-          cat /tmp/champion-coach-files.txt
-          shopt -s dotglob nullglob
-          restored=(/tmp/champion-coach-restore/*)
-          if [ ${#restored[@]} -eq 1 ] && [ -d "${restored[0]}" ]; then
-            cp -a "${restored[0]}/." .
-          else
-            cp -a /tmp/champion-coach-restore/. .
-          fi
-          test -f core.js
-          test -f app.js
-          test -f styles.css
-          test -f pokemon-data.js
-          test -f competitive-data.js
-          test -f tests/core.test.js
-      - name: Remove bootstrap transport
-        run: |
-          rm -rf .bootstrap
+          tar -xJf /tmp/champion-coach.tar.xz -C /tmp/champion-coach-restore
+
+          test -f /tmp/champion-coach-restore/core.js
+          test -f /tmp/champion-coach-restore/app.js
+          test -f /tmp/champion-coach-restore/styles.css
+          test -f /tmp/champion-coach-restore/pokemon-data.js
+          test -f /tmp/champion-coach-restore/competitive-data.js
+          test -f /tmp/champion-coach-restore/tests/core.test.js
+
+          cp -a /tmp/champion-coach-restore/. .
+
+          rm -rf .bootstrap .bootstrap2
           rm -f .github/workflows/bootstrap.yml
-      - name: Pre-commit syntax checks
+
+      - name: Install static-check dependency
+        run: python -m pip install beautifulsoup4
+
+      - name: Verify restored application
+        shell: bash
         run: |
+          set -euo pipefail
           node --check pokemon-data.js
           node --check competitive-data.js
           node --check core.js
           node --check app.js
-      - name: Commit restored application
+          node --check sw.js
+          node --test tests/core.test.js
+          node tests/runtime_smoke.js
+          python tests/static_check.py
+
+      - name: Commit exact repository state
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          if git diff --cached --quiet; then
-            echo "No restored changes to commit."
-            exit 0
-          fi
-          git commit -m "Restore Champion Coach v0.6.1 application"
+          git diff --cached --stat
+          test -n "$(git diff --cached --name-only)"
+          git commit -m "Restore exact Champion Coach v0.6.1 repository"
           git push origin HEAD:main
