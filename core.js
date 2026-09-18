@@ -990,7 +990,19 @@
     if(!meta || typeof meta!=='object') return null;
     const moves=(meta.moves||[]).map(x=>typeof x==='string'?{name:x,usage:null}:x).filter(x=>x&&x.name).slice(0,6);
     const items=(meta.items||[]).map(x=>typeof x==='string'?{name:x,usage:null}:x).filter(x=>x&&x.name).slice(0,6);
-    return {usage:Number(meta.usage)||0,moves,items,updatedAt:meta.updatedAt||''};
+    const rawPoints=meta.statPoints&&typeof meta.statPoints==='object'?meta.statPoints:null;
+    const statPoints=rawPoints?Object.fromEntries(STAT_POINT_KEYS.map(k=>[k,Math.max(0,Math.min(32,Number(rawPoints[k])||0))])):null;
+    const statPointTotal=statPoints?Object.values(statPoints).reduce((a,b)=>a+b,0):0;
+    return {
+      usage:Number(meta.usage)||0,
+      moves,
+      items,
+      updatedAt:meta.updatedAt||'',
+      nature:STARTER_NATURES.includes(meta.nature)?meta.nature:'',
+      statPoints:statPointTotal===66?statPoints:null,
+      statExplanation:typeof meta.statExplanation==='string'?meta.statExplanation:'',
+      source:typeof meta.source==='string'?meta.source:''
+    };
   }
 
   function starterItemCandidates(pokemon, format, meta) {
@@ -1009,8 +1021,24 @@
     if(!p) return null;
     const entry=normalizeMetaEntry(meta), spread=statPointSpread(p,format), items=starterItemCandidates(p,format,entry);
     const moves=entry?entry.moves.slice(0,4):[];
-    const dataStrength=entry&&entry.moves.length>=3&&entry.items.length? (entry.usage>=1?'実戦データあり':'少数実戦データ') : '実戦データ不足';
-    return {pokemon:p.name,id:p.id,nature:spread.nature,statPoints:spread.points,statPointTotal:spread.total,statExplanation:spread.explanation,item:items[0]||'',itemAlternatives:items.slice(1,4),moves,usage:entry?.usage||0,dataStrength,source:entry?'Reg M-C実戦データ＋スターター配分':'スターター配分'};
+    const points=entry?.statPoints||spread.points;
+    const nature=entry?.nature||spread.nature;
+    const statExplanation=entry?.statExplanation||spread.explanation;
+    const dataStrength=entry&&entry.moves.length>=3&&entry.items.length
+      ? (format==='single'?'現行シングル育成例':'実戦データあり')
+      : '実戦データ不足';
+    return {
+      pokemon:p.name,id:p.id,nature,
+      statPoints:points,
+      statPointTotal:Object.values(points).reduce((a,b)=>a+b,0),
+      statExplanation,
+      item:items[0]||'',
+      itemAlternatives:items.slice(1,4),
+      moves,
+      usage:entry?.usage||0,
+      dataStrength,
+      source:entry?.source||(entry?'Reg M-C実戦データ＋スターター配分':'スターター配分')
+    };
   }
 
   function buildTeamStarterSets(team, format, metaById, explicitCatalog) {
