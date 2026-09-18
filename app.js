@@ -7,6 +7,8 @@
   let lastAssist = null;
   let competitiveMeta = {};
   let competitiveMetaUpdatedAt = '';
+  let singleCompetitiveMeta = {};
+  let singleCompetitiveMetaUpdatedAt = '2026-09-18';
   const META_CACHE_KEY = 'championCoach.regmcMeta.v1';
   let teamDraft = [...(state.team.members || [])];
   let favoriteDraft = state.team.favorite || teamDraft[0] || '';
@@ -17,7 +19,7 @@
   let replacementTarget = '';
 
   function defaultState() {
-    return { version: 6, rank: '', team: { name: '', format: 'double', members: [], favorite: '', plan: '', weak: '' }, inventory: { unowned: [] }, matches: [], metaNotes: [] };
+    return { version: 6, rank: '', team: { name: '', format: 'single', members: [], favorite: '', plan: '', weak: '' }, inventory: { unowned: [] }, matches: [], metaNotes: [] };
   }
 
   function loadState() {
@@ -83,6 +85,9 @@
     const fallback=window.PC_COMPETITIVE_FALLBACK || {}; const out={};
     Object.entries(fallback).forEach(([en,meta])=>{const mon=resolveMon(en);if(mon)out[mon.id]=meta;});
     competitiveMeta=out; competitiveMetaUpdatedAt='2026-09-17';
+    const singleFallback=window.PC_SINGLE_COMPETITIVE_FALLBACK || {}; const singleOut={};
+    Object.entries(singleFallback).forEach(([en,meta])=>{const mon=resolveMon(en);if(mon)singleOut[mon.id]=meta;});
+    singleCompetitiveMeta=singleOut;
     try { const cached=JSON.parse(localStorage.getItem(META_CACHE_KEY)||'null'); if(cached&&cached.data&&typeof cached.data==='object'){competitiveMeta={...competitiveMeta,...cached.data};competitiveMetaUpdatedAt=cached.updatedAt||competitiveMetaUpdatedAt;} } catch(_) {}
   }
   function parseNameCsv(csv) {
@@ -242,7 +247,7 @@
     const rawFavorite=typeof team.favorite === 'string' ? C.findCatalogPokemon(team.favorite,catalog)?.name : '';
     clean.team = {
       name: typeof team.name === 'string' ? team.name.slice(0, 120) : '',
-      format: team.format === 'single' ? 'single' : 'double',
+      format: team.format === 'double' ? 'double' : 'single',
       members: normalizedTeam,
       favorite: rawFavorite && normalizedTeam.includes(rawFavorite) ? rawFavorite : (normalizedTeam[0] || ''),
       plan: typeof team.plan === 'string' ? team.plan.slice(0, 3000) : '',
@@ -325,7 +330,7 @@
   }
 
   function teamPlanForFormat(format) {
-    return (state.team.format || 'double') === (format === 'single' ? 'single' : 'double') ? state.team.plan : '';
+    return (state.team.format || 'single') === (format === 'single' ? 'single' : 'double') ? state.team.plan : '';
   }
 
   function renderHomeFoundation(foundation) {
@@ -409,9 +414,10 @@
 
   function renderTeamBuilds() {
     const box=el('teamTrainingCards'); if(!box) return; box.replaceChildren();
-    text(el('teamTrainingMeta'),state.team.format==='double'?(competitiveMetaUpdatedAt?`M-C ダブル ${competitiveMetaUpdatedAt}`:'M-C ダブル 内蔵'):'シングル スターター');
+    text(el('teamTrainingMeta'),state.team.format==='single'?(singleCompetitiveMetaUpdatedAt?`M-C シングル ${singleCompetitiveMetaUpdatedAt}`:'M-C シングル 内蔵'):(competitiveMetaUpdatedAt?`M-C ダブル ${competitiveMetaUpdatedAt}`:'M-C ダブル 内蔵'));
     if(!(state.team.members||[]).length){box.append(make('div','empty','構築を保存すると、6体それぞれのスターター型を表示します。'));return;}
-    const sets=C.buildTeamStarterSets(state.team.members,state.team.format,state.team.format==='double'?competitiveMeta:{},catalog);
+    const metaMap=state.team.format==='single'?singleCompetitiveMeta:competitiveMeta;
+    const sets=C.buildTeamStarterSets(state.team.members,state.team.format,metaMap,catalog);
     sets.forEach(set=>{
       const mon=resolveMon(set.pokemon); const card=make('article','training-card');
       const head=make('div','training-head'),title=make('div','training-title');title.append(monImage(mon,'slot-img'));const titleText=make('div');titleText.append(make('strong','',set.pokemon),make('div','small muted',`${formatTypes(mon)} ・ ${set.dataStrength}`));title.append(titleText);head.append(title);
@@ -428,7 +434,7 @@
 
   function renderSavedTeamAnalysis() {
     el('assistOwnTeam').value = (state.team.members || []).join(' / ');
-    if (!lastAssist) el('assistFormat').value = state.team.format || 'double';
+    if (!lastAssist) el('assistFormat').value = state.team.format || 'single';
     const foundation=C.buildTeamFoundation(state.team.members,state.team.format,state.team.plan);
     const badge=foundationBadge(foundation); const foundationBadgeNode=el('teamFoundationBadge');
     foundationBadgeNode.className=`tag ${badge.cls}`; text(foundationBadgeNode,badge.text);
@@ -448,7 +454,7 @@
   function renderTeam() {
     teamDraft=[...(state.team.members || [])]; favoriteDraft=state.team.favorite || teamDraft[0] || '';
     el('teamName').value = state.team.name || '';
-    el('teamFormat').value = state.team.format || 'double';
+    el('teamFormat').value = state.team.format || 'single';
     syncShadow('teamMembers',teamDraft);
     renderTeamDraft();
     el('teamPlan').value = state.team.plan || '';
@@ -766,9 +772,9 @@
   el('loadDemo').addEventListener('click', () => {
     if(state.matches.length && !confirm('現在のデータにサンプル3試合を追加します。よろしいですか？')) return;
     const samples=[
-      {id:`demo-${Date.now()}-1`,date:'2026-09-17',format:'double',opponentTeam:['ボーマンダ','ゴリランダー','ガオガエン','サーフゴー','メタグロス','パーモット'],selectedTeam:['ガオガエン','サーフゴー','カイリュー','パーモット'],result:'loss',cause:'selection',selectionReason:'メガボーマンダへの回答を曖昧なまま選出',keyTurn:'選出時点でメガボーマンダへの回答が薄かった',confidence:2,planOutcome:'broken',learning:'最大打点を受ける役を先に決める'},
-      {id:`demo-${Date.now()}-2`,date:'2026-09-16',format:'double',opponentTeam:['ボーマンダ','ゴリランダー','ガオガエン','イエッサン♀','ブリムオン','セグレイブ'],selectedTeam:['ガオガエン','サーフゴー','ブリムオン','カイリュー'],result:'loss',cause:'knowledge',selectionReason:'技範囲の確認なしで通常選出',keyTurn:'相手の技範囲を把握していなかった',confidence:1,planOutcome:'broken',learning:'メガボーマンダの警戒技を登録'},
-      {id:`demo-${Date.now()}-3`,date:'2026-09-15',format:'double',opponentTeam:['ガブリアス','ゴリランダー','サーフゴー','ガオガエン','カイリュー','ブリムオン'],selectedTeam:['サーフゴー','カイリュー','ガオガエン','ブリムオン'],result:'win',cause:'unknown',selectionReason:'終盤にカイリューを通す',keyTurn:'終盤の詰めを先に決められた',confidence:4,planOutcome:'held',learning:'勝ち筋を先に決めると選択が減る'}
+      {id:`demo-${Date.now()}-1`,date:'2026-09-18',format:'single',opponentTeam:['ボーマンダ','ガブリアス','アシレーヌ','グソクムシャ','カバルドン','サーフゴー'],selectedTeam:['ガブリアス','アシレーヌ','サーフゴー'],result:'loss',cause:'selection',selectionReason:'カバルドン展開への回答を曖昧なまま選出',keyTurn:'ステルスロック＋あくびへの処理順が決まっていなかった',confidence:2,planOutcome:'broken',learning:'選出時に起点作成役への回答を1つ決める'},
+      {id:`demo-${Date.now()}-2`,date:'2026-09-17',format:'single',opponentTeam:['ボーマンダ','ガブリアス','マスカーニャ','ミミッキュ','アシレーヌ','カバルドン'],selectedTeam:['ガブリアス','アシレーヌ','カイリュー'],result:'loss',cause:'knowledge',selectionReason:'相手の先発候補を絞らず選出',keyTurn:'タスキ・積み・あくびの複数展開を同時に受けた',confidence:2,planOutcome:'partial',learning:'先発候補を2体まで絞ってから3体を選ぶ'},
+      {id:`demo-${Date.now()}-3`,date:'2026-09-16',format:'single',opponentTeam:['ガブリアス','アシレーヌ','サーフゴー','カイリュー','キラフロル','ミミッキュ'],selectedTeam:['ガブリアス','サーフゴー','カイリュー'],result:'win',cause:'unknown',selectionReason:'終盤にカイリューを残す3体選出',keyTurn:'先発で削って終盤の詰め役を温存できた',confidence:4,planOutcome:'held',learning:'3体の役割を先発・中継ぎ・詰めで分ける'}
     ];
     state.matches.push(...samples); saveState(); renderAll(); el('settingsDialog').close();
   });
