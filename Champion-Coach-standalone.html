@@ -1,0 +1,2577 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Champion Coach">
+  <title>Champion Coach v0.6.1</title>
+  <style>
+:root{
+  --bg:#f3f5f8;--surface:#fff;--ink:#131820;--muted:#697386;--line:#e5e9f0;
+  --accent:#2b59ff;--accent-soft:#edf1ff;--good:#17784b;--good-soft:#eaf7f0;
+  --warn:#a66000;--warn-soft:#fff4df;--bad:#b13636;--bad-soft:#fff0f0;--dark:#111827;
+  --shadow:0 12px 34px rgba(17,24,39,.08);--radius:20px;
+}
+*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI",sans-serif;background:var(--bg);color:var(--ink);padding-bottom:92px}button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:calc(14px + env(safe-area-inset-top)) 18px 14px;background:rgba(243,245,248,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(229,233,240,.8)}h1{font-size:21px;line-height:1.1;margin:2px 0 0}.eyebrow,.section-kicker{margin:0;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.13em}.icon-btn{width:40px;height:40px;border:0;border-radius:14px;background:var(--surface);box-shadow:0 4px 14px rgba(17,24,39,.06);font-size:18px}.screen{display:none;max-width:760px;margin:0 auto;padding:16px}.screen.active{display:block}.regulation-card{background:linear-gradient(145deg,#111827,#263554);border-radius:26px;padding:22px;color:white;box-shadow:var(--shadow)}.regulation-card h2{font-size:23px;line-height:1.35;margin:14px 0 8px}.regulation-card p{color:#d4d9e3;font-size:13px;line-height:1.65;margin:0}.hero-tags{display:flex;flex-wrap:wrap;gap:7px}.pill{display:inline-block;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);padding:6px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.08em}.pill.subtle{background:rgba(255,255,255,.06);color:#d8deea}.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}.stat{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:15px}.stat span,.stat small{display:block;color:var(--muted);font-size:11px}.stat strong{font-size:25px;display:inline-block;margin:4px 3px 2px 0}.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:17px;margin:12px 0;box-shadow:0 5px 18px rgba(17,24,39,.035)}.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:13px}.panel h2{font-size:18px;margin:4px 0 0}.text-btn,.ghost-btn{border:0;background:transparent;color:var(--accent);font-weight:700;font-size:12px}.stack{display:grid;gap:10px}.stack.compact{gap:8px}.task-card,.history-card,.meta-card{border:1px solid var(--line);border-radius:15px;padding:13px;background:#fbfcfe}.task-card.high{border-color:#ffd4d4;background:#fffafa}.task-card.medium{border-color:#ffe2a9;background:#fffdf8}.task-card h3,.history-card h3,.meta-card h3{font-size:14px;margin:0 0 5px}.task-card p,.history-card p,.meta-card p{font-size:12px;line-height:1.55;color:var(--muted);margin:0}.muted{color:var(--muted);font-size:12px;line-height:1.6}.form-panel label,fieldset{display:block;margin:13px 0;color:#3b4350;font-weight:700;font-size:12px}.form-panel input,.form-panel textarea,.form-panel select,dialog input{width:100%;border:1px solid #dbe0e8;border-radius:13px;padding:12px;background:#fff;color:var(--ink);outline:none;margin-top:6px}.form-panel input:focus,.form-panel textarea:focus,.form-panel select:focus,dialog input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(43,89,255,.1)}textarea{resize:vertical}.hint{color:var(--muted);font-weight:500}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}fieldset{border:0;padding:0}.segmented{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}.segmented label{margin:0}.segmented input{display:none}.segmented span{display:block;text-align:center;border:1px solid #dbe0e8;border-radius:12px;padding:11px;background:#fff}.segmented input:checked+span{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}.range-value{display:inline-block;margin-left:8px;background:var(--accent-soft);color:var(--accent);border-radius:999px;min-width:26px;text-align:center;padding:3px 6px}.primary-btn,.secondary-btn,.danger-btn,.file-btn{width:100%;border:0;border-radius:14px;padding:13px 14px;font-weight:800;text-align:center;display:block}.primary-btn{background:var(--dark);color:white}.secondary-btn{background:var(--accent-soft);color:var(--accent)}.danger-btn{background:var(--bad-soft);color:var(--bad)}.file-btn{background:#f4f6f9;color:#374151}.file-btn input{display:none}.analysis-panel{border-color:#cfd8ff;background:linear-gradient(180deg,#fff,#f8f9ff)}.check-list{display:grid;gap:7px;margin:12px 0}.check-item{font-size:12px;padding:9px 11px;background:#fff;border:1px solid var(--line);border-radius:11px}.next-action{background:var(--dark);color:white;border-radius:14px;padding:13px}.next-action span{display:block;color:#b8c0cd;font-size:10px;margin-bottom:4px}.next-action strong{font-size:13px;line-height:1.5}.error-box{background:var(--bad-soft);color:var(--bad);padding:11px;border-radius:12px;font-size:12px;margin:10px 0}.threat-list{display:grid;gap:9px}.threat-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;border-bottom:1px solid var(--line);padding:9px 0}.threat-row:last-child{border-bottom:0}.threat-name{font-size:13px;font-weight:800}.threat-meta{font-size:10px;color:var(--muted);margin-top:3px}.score{min-width:55px;text-align:right}.score strong{display:block;font-size:16px}.meter{height:5px;background:#edf0f4;border-radius:999px;margin-top:6px;overflow:hidden}.meter>span{display:block;height:100%;background:var(--dark);border-radius:999px}.tag{display:inline-block;font-size:9px;font-weight:800;padding:4px 7px;border-radius:999px;background:#eef1f5;margin-right:5px}.tag.high{background:var(--bad-soft);color:var(--bad)}.tag.mid{background:var(--warn-soft);color:var(--warn)}.tag.low{background:var(--good-soft);color:var(--good)}.history-top{display:flex;justify-content:space-between;gap:8px;align-items:center}.result{font-size:10px;font-weight:800;border-radius:999px;padding:4px 7px}.result.win{background:var(--good-soft);color:var(--good)}.result.loss{background:var(--bad-soft);color:var(--bad)}.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(4,1fr);padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-top:1px solid var(--line)}.bottom-nav button{border:0;background:transparent;color:#7c8595;font-size:10px;font-weight:700;padding:6px}.bottom-nav button span{display:block;font-size:20px;line-height:1.2;margin-bottom:2px}.bottom-nav button.active{color:var(--accent)}dialog{width:min(92vw,520px);border:0;border-radius:22px;padding:0;box-shadow:0 24px 70px rgba(17,24,39,.28)}dialog::backdrop{background:rgba(17,24,39,.45);backdrop-filter:blur(3px)}.dialog-card{padding:18px}.dialog-card>*{margin-top:10px}.small{font-size:10px}.empty{padding:18px;text-align:center;color:var(--muted);font-size:12px;border:1px dashed #d5dbe4;border-radius:14px}@media(min-width:620px){.stats-grid{grid-template-columns:repeat(4,1fr)}.screen{padding:24px}.topbar{padding-left:max(24px,calc((100vw - 760px)/2));padding-right:max(24px,calc((100vw - 760px)/2))}}@media(max-width:420px){.two-col{grid-template-columns:1fr}.regulation-card h2{font-size:20px}}
+.selection-picks{margin:8px 0 12px}.assist-label{font-size:10px;color:var(--muted);font-weight:800;letter-spacing:.08em;margin-bottom:7px}.pick-chips{display:flex;flex-wrap:wrap;gap:7px}.pick-chip{display:inline-flex;align-items:center;min-height:34px;padding:7px 10px;border-radius:12px;background:#fff;border:1px solid #dbe0e8;font-size:12px;font-weight:800}.pick-chip.supported{border-color:#c8d2ff;background:var(--accent-soft);color:var(--accent)}.pick-chip.provisional{border-style:dashed;color:var(--muted)}.assist-actions{margin-top:12px}.assist-card,.candidate-card{border:1px solid var(--line);border-radius:15px;padding:13px;background:#fbfcfe}.assist-card h3,.candidate-card h3{font-size:14px;margin:0}.assist-card p,.candidate-card p{font-size:11px;line-height:1.55;color:var(--muted);margin:6px 0 0}.assist-card-top,.candidate-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.answer-line{color:var(--good)!important;font-weight:700}.candidate-head>div:first-child{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.candidate-score{text-align:right;min-width:54px}.candidate-score strong{display:block;font-size:18px}.candidate-score span{font-size:9px;color:var(--muted)}.mini-btn{margin-top:9px;border:0;background:var(--accent-soft);color:var(--accent);border-radius:10px;padding:7px 9px;font-size:10px;font-weight:800}.bottom-nav{grid-template-columns:repeat(5,1fr)}.bottom-nav button{padding:6px 2px;font-size:9px}.bottom-nav button span{font-size:18px}
+
+/* v0.3 beginner-guided pre-battle flow */
+.quick-start .primary-btn{margin-top:12px}.beginner-panel{border-color:#bdd7c8;background:linear-gradient(180deg,#fff,#f7fcf9)}
+.focus-card{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff}.focus-card.known{border-left:4px solid #2f7d57}.focus-card.unknown{border-left:4px solid #d7a13b}.focus-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:7px}.focus-head>div:first-child{display:flex;align-items:center;gap:8px;min-width:0}.focus-head h3{font-size:15px;margin:0}.focus-rank{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--dark);color:#fff;font-size:11px;font-weight:900;flex:0 0 auto}.focus-role{font-size:10px!important;font-weight:800;color:#596273!important;letter-spacing:.02em}.focus-card>p{font-size:12px;line-height:1.6;margin:5px 0;color:#3e4652}.focus-watch{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:11px;line-height:1.65}.personal-line{color:var(--accent)!important;font-weight:700}.guide-principles{display:grid;gap:8px;margin-top:13px}.principle-row{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start;padding:10px;border-radius:12px;background:#f7f8fb;border:1px solid var(--line)}.principle-row p{margin:0;font-size:11px;line-height:1.55;color:#4b5563}
+
+/* v0.4 cold-start foundation and progress */
+.foundation-panel{border-color:#cfd8ff;background:linear-gradient(180deg,#fff,#f8faff)}
+.foundation-plan{font-size:13px;line-height:1.7;font-weight:700;color:#303949;margin:8px 0 12px}
+.foundation-block{padding:12px 0;border-top:1px solid var(--line)}
+.foundation-block:first-of-type{border-top:0}
+.role-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 14px}
+.role-card{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff;min-width:0}
+.role-card strong{font-size:12px;overflow-wrap:anywhere}.role-card span{font-size:9px;line-height:1.45;color:var(--muted)}
+.role-card.unknown{border-style:dashed;background:#fafbfc}.role-card.unknown span{color:var(--warn)}
+.foundation-good,.foundation-gap{border-radius:12px;padding:10px 11px;font-size:11px;line-height:1.55}
+.foundation-good{background:var(--good-soft);color:#17663f;border:1px solid #cae7d7}.foundation-gap{background:var(--warn-soft);color:#76500e;border:1px solid #f0d6a6}
+.foundation-columns{align-items:start}.progress-panel{border-color:#d9dee8}
+.progress-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 12px}
+.progress-metric{border:1px solid var(--line);border-radius:13px;padding:10px;background:#fbfcfe}.progress-metric span,.progress-metric small{display:block;font-size:9px;color:var(--muted)}.progress-metric strong{display:block;font-size:18px;margin:3px 0}
+@media(max-width:420px){.role-grid{grid-template-columns:1fr}.progress-metrics{grid-template-columns:1fr 1fr}.progress-metric:last-child:nth-child(odd){grid-column:1/-1}}
+.foundation-pick-line{display:grid;grid-template-columns:64px 1fr;gap:8px;align-items:start;margin:7px 0}.foundation-pick-line .assist-label{margin:8px 0 0}
+@media(max-width:420px){.foundation-pick-line{grid-template-columns:1fr}.foundation-pick-line .assist-label{margin:0}}
+
+/* v0.5 visual Pokémon selector / favorite-first onboarding */
+.data-shadow{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;overflow:hidden!important;padding:0!important;margin:0!important;border:0!important}
+.picker-field{margin:14px 0}.picker-field-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-size:12px;font-weight:800;color:#3b4350;margin-bottom:8px}.button-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.button-row .primary-btn,.button-row .secondary-btn,.button-row .ghost-btn{width:auto;flex:1 1 150px}.favorite-start{padding:14px;border-radius:15px;background:var(--accent-soft);border:1px solid #cfd8ff;margin-bottom:12px}.favorite-start h3{margin:4px 0 5px;font-size:16px}.favorite-start p{margin:0}.team-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.compact-slots{grid-template-columns:repeat(3,minmax(0,1fr))}.team-slot{position:relative;min-height:94px;border:1px dashed #ccd3df;border-radius:14px;background:#fbfcfe;padding:8px;display:flex;align-items:center;gap:8px;overflow:hidden}.team-slot.filled{border-style:solid;background:#fff}.team-slot.anchor{border-color:#e2ae3b;background:#fffaf0;box-shadow:inset 0 0 0 1px #f4d68c}.slot-img,.pokemon-card-img{width:54px;height:54px;object-fit:contain;flex:0 0 auto;image-rendering:auto}.slot-text{min-width:0}.slot-name{font-size:11px;font-weight:800;line-height:1.35;overflow-wrap:anywhere}.slot-types{font-size:9px;color:var(--muted);margin-top:3px}.slot-anchor{font-size:8px;font-weight:900;color:#8a5c00;background:#fff0c4;padding:2px 5px;border-radius:999px;display:inline-block;margin-top:4px}.slot-actions{position:absolute;right:4px;top:4px;display:flex;gap:3px}.slot-action{border:0;width:24px;height:24px;border-radius:8px;background:rgba(243,245,248,.92);font-size:12px;padding:0}.slot-empty{display:grid;place-items:center;width:100%;height:100%;min-height:72px;color:#9aa3b2;font-size:11px;text-align:center}.type-pill{display:inline-block;border-radius:999px;padding:3px 6px;margin:2px 3px 0 0;background:#eef1f5;color:#45505f;font-size:8px;font-weight:800}.mega-badge{display:inline-block;border-radius:999px;padding:3px 6px;background:#f2eaff;color:#6841a6;font-size:8px;font-weight:900;margin-left:4px}.starter-advice{margin:10px 0;padding:11px 12px;border-radius:13px;background:var(--good-soft);border:1px solid #cae7d7;font-size:11px;line-height:1.55;color:#17663f}.partner-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.partner-card{border:1px solid var(--line);border-radius:13px;background:#fff;padding:9px;display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;text-align:left}.partner-card img{width:44px;height:44px;object-fit:contain}.partner-card strong{font-size:11px;display:block}.partner-card small{font-size:8px;color:var(--muted);line-height:1.35;display:block;margin-top:3px}.partner-card button{grid-column:1/-1;border:0;border-radius:9px;padding:7px;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:9px}.inline-picker{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}.inline-picker .mini-btn{height:44px;margin:6px 0 0;padding:0 13px}.own-pick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.own-pick-btn{border:1px solid var(--line);border-radius:12px;padding:8px 6px;background:#fff;font-size:10px;font-weight:800;min-height:42px}.own-pick-btn.selected{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.pokemon-picker-dialog{width:min(96vw,820px);max-width:820px;height:min(88vh,760px);max-height:88vh}.picker-dialog-card{height:100%;display:flex;flex-direction:column;padding:16px}.picker-toolbar{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:8px}.picker-toolbar input,.picker-toolbar select{width:100%;border:1px solid #dbe0e8;border-radius:12px;padding:10px;background:#fff}.picker-status{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:10px;margin:9px 0}.pokemon-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;overflow:auto;overscroll-behavior:contain;padding:2px 2px 80px}.pokemon-card{position:relative;border:1px solid var(--line);border-radius:14px;background:#fff;padding:9px;min-height:132px;text-align:left;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}.pokemon-card.selected{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:#f8f9ff}.pokemon-card.disabled{opacity:.45}.pokemon-card-img{width:66px;height:66px}.pokemon-card-name{font-size:10px;font-weight:900;line-height:1.3;text-align:center;overflow-wrap:anywhere}.pokemon-card-meta{font-size:8px;color:var(--muted);text-align:center;margin-top:3px}.pokemon-card-check{position:absolute;right:6px;top:6px;display:grid;place-items:center;width:21px;height:21px;border-radius:999px;background:var(--accent);color:#fff;font-size:10px;font-weight:900}.picker-dialog-actions{position:sticky;bottom:-1px;padding-top:9px;background:linear-gradient(transparent,#fff 18%)}.picker-dialog-actions .primary-btn{max-width:320px;margin:0 auto}.sprite-fallback{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:#f0f2f6;color:#8b94a3;font-size:18px;font-weight:900;flex:0 0 auto}
+@media(max-width:560px){.team-slots,.compact-slots{grid-template-columns:repeat(2,minmax(0,1fr))}.pokemon-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.picker-toolbar{grid-template-columns:1fr}.partner-grid{grid-template-columns:1fr}.own-pick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pokemon-card{min-height:126px}.pokemon-card-img{width:60px;height:60px}}
+
+/* v0.6 ownership + starter builds */
+.inventory-box{margin:14px 0;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--soft,#f7f8fa)}
+.inventory-chips{display:flex;gap:8px;flex-wrap:wrap}.inventory-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid var(--line);border-radius:999px;background:#fff}.inventory-chip button{border:0;background:transparent;font:inherit;cursor:pointer}
+.inventory-action{font-size:11px!important;width:auto!important;padding:0 5px!important}.unavailable-label{font-weight:700;color:#8a3d3d}.partner-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.training-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}.training-card{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff}.training-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.training-title{display:flex;gap:10px;align-items:center}.training-title img,.training-title .sprite-fallback{width:48px;height:48px}.training-section{margin-top:12px}.training-label{display:block;font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}.stat-point-list{display:flex;flex-wrap:wrap;gap:6px}.stat-point-chip{padding:5px 8px;border-radius:999px;background:var(--soft,#f3f5f7);font-size:12px;font-weight:700}.move-list{display:grid;gap:5px;margin:0;padding-left:18px}.training-note{font-size:12px;color:var(--muted);margin-top:6px}.training-card .item-main{font-weight:800}.training-card .item-alt{font-size:12px;color:var(--muted)}
+@media(max-width:520px){.training-grid{grid-template-columns:1fr}.training-card{padding:12px}}
+.replacement-banner{grid-column:1/-1;padding:9px 11px;border-radius:12px;background:var(--soft,#f4f6f8);font-size:12px;font-weight:700}.training-panel .muted{max-width:850px}
+
+.version-badge{display:inline-flex;align-items:center;vertical-align:middle;margin-left:.35rem;padding:.12rem .42rem;border-radius:999px;font-size:.62rem;font-weight:700;letter-spacing:.04em;background:#e5e7eb;color:#4b5563}
+
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Pokémon Champions 復帰支援</p>
+      <h1>Champion Coach <span class="version-badge" id="appVersionBadge">v0.6.1</span></h1>
+    </div>
+    <button id="openSettings" class="icon-btn" aria-label="設定">⚙</button>
+  </header>
+
+  <main>
+    <section id="screen-home" class="screen active" aria-labelledby="nav-home">
+      <div class="regulation-card">
+        <div>
+          <div class="hero-tags"><span class="pill">REGULATION M-C</span><span id="rankChip" class="pill subtle">RANK 未設定</span></div>
+          <h2>相手6体から「まず何を見るか」を整理する</h2>
+          <p>対策を自分で書けなくても開始できます。M-Cの基本対戦ガイドと自分の履歴を合わせて、試合前に見る順番を絞ります。</p>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat"><span>総対戦</span><strong id="statTotal">0</strong><small>試合</small></article>
+        <article class="stat"><span>勝率</span><strong id="statWinRate">—</strong><small>全期間</small></article>
+        <article class="stat"><span>直近10戦</span><strong id="statRecent">—</strong><small>勝率</small></article>
+        <article class="stat"><span>現在</span><strong id="statStreak">—</strong><small>連勝/連敗</small></article>
+      </div>
+
+      <section class="panel quick-start">
+        <div class="panel-head"><div><span class="section-kicker">QUICK START</span><h2>相手6体が分かったらここから</h2></div></div>
+        <p class="muted">「何を対策するか」を自分で決める必要はありません。相手6体を入れると、基本ガイドから優先して見る相手・展開・選出上の注意を整理します。</p>
+        <button id="quickStartButton" class="primary-btn" type="button" data-nav="assist">対戦準備を始める</button>
+      </section>
+
+      <section id="homeFoundationPanel" class="panel foundation-panel">
+        <div class="panel-head"><div><span class="section-kicker">STARTER FOUNDATION</span><h2>0戦から使う基本戦術</h2></div><span id="homeFoundationBadge" class="tag mid">未診断</span></div>
+        <p id="homeFoundationPlan" class="foundation-plan">構築6体を登録すると、役割から基本戦術の仮説を作ります。</p>
+        <div id="homeFoundationPicks" class="selection-picks"></div>
+        <div id="homeFoundationGaps" class="stack compact"></div>
+        <button class="secondary-btn" type="button" data-nav="team">構築と土台を確認</button>
+      </section>
+
+      <section class="panel progress-panel">
+        <div class="panel-head"><div><span class="section-kicker">PROGRESS</span><h2>今どの段階か</h2></div><span id="progressStage" class="tag mid">土台作り</span></div>
+        <p id="progressMessage" class="muted"></p>
+        <div id="progressMetrics" class="progress-metrics"></div>
+        <div class="next-action"><span>次に変えるのはここだけ</span><strong id="progressNext"></strong></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div><span class="section-kicker">PERSONAL META</span><h2>自分が当たっている環境</h2></div><button class="text-btn" data-nav="environment">詳しく見る</button></div>
+        <div id="homeThreats" class="stack compact"></div>
+      </section>
+    </section>
+
+
+    <section id="screen-assist" class="screen" aria-labelledby="nav-assist">
+      <section class="panel form-panel">
+        <div class="panel-head"><div><span class="section-kicker">TEAM PREVIEW</span><h2>かんたん対戦準備</h2></div></div>
+        <p class="muted">相手6体を入れるだけで、まず警戒する相手と展開を基本ガイドから整理します。自分の対策メモは必須ではありません。</p>
+        <form id="assistForm" novalidate>
+          <div class="two-col">
+            <label>形式<select id="assistFormat"><option value="double">ダブル</option><option value="single">シングル</option></select></label>
+            <label>自分の構築<span class="hint">構築画面から自動取得</span><input id="assistOwnTeam" readonly placeholder="構築を登録してください"></label>
+          </div>
+          <div class="picker-field">
+            <div class="picker-field-head"><span>相手の6体</span><span id="assistOpponentCount" class="hint">0/6</span></div>
+            <div id="assistOpponentBuilder" class="team-slots compact-slots"></div>
+            <div class="button-row"><button id="pickAssistOpponent" class="secondary-btn" type="button">一覧から選ぶ</button><button id="clearAssistOpponent" class="ghost-btn" type="button">クリア</button></div>
+            <textarea id="assistOpponentTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
+          </div>
+          <div id="assistErrors" class="error-box" hidden></div>
+          <button class="primary-btn" type="submit">今回の対戦を整理</button>
+        </form>
+      </section>
+
+      <section id="assistFocusPanel" class="panel beginner-panel" hidden>
+        <div class="panel-head"><div><span class="section-kicker">START HERE</span><h2>今回まず見ること</h2></div><span id="assistGuideCoverage" class="tag mid">基本ガイド確認中</span></div>
+        <p id="assistFocusSummary" class="muted"></p>
+        <div id="assistFocusList" class="stack"></div>
+        <div id="assistPrinciples" class="guide-principles"></div>
+        <p id="assistUnknowns" class="small muted"></p>
+      </section>
+
+      <section id="assistResult" class="panel analysis-panel" hidden>
+        <div class="panel-head"><div><span class="section-kicker">SELECTION</span><h2>選出候補</h2></div><span id="assistEvidence" class="tag mid">根拠集計中</span></div>
+        <div id="assistRecommended" class="selection-picks"></div>
+        <p id="assistSummary" class="muted"></p>
+        <div class="assist-actions">
+          <button id="copyAssistToLog" class="secondary-btn" type="button">この相手を対戦記録へコピー</button>
+        </div>
+      </section>
+
+      <section id="assistThreatPanel" class="panel" hidden>
+        <div class="panel-head"><div><span class="section-kicker">THREATS</span><h2>相手ごとの詳細</h2></div></div>
+        <div id="assistThreats" class="stack compact"></div>
+      </section>
+
+      <section id="assistCandidatesPanel" class="panel" hidden>
+        <div class="panel-head"><div><span class="section-kicker">EVIDENCE</span><h2>自分の6体との照合</h2></div></div>
+        <div id="assistCandidates" class="stack compact"></div>
+      </section>
+
+      <section id="assistFailuresPanel" class="panel" hidden>
+        <div class="panel-head"><div><span class="section-kicker">PAST MISTAKES</span><h2>似た相手への過去の敗戦</h2></div></div>
+        <div id="assistFailures" class="stack compact"></div>
+      </section>
+    </section>
+
+    <section id="screen-log" class="screen" aria-labelledby="nav-log">
+      <section class="panel form-panel">
+        <div class="panel-head"><div><span class="section-kicker">MATCH LOG</span><h2>対戦を記録</h2></div></div>
+        <form id="matchForm" novalidate>
+          <div class="two-col">
+            <label>日付<input id="matchDate" type="date"></label>
+            <label>形式<select id="matchFormat"><option value="double">ダブル</option><option value="single">シングル</option></select></label>
+          </div>
+          <div class="picker-field">
+            <div class="picker-field-head"><span>相手の6体</span><span id="logOpponentCount" class="hint">0/6</span></div>
+            <div id="logOpponentBuilder" class="team-slots compact-slots"></div>
+            <div class="button-row"><button id="pickLogOpponent" class="secondary-btn" type="button">一覧から選ぶ</button><button id="clearLogOpponent" class="ghost-btn" type="button">クリア</button></div>
+            <textarea id="opponentTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
+          </div>
+          <div class="picker-field">
+            <div class="picker-field-head"><span>自分の選出</span><span id="selectedTeamCount" class="hint">実際に出した3/4体</span></div>
+            <div id="selectedTeamPicker" class="own-pick-grid"></div>
+            <textarea id="selectedTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
+          </div>
+          <div class="two-col">
+            <fieldset><legend>結果</legend><div class="segmented"><label><input type="radio" name="result" value="win"><span>勝ち</span></label><label><input type="radio" name="result" value="loss"><span>負け</span></label></div></fieldset>
+            <label>敗因の仮分類<select id="cause"><option value="unknown">未分類</option><option value="selection">選出</option><option value="plan">ゲームプラン</option><option value="turn">ターン判断</option><option value="knowledge">知識不足</option><option value="execution">操作・時間</option><option value="luck">運要素</option></select></label>
+          </div>
+          <label>選出理由 / 事前ゲームプラン<textarea id="selectionReason" rows="2" placeholder="例：メガボーマンダを○○で抑え、終盤に△△を通す"></textarea></label>
+          <label>事前プランはどこまで機能した？ <span class="hint">任意。勝率以外の進捗を見るために使います</span><select id="planOutcome"><option value="unknown">未記録</option><option value="held">機能した</option><option value="partial">途中まで</option><option value="broken">早めに崩れた</option></select></label>
+          <label>重要だったターン/場面<textarea id="keyTurn" rows="2" placeholder="例：4T目、相手の守るを読んで集中した場面"></textarea></label>
+          <label>その時の判断確信度 <span class="hint">1=ほぼ分からなかった / 5=かなり自信あり</span><input id="confidence" type="range" min="1" max="5" value="3"><span id="confidenceValue" class="range-value">3</span></label>
+          <label>今回の学び<textarea id="learning" rows="2" placeholder="例：この並びには初手○○を固定しない"></textarea></label>
+          <div id="formErrors" class="error-box" hidden></div>
+          <button class="primary-btn" type="submit">記録して分析</button>
+        </form>
+      </section>
+
+      <section id="latestAnalysis" class="panel analysis-panel" hidden>
+        <div class="panel-head"><div><span class="section-kicker">COACH REVIEW</span><h2 id="analysisHeadline"></h2></div></div>
+        <p id="analysisSummary"></p>
+        <div id="analysisChecks" class="check-list"></div>
+        <div class="next-action"><span>次にやること</span><strong id="analysisNext"></strong></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div><span class="section-kicker">HISTORY</span><h2>最近の対戦</h2></div></div>
+        <div id="matchHistory" class="stack compact"></div>
+      </section>
+    </section>
+
+    <section id="screen-environment" class="screen" aria-labelledby="nav-environment">
+      <section class="panel">
+        <div class="panel-head"><div><span class="section-kicker">PERSONAL META</span><h2>対戦ログから見た要警戒</h2></div></div>
+        <p class="muted">これは全プレイヤーの使用率ではなく、あなた自身が遭遇した頻度・敗戦率・直近遭遇を合成した「個人環境」です。</p>
+        <div id="threatTable" class="threat-list"></div>
+      </section>
+
+      <section class="panel form-panel">
+        <div class="panel-head"><div><span class="section-kicker">KNOWLEDGE</span><h2>環境メモ</h2></div></div>
+        <form id="metaForm">
+          <div class="picker-field"><div class="picker-field-head"><span>ポケモン</span><span class="hint">名前が分からなくても一覧から選べます</span></div><div class="inline-picker"><input id="metaPokemon" placeholder="例：ボーマンダ"><button id="pickMetaPokemon" class="mini-btn" type="button">一覧</button></div></div>
+          <div class="two-col"><label>警戒度<select id="metaRisk"><option value="high">高</option><option value="mid">中</option><option value="low">低</option></select></label><label>分類<input id="metaRole" placeholder="例：物理エース"></label></div>
+          <label>警戒する技・持ち物<textarea id="metaWatch" rows="2" placeholder="分からない項目だけ残してもOK"></textarea></label>
+          <label>自分の構築での回答<textarea id="metaAnswer" rows="2" placeholder="誰で受ける / 何を通す / 初手で何をする"></textarea></label>
+          <button class="secondary-btn" type="submit">環境メモに追加</button>
+        </form>
+        <div id="metaNotes" class="stack"></div>
+      </section>
+    </section>
+
+    <section id="screen-team" class="screen" aria-labelledby="nav-team">
+      <section class="panel form-panel">
+        <div class="panel-head"><div><span class="section-kicker">MY TEAM</span><h2>自分の構築</h2></div></div>
+        <div class="favorite-start">
+          <span class="section-kicker">START WITH A FAVORITE</span>
+          <h3>まず好きな1体を選ぶ</h3>
+          <p class="muted">名前やタイプを覚えていなくても大丈夫です。画像とタイプを見て1体選び、残りは役割の偏りが少なくなるよう仮組みできます。</p>
+        </div>
+        <form id="teamForm">
+          <div class="two-col"><label>構築名<input id="teamName" placeholder="例：復帰用バランス"></label><label>主に使う形式<select id="teamFormat"><option value="double">ダブル</option><option value="single">シングル</option></select></label></div>
+          <div class="picker-field">
+            <div class="picker-field-head"><span>構築メンバー</span><span id="teamMemberCount" class="hint">0/6</span></div>
+            <div id="teamMemberBuilder" class="team-slots"></div>
+            <div class="button-row"><button id="pickTeamMember" class="secondary-btn" type="button">ポケモン一覧から選ぶ</button><button id="autoCompleteTeam" class="secondary-btn" type="button">残りをおまかせで仮組み</button><button id="clearTeamMembers" class="ghost-btn" type="button">全て外す</button></div>
+            <textarea id="teamMembers" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
+          </div>
+          <div id="teamStarterAdvice" class="starter-advice" hidden></div>
+          <div id="teamPartnerSuggestions" class="partner-grid"></div>
+          <div class="inventory-box"><div class="picker-field-head"><span>持っていないポケモン</span><span id="teamInventoryCount" class="hint">0体</span></div><p class="small muted">候補の「持っていない」を押すと、以後の仮組みから自動で除外します。所持したらここから戻せます。</p><div id="teamInventory" class="inventory-chips"></div></div>
+          <div id="teamErrors" class="error-box" hidden></div>
+          <label>基本の勝ち筋<textarea id="teamPlan" rows="3" placeholder="例：盤面を整えて終盤に○○を通す"></textarea></label>
+          <label>苦手な並び<textarea id="teamWeak" rows="3" placeholder="例：高速展開＋先制技"></textarea></label>
+          <button class="primary-btn" type="submit">構築を保存</button>
+        </form>
+      </section>
+
+      <section id="teamFoundationPanel" class="panel foundation-panel">
+        <div class="panel-head"><div><span class="section-kicker">STARTER FOUNDATION</span><h2>基本戦術の仮説</h2></div><span id="teamFoundationBadge" class="tag mid">未診断</span></div>
+        <p class="muted">個人ログ0件でも、登録した6体の一般的な役割から「最初に試す形」を作ります。技・持ち物が違う場合は手入力の基本勝ち筋を優先します。</p>
+        <div id="teamFoundationRoles" class="role-grid"></div>
+        <div class="foundation-block"><span class="assist-label">基本勝ち筋</span><p id="teamFoundationPlan" class="foundation-plan"></p><button id="adoptFoundationPlan" class="mini-btn" type="button">この仮説を基本勝ち筋に採用</button></div>
+        <div class="foundation-block"><span class="assist-label">基本選出のたたき台</span><div id="teamFoundationPicks" class="selection-picks"></div></div>
+        <div class="two-col foundation-columns"><div><span class="assist-label">確認できた強み</span><div id="teamFoundationStrengths" class="stack compact"></div></div><div><span class="assist-label">最初に確認する不足</span><div id="teamFoundationGaps" class="stack compact"></div></div></div>
+      </section>
+
+      <section id="teamTrainingPanel" class="panel training-panel">
+        <div class="panel-head"><div><span class="section-kicker">STARTER BUILDS</span><h2>育成スターター</h2></div><span id="teamTrainingMeta" class="tag mid">M-C</span></div>
+        <p class="muted">ダブルの持ち物・技はReg M-Cの実戦データを優先します。シングルは信頼できる現行データがない場合、持ち物・性格・能力ポイントだけスターター案を出し、技は断定しません。能力ポイントは1能力最大32・合計66です。</p>
+        <div id="teamTrainingCards" class="training-grid"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div><span class="section-kicker">SELECTION REVIEW</span><h2>選出実績</h2></div></div>
+        <div id="selectionStats" class="threat-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="メインナビゲーション">
+    <button id="nav-home" class="active" data-nav="home"><span>⌂</span>ホーム</button>
+    <button id="nav-assist" data-nav="assist"><span>⇄</span>対戦準備</button>
+    <button id="nav-log" data-nav="log"><span>＋</span>対戦記録</button>
+    <button id="nav-environment" data-nav="environment"><span>◎</span>環境</button>
+    <button id="nav-team" data-nav="team"><span>◇</span>構築</button>
+  </nav>
+
+  <dialog id="pokemonPickerDialog" class="pokemon-picker-dialog">
+    <div class="picker-dialog-card">
+      <div class="panel-head"><div><span class="section-kicker">POKÉMON SELECTOR</span><h2 id="pokemonPickerTitle">ポケモンを選ぶ</h2></div><button id="closePokemonPicker" class="icon-btn" type="button" aria-label="閉じる">×</button></div>
+      <p id="pokemonPickerHelp" class="small muted">画像・タイプを見ながら選べます。</p>
+      <div class="picker-toolbar"><input id="pokemonSearch" type="search" placeholder="名前が分かれば検索"><select id="pokemonTypeFilter"><option value="all">すべてのタイプ</option></select></div>
+      <div class="picker-status"><span id="pokemonPickerSelected">0/6 選択</span><span id="pokemonCatalogCount"></span></div>
+      <div id="pokemonCatalogGrid" class="pokemon-grid"></div>
+      <div class="picker-dialog-actions"><button id="pokemonPickerDone" class="primary-btn" type="button">選択を反映</button></div>
+    </div>
+  </dialog>
+
+  <dialog id="settingsDialog">
+    <form method="dialog" class="dialog-card">
+      <div class="panel-head"><div><span class="section-kicker">SETTINGS</span><h2>データ管理</h2></div><button class="icon-btn" value="cancel" aria-label="閉じる">×</button></div>
+      <label>現在ランク<input id="currentRank" placeholder="例：ハイパー2"></label>
+      <button id="exportData" class="secondary-btn" type="button">JSONバックアップを書き出す</button>
+      <label class="file-btn">JSONバックアップを読み込む<input id="importData" type="file" accept="application/json"></label>
+      <button id="loadDemo" class="ghost-btn" type="button">サンプルデータを入れる</button>
+      <button id="clearData" class="danger-btn" type="button">全データを削除</button>
+      <p class="small muted">対戦ログや構築などの個人データはこの端末のブラウザ内に保存されます。公開されているM-C環境データの取得だけ外部サイトへ通信します。</p>
+    </form>
+  </dialog>
+
+<script>
+(function(root){
+  'use strict';
+  const RAW=`venusaur|フシギバナ|Venusaur|3|くさ,どく|80,82,83,100,100,80|1
+charizard|リザードン|Charizard|6|ほのお,ひこう|78,84,78,109,85,100|2
+blastoise|カメックス|Blastoise|9|みず|79,83,100,85,105,78|1
+beedrill|スピアー|Beedrill|15|むし,どく|65,90,40,45,80,75|1
+pidgeot|ピジョット|Pidgeot|18|ノーマル,ひこう|83,80,75,70,70,101|1
+arbok|アーボック|Arbok|24|どく|60,95,69,65,79,80|0
+pikachu|ピカチュウ|Pikachu|25|でんき|35,55,40,50,50,90|0
+raichu|ライチュウ|Raichu|26|でんき|60,90,55,90,80,110|2
+raichualola|ライチュウ（アローラのすがた）|Raichu-Alola|26|でんき,エスパー|60,85,50,95,85,110|0
+clefable|ピクシー|Clefable|36|フェアリー|95,70,73,95,90,60|1
+ninetales|キュウコン|Ninetales|38|ほのお|73,76,75,81,100,100|0
+ninetalesalola|キュウコン（アローラのすがた）|Ninetales-Alola|38|こおり,フェアリー|73,67,75,81,100,109|0
+wigglytuff|プクリン|Wigglytuff|40|ノーマル,フェアリー|140,70,45,85,50,45|0
+vileplume|ラフレシア|Vileplume|45|くさ,どく|75,80,85,110,90,50|0
+persian|ペルシアン|Persian|53|ノーマル|65,70,60,65,65,115|0
+persianalola|ペルシアン（アローラのすがた）|Persian-Alola|53|あく|65,60,60,75,65,115|0
+perrserker|ニャイキング|Perrserker|863|はがね|70,110,100,50,60,50|0
+arcanine|ウインディ|Arcanine|59|ほのお|90,110,80,100,80,95|0
+arcaninehisui|ウインディ（ヒスイのすがた）|Arcanine-Hisui|59|ほのお,いわ|95,115,80,95,80,90|0
+politoed|ニョロトノ|Politoed|186|みず|90,75,75,90,100,70|0
+alakazam|フーディン|Alakazam|65|エスパー|55,50,45,135,95,120|1
+machamp|カイリキー|Machamp|68|かくとう|90,130,80,65,85,55|0
+victreebel|ウツボット|Victreebel|71|くさ,どく|80,105,65,100,70,70|1
+slowbro|ヤドラン|Slowbro|80|みず,エスパー|95,75,110,100,80,30|1
+slowbrogalar|ヤドラン（ガラルのすがた）|Slowbro-Galar|80|どく,エスパー|95,100,95,100,70,30|0
+slowking|ヤドキング|Slowking|199|みず,エスパー|95,75,80,100,110,30|0
+slowkinggalar|ヤドキング（ガラルのすがた）|Slowking-Galar|199|どく,エスパー|95,65,80,110,110,30|0
+farfetchd|カモネギ|Farfetch’d|83|ノーマル,ひこう|52,90,55,58,62,60|0
+sirfetchd|ネギガナイト|Sirfetch’d|865|かくとう|62,135,95,68,82,65|0
+gengar|ゲンガー|Gengar|94|ゴースト,どく|60,65,60,130,75,110|1
+steelix|ハガネール|Steelix|208|はがね,じめん|75,85,200,55,65,30|1
+rhyperior|ドサイドン|Rhyperior|464|じめん,いわ|115,140,130,55,55,40|0
+kangaskhan|ガルーラ|Kangaskhan|115|ノーマル|105,95,80,40,80,90|1
+starmie|スターミー|Starmie|121|みず,エスパー|60,75,85,100,85,115|1
+mrmime|バリヤード|Mr. Mime|122|エスパー,フェアリー|40,45,65,100,120,90|0
+mrrime|バリコオル|Mr. Rime|866|こおり,エスパー|80,85,75,110,100,70|0
+scizor|ハッサム|Scizor|212|むし,はがね|70,130,100,55,80,65|1
+kleavor|バサギリ|Kleavor|900|むし,いわ|70,135,95,45,70,85|0
+pinsir|カイロス|Pinsir|127|むし|65,125,100,55,70,85|1
+tauros|ケンタロス|Tauros|128|ノーマル|75,100,95,40,70,110|0
+taurospaldeacombat|ケンタロス（パルデア・コンバット種）|Tauros-Paldea-Combat|128|かくとう|75,110,105,30,70,100|0
+taurospaldeablaze|ケンタロス（パルデア・ブレイズ種）|Tauros-Paldea-Blaze|128|かくとう,ほのお|75,110,105,30,70,100|0
+taurospaldeaaqua|ケンタロス（パルデア・ウォーター種）|Tauros-Paldea-Aqua|128|かくとう,みず|75,110,105,30,70,100|0
+gyarados|ギャラドス|Gyarados|130|みず,ひこう|95,125,79,60,100,81|1
+ditto|メタモン|Ditto|132|ノーマル|48,48,48,48,48,48|0
+vaporeon|シャワーズ|Vaporeon|134|みず|130,65,60,110,95,65|0
+jolteon|サンダース|Jolteon|135|でんき|65,65,60,110,95,130|0
+flareon|ブースター|Flareon|136|ほのお|65,130,60,95,110,65|0
+espeon|エーフィ|Espeon|196|エスパー|65,65,60,130,95,110|0
+umbreon|ブラッキー|Umbreon|197|あく|95,65,110,60,130,65|0
+leafeon|リーフィア|Leafeon|470|くさ|65,110,130,60,65,95|0
+glaceon|グレイシア|Glaceon|471|こおり|65,60,110,130,95,65|0
+sylveon|ニンフィア|Sylveon|700|フェアリー|95,65,65,110,130,60|0
+aerodactyl|プテラ|Aerodactyl|142|いわ,ひこう|80,105,65,60,75,130|1
+snorlax|カビゴン|Snorlax|143|ノーマル|160,110,65,65,110,30|0
+dragonite|カイリュー|Dragonite|149|ドラゴン,ひこう|91,134,95,100,100,80|1
+typhlosion|バクフーン|Typhlosion|157|ほのお|78,84,78,109,85,100|0
+typhlosionhisui|バクフーン（ヒスイのすがた）|Typhlosion-Hisui|157|ほのお,ゴースト|73,84,78,119,85,95|0
+feraligatr|オーダイル|Feraligatr|160|みず|85,105,100,79,83,78|1
+ariados|アリアドス|Ariados|168|むし,どく|70,90,70,60,70,40|0
+ampharos|デンリュウ|Ampharos|181|でんき|90,75,85,115,90,55|1
+azumarill|マリルリ|Azumarill|184|みず,フェアリー|100,50,80,60,80,50|0
+farigiraf|リキキリン|Farigiraf|981|ノーマル,エスパー|120,90,70,110,70,60|0
+forretress|フォレトス|Forretress|205|むし,はがね|75,90,140,60,60,40|0
+gliscor|グライオン|Gliscor|472|じめん,ひこう|75,95,125,45,75,95|0
+qwilfish|ハリーセン|Qwilfish|211|みず,どく|65,95,85,55,55,85|0
+overqwil|ハリーマン|Overqwil|904|あく,どく|85,115,95,65,65,85|0
+heracross|ヘラクロス|Heracross|214|むし,かくとう|80,125,75,40,95,85|1
+weavile|マニューラ|Weavile|461|あく,こおり|70,120,65,45,85,125|0
+sneasler|オオニューラ|Sneasler|903|かくとう,どく|80,130,60,40,80,120|0
+mamoswine|マンムー|Mamoswine|473|こおり,じめん|110,130,80,70,60,80|0
+skarmory|エアームド|Skarmory|227|はがね,ひこう|65,80,140,40,70,70|1
+houndoom|ヘルガー|Houndoom|229|あく,ほのお|75,90,50,110,80,95|1
+wyrdeer|アヤシシ|Wyrdeer|899|ノーマル,エスパー|103,105,72,105,75,65|0
+tyranitar|バンギラス|Tyranitar|248|いわ,あく|100,134,110,95,100,61|1
+sceptile|ジュカイン|Sceptile|254|くさ|70,85,65,105,85,120|1
+blaziken|バシャーモ|Blaziken|257|ほのお,かくとう|80,120,70,110,70,80|1
+swampert|ラグラージ|Swampert|260|みず,じめん|100,110,90,85,90,60|1
+pelipper|ペリッパー|Pelipper|279|みず,ひこう|60,50,100,95,70,65|0
+gardevoir|サーナイト|Gardevoir|282|エスパー,フェアリー|68,65,65,125,115,80|1
+gallade|エルレイド|Gallade|475|エスパー,かくとう|68,125,65,65,115,80|1
+sableye|ヤミラミ|Sableye|302|あく,ゴースト|50,75,75,65,65,50|1
+mawile|クチート|Mawile|303|はがね,フェアリー|50,85,85,55,55,50|1
+aggron|ボスゴドラ|Aggron|306|はがね,いわ|70,110,180,60,60,50|1
+medicham|チャーレム|Medicham|308|かくとう,エスパー|60,60,75,60,75,80|1
+manectric|ライボルト|Manectric|310|でんき|70,75,60,105,60,105|1
+roserade|ロズレイド|Roserade|407|くさ,どく|60,70,65,125,105,90|0
+swalot|マルノーム|Swalot|317|どく|100,73,83,73,83,55|0
+sharpedo|サメハダー|Sharpedo|319|みず,あく|70,120,40,95,40,95|1
+camerupt|バクーダ|Camerupt|323|ほのお,じめん|70,100,70,105,75,40|1
+torkoal|コータス|Torkoal|324|ほのお|70,85,140,85,70,20|0
+altaria|チルタリス|Altaria|334|ドラゴン,ひこう|75,70,90,70,105,80|1
+milotic|ミロカロス|Milotic|350|みず|95,60,79,100,125,81|0
+castform|ポワルン|Castform|351|ノーマル|70,70,70,70,70,70|0
+banette|ジュペッタ|Banette|354|ゴースト|64,115,65,83,63,65|1
+chimecho|チリーン|Chimecho|358|エスパー|75,50,80,95,90,65|1
+absol|アブソル|Absol|359|あく|65,130,60,75,60,75|2
+glalie|オニゴーリ|Glalie|362|こおり|80,80,80,80,80,80|1
+froslass|ユキメノコ|Froslass|478|こおり,ゴースト|70,80,70,80,70,110|1
+salamence|ボーマンダ|Salamence|373|ドラゴン,ひこう|95,135,80,110,80,100|1
+metagross|メタグロス|Metagross|376|はがね,エスパー|80,135,130,95,90,70|1
+torterra|ドダイトス|Torterra|389|くさ,じめん|95,109,105,75,85,56|0
+infernape|ゴウカザル|Infernape|392|ほのお,かくとう|76,104,71,104,71,108|0
+empoleon|エンペルト|Empoleon|395|みず,はがね|84,86,88,111,101,60|0
+staraptor|ムクホーク|Staraptor|398|ノーマル,ひこう|85,120,70,50,60,100|1
+luxray|レントラー|Luxray|405|でんき|80,120,79,95,79,70|0
+rampardos|ラムパルド|Rampardos|409|いわ|97,165,60,65,50,58|0
+bastiodon|トリデプス|Bastiodon|411|いわ,はがね|60,52,168,47,138,30|0
+lopunny|ミミロップ|Lopunny|428|ノーマル|65,76,84,54,96,105|1
+spiritomb|ミカルゲ|Spiritomb|442|ゴースト,あく|50,92,108,92,108,35|0
+garchomp|ガブリアス|Garchomp|445|ドラゴン,じめん|108,130,95,80,85,102|2
+lucario|ルカリオ|Lucario|448|かくとう,はがね|70,110,70,115,70,90|2
+hippowdon|カバルドン|Hippowdon|450|じめん|108,112,118,68,72,47|0
+toxicroak|ドクロッグ|Toxicroak|454|どく,かくとう|83,106,65,86,65,85|0
+abomasnow|ユキノオー|Abomasnow|460|くさ,こおり|90,92,75,92,85,60|1
+rotom|ロトム|Rotom|479|でんき,ゴースト|50,50,77,95,77,91|0
+rotomheat|ヒートロトム|Rotom-Heat|479|でんき,ほのお|50,65,107,105,107,86|0
+rotomwash|ウォッシュロトム|Rotom-Wash|479|でんき,みず|50,65,107,105,107,86|0
+rotomfrost|フロストロトム|Rotom-Frost|479|でんき,こおり|50,65,107,105,107,86|0
+rotomfan|スピンロトム|Rotom-Fan|479|でんき,ひこう|50,65,107,105,107,86|0
+rotommow|カットロトム|Rotom-Mow|479|でんき,くさ|50,65,107,105,107,86|0
+serperior|ジャローダ|Serperior|497|くさ|75,75,95,75,95,113|0
+emboar|エンブオー|Emboar|500|ほのお,かくとう|110,123,65,100,65,65|1
+samurott|ダイケンキ|Samurott|503|みず|95,100,85,108,70,70|0
+samurotthisui|ダイケンキ（ヒスイのすがた）|Samurott-Hisui|503|みず,あく|90,108,80,100,65,85|0
+watchog|ミルホッグ|Watchog|505|ノーマル|60,85,69,60,69,77|0
+liepard|レパルダス|Liepard|510|あく|64,88,50,88,50,106|0
+simisage|ヤナッキー|Simisage|512|くさ|75,98,63,98,63,101|0
+simisear|バオッキー|Simisear|514|ほのお|75,98,63,98,63,101|0
+simipour|ヒヤッキー|Simipour|516|みず|75,98,63,98,63,101|0
+musharna|ムシャーナ|Musharna|518|エスパー|116,55,85,107,95,29|0
+excadrill|ドリュウズ|Excadrill|530|じめん,はがね|110,135,60,50,65,88|1
+audino|タブンネ|Audino|531|ノーマル|103,60,86,60,86,50|1
+conkeldurr|ローブシン|Conkeldurr|534|かくとう|105,140,95,55,65,45|0
+scolipede|ペンドラー|Scolipede|545|むし,どく|60,100,89,55,69,112|1
+whimsicott|エルフーン|Whimsicott|547|くさ,フェアリー|60,67,85,77,75,116|0
+basculegion|イダイトウ♂|Basculegion|902|みず,ゴースト|120,112,65,80,75,78|0
+basculegionf|イダイトウ♀|Basculegion-F|902|みず,ゴースト|120,92,65,100,75,78|0
+krookodile|ワルビアル|Krookodile|553|じめん,あく|95,117,80,65,70,92|0
+scrafty|ズルズキン|Scrafty|560|あく,かくとう|65,90,115,45,115,58|1
+cofagrigus|デスカーン|Cofagrigus|563|ゴースト|58,50,145,95,105,30|0
+runerigus|デスバーン|Runerigus|867|じめん,ゴースト|58,95,145,50,105,30|0
+garbodor|ダストダス|Garbodor|569|どく|80,95,82,60,82,75|0
+zoroark|ゾロアーク|Zoroark|571|あく|60,105,60,120,60,105|0
+zoroarkhisui|ゾロアーク（ヒスイのすがた）|Zoroark-Hisui|571|ノーマル,ゴースト|55,100,60,125,60,110|0
+reuniclus|ランクルス|Reuniclus|579|エスパー|110,65,75,125,85,30|0
+vanilluxe|バイバニラ|Vanilluxe|584|こおり|71,95,85,110,95,79|0
+emolga|エモンガ|Emolga|587|でんき,ひこう|55,75,60,75,60,103|0
+eelektross|シビルドン|Eelektross|604|でんき|85,115,80,105,80,50|1
+chandelure|シャンデラ|Chandelure|609|ゴースト,ほのお|60,55,90,145,90,80|1
+beartic|ツンベアー|Beartic|614|こおり|95,130,80,70,80,50|0
+stunfisk|マッギョ|Stunfisk|618|じめん,でんき|109,66,84,81,99,32|0
+stunfiskgalar|マッギョ（ガラルのすがた）|Stunfisk-Galar|618|じめん,はがね|109,81,99,66,84,32|0
+golurk|ゴルーグ|Golurk|623|じめん,ゴースト|89,124,80,55,80,55|1
+hydreigon|サザンドラ|Hydreigon|635|あく,ドラゴン|92,105,90,125,90,98|0
+volcarona|ウルガモス|Volcarona|637|むし,ほのお|85,60,65,135,105,100|0
+chesnaught|ブリガロン|Chesnaught|652|くさ,かくとう|88,107,122,74,75,64|1
+delphox|マフォクシー|Delphox|655|ほのお,エスパー|75,69,72,114,100,104|1
+greninja|ゲッコウガ|Greninja|658|みず,あく|72,95,67,103,71,122|1
+diggersby|ホルード|Diggersby|660|ノーマル,じめん|85,56,77,50,77,78|0
+talonflame|ファイアロー|Talonflame|663|ほのお,ひこう|78,81,71,74,69,126|0
+vivillon|ビビヨン|Vivillon|666|むし,ひこう|80,52,50,90,50,89|0
+pyroar|カエンジシ|Pyroar|668|ほのお,ノーマル|86,68,72,109,66,106|1
+floetteeternal|フラエッテ（えいえんのはな）|Floette-Eternal|670|フェアリー|74,65,67,125,128,92|0
+florges|フラージェス|Florges|671|フェアリー|78,65,68,112,154,75|0
+gogoat|ゴーゴート|Gogoat|673|くさ|123,100,62,97,81,68|0
+pangoro|ゴロンダ|Pangoro|675|かくとう,あく|95,124,78,69,71,58|0
+furfrou|トリミアン|Furfrou|676|ノーマル|75,80,60,65,90,102|0
+meowstic|ニャオニクス|Meowstic|678|エスパー|74,48,76,83,81,104|2
+aegislash|ギルガルド|Aegislash|681|はがね,ゴースト|60,50,140,50,140,60|0
+aromatisse|フレフワン|Aromatisse|683|フェアリー|101,72,72,99,89,29|0
+slurpuff|ペロリーム|Slurpuff|685|フェアリー|82,80,86,85,75,72|0
+malamar|カラマネロ|Malamar|687|あく,エスパー|86,92,88,68,75,73|1
+barbaracle|ガメノデス|Barbaracle|689|いわ,みず|72,105,115,54,86,68|1
+dragalge|ドラミドロ|Dragalge|691|どく,ドラゴン|65,75,90,97,123,44|1
+clawitzer|ブロスター|Clawitzer|693|みず|71,73,88,120,89,59|0
+heliolisk|エレザード|Heliolisk|695|でんき,ノーマル|62,55,52,109,94,109|0
+tyrantrum|ガチゴラス|Tyrantrum|697|いわ,ドラゴン|82,121,119,69,59,71|0
+aurorus|アマルルガ|Aurorus|699|いわ,こおり|123,77,72,99,92,58|0
+hawlucha|ルチャブル|Hawlucha|701|かくとう,ひこう|78,92,75,74,63,118|1
+dedenne|デデンネ|Dedenne|702|でんき,フェアリー|67,58,57,81,67,101|0
+goodra|ヌメルゴン|Goodra|706|ドラゴン|90,100,70,110,150,80|0
+goodrahisui|ヌメルゴン（ヒスイのすがた）|Goodra-Hisui|706|はがね,ドラゴン|80,100,100,110,150,60|0
+klefki|クレッフィ|Klefki|707|はがね,フェアリー|57,80,91,80,87,75|0
+trevenant|オーロット|Trevenant|709|ゴースト,くさ|85,110,76,65,82,56|0
+gourgeist|パンプジン|Gourgeist|711|ゴースト,くさ|65,90,122,58,75,84|0
+gourgeistsmall|パンプジン（ちいさいサイズ）|Gourgeist-Small|711|ゴースト,くさ|55,85,122,58,75,99|0
+gourgeistlarge|パンプジン（おおきいサイズ）|Gourgeist-Large|711|ゴースト,くさ|75,95,122,58,75,69|0
+gourgeistsuper|パンプジン（とくだいサイズ）|Gourgeist-Super|711|ゴースト,くさ|85,100,122,58,75,54|0
+avalugg|クレベース|Avalugg|713|こおり|95,117,184,44,46,28|0
+avalugghisui|クレベース（ヒスイのすがた）|Avalugg-Hisui|713|こおり,いわ|95,127,184,34,36,38|0
+noivern|オンバーン|Noivern|715|ひこう,ドラゴン|85,70,80,97,80,123|0
+decidueye|ジュナイパー|Decidueye|724|くさ,ゴースト|78,107,75,100,100,70|0
+decidueyehisui|ジュナイパー（ヒスイのすがた）|Decidueye-Hisui|724|くさ,かくとう|88,112,80,95,95,60|0
+incineroar|ガオガエン|Incineroar|727|ほのお,あく|95,115,90,80,90,60|0
+primarina|アシレーヌ|Primarina|730|みず,フェアリー|80,74,74,126,116,60|0
+toucannon|ドデカバシ|Toucannon|733|ノーマル,ひこう|80,120,75,75,75,60|0
+crabominable|ケケンカニ|Crabominable|740|かくとう,こおり|97,132,77,62,67,43|1
+lycanroc|ルガルガン（まひるのすがた）|Lycanroc|745|いわ|75,115,65,55,65,112|0
+lycanrocmidnight|ルガルガン（まよなかのすがた）|Lycanroc-Midnight|745|いわ|85,115,75,55,75,82|0
+lycanrocdusk|ルガルガン（たそがれのすがた）|Lycanroc-Dusk|745|いわ|75,117,65,55,65,110|0
+toxapex|ドヒドイデ|Toxapex|748|どく,みず|50,63,152,53,142,35|0
+mudsdale|バンバドロ|Mudsdale|750|じめん|100,125,100,55,85,35|0
+araquanid|オニシズクモ|Araquanid|752|みず,むし|68,70,92,50,132,42|0
+salazzle|エンニュート|Salazzle|758|どく,ほのお|68,64,60,111,60,117|0
+tsareena|アマージョ|Tsareena|763|くさ|72,120,98,50,98,72|0
+oranguru|ヤレユータン|Oranguru|765|ノーマル,エスパー|90,60,80,90,110,60|0
+passimian|ナゲツケサル|Passimian|766|かくとう|100,120,90,40,60,80|0
+golisopod|グソクムシャ|Golisopod|768|むし,みず|75,125,140,60,90,40|1
+mimikyu|ミミッキュ|Mimikyu|778|ゴースト,フェアリー|55,90,80,50,105,96|0
+drampa|ジジーロン|Drampa|780|ノーマル,ドラゴン|78,60,85,135,91,36|1
+kommoo|ジャラランガ|Kommo-o|784|ドラゴン,かくとう|75,110,125,100,105,85|0
+rillaboom|ゴリランダー|Rillaboom|812|くさ|100,125,90,60,70,85|0
+cinderace|エースバーン|Cinderace|815|ほのお|80,116,75,65,75,119|0
+inteleon|インテレオン|Inteleon|818|みず|70,85,65,125,65,120|0
+corviknight|アーマーガア|Corviknight|823|ひこう,はがね|98,87,105,53,85,67|0
+thievul|フォクスライ|Thievul|828|あく|70,58,58,87,92,90|0
+flapple|アップリュー|Flapple|841|くさ,ドラゴン|70,110,80,95,60,70|0
+appletun|タルップル|Appletun|842|くさ,ドラゴン|110,85,80,100,80,30|0
+sandaconda|サダイジャ|Sandaconda|844|じめん|72,107,125,65,70,71|0
+toxtricity|ストリンダー|Toxtricity|849|でんき,どく|75,98,70,114,70,75|0
+grapploct|オトスパス|Grapploct|853|かくとう|80,118,90,70,80,42|0
+polteageist|ポットデス|Polteageist|855|ゴースト|60,65,65,134,114,70|0
+hatterene|ブリムオン|Hatterene|858|エスパー,フェアリー|57,90,95,136,103,29|0
+grimmsnarl|オーロンゲ|Grimmsnarl|861|あく,フェアリー|95,120,65,95,75,60|0
+alcremie|マホイップ|Alcremie|869|フェアリー|65,60,75,110,121,64|0
+falinks|タイレーツ|Falinks|870|かくとう|65,100,100,70,60,75|1
+pincurchin|バチンウニ|Pincurchin|871|でんき|48,101,95,91,85,15|0
+indeedee|イエッサン|Indeedee|876|エスパー,ノーマル|60,65,55,105,95,95|0
+indeedeef|イエッサン♀|Indeedee-F|876|エスパー,ノーマル|70,55,65,95,105,85|0
+morpeko|モルペコ|Morpeko|877|でんき,あく|58,95,58,70,58,97|0
+dragapult|ドラパルト|Dragapult|887|ドラゴン,ゴースト|88,120,75,100,75,142|0
+meowscarada|マスカーニャ|Meowscarada|908|くさ,あく|76,110,70,81,70,123|0
+skeledirge|ラウドボーン|Skeledirge|911|ほのお,ゴースト|104,75,100,110,75,66|0
+quaquaval|ウェーニバル|Quaquaval|914|みず,かくとう|85,120,80,85,75,85|0
+houndstone|ハカドッグ|Houndstone|972|ゴースト|72,101,100,50,97,68|0
+espathra|クエスパトラ|Espathra|956|エスパー|95,60,60,101,60,105|0
+palafin|イルカマン|Palafin|964|みず|100,70,72,53,62,100|0
+arboliva|オリーヴァ|Arboliva|930|くさ,ノーマル|78,69,90,125,109,39|0
+scovillain|スコヴィラン|Scovillain|952|くさ,ほのお|65,108,65,108,65,75|1
+bellibolt|ハラバリー|Bellibolt|939|でんき|109,64,91,103,83,45|0
+orthworm|ミミズズ|Orthworm|968|はがね|70,85,145,60,55,65|0
+maushold|イッカネズミ|Maushold|925|ノーマル|74,75,70,65,75,111|0
+baxcalibur|セグレイブ|Baxcalibur|998|ドラゴン,こおり|115,145,92,75,86,87|1
+pawmot|パーモット|Pawmot|923|でんき,かくとう|70,115,70,70,60,105|0
+squawkabilly|イキリンコ|Squawkabilly|931|ノーマル,ひこう|82,96,51,45,51,92|0
+garganacl|キョジオーン|Garganacl|934|いわ|100,100,130,45,90,35|0
+glimmora|キラフロル|Glimmora|970|いわ,どく|83,55,90,130,81,86|1
+mabosstiff|マフィティフ|Mabosstiff|943|あく|80,120,90,60,70,85|0
+gholdengo|サーフゴー|Gholdengo|1000|はがね,ゴースト|87,60,95,133,91,84|0
+tinkaton|デカヌチャン|Tinkaton|959|フェアリー,はがね|85,75,77,70,105,94|0
+armarouge|グレンアルマ|Armarouge|936|ほのお,エスパー|85,60,100,125,80,75|0
+ceruledge|ソウブレイズ|Ceruledge|937|ほのお,ゴースト|75,125,80,60,100,85|0
+kingambit|ドドゲザン|Kingambit|983|あく,はがね|100,135,120,60,85,50|0
+annihilape|コノヨザル|Annihilape|979|かくとう,ゴースト|110,115,80,50,90,90|0
+sinistcha|ヤバソチャ|Sinistcha|1013|くさ,ゴースト|71,60,106,121,80,70|0
+archaludon|ブリジュラス|Archaludon|1018|はがね,ドラゴン|90,105,130,125,65,85|0
+hydrapple|カミツオロチ|Hydrapple|1019|くさ,ドラゴン|106,80,110,120,80,44|0`;
+  const catalog=RAW.trim().split(/\n/).filter(Boolean).map(line=>{
+    const [id,name,en,dex,types,stats,mega]=line.split('|');
+    return {id,name,en,dex:Number(dex),types:types.split(','),stats:stats.split(',').map(Number),mega:Number(mega)};
+  });
+  root.PC_POKEMON_CATALOG=catalog;
+  if(typeof module==='object'&&module.exports) module.exports=catalog;
+})(typeof globalThis!=='undefined'?globalThis:this);
+
+</script>
+<script>
+(function(root){'use strict';
+const RAW=`
+Rillaboom|37.6|ねこだまし,グラススライダー,ウッドハンマー,とんぼがえり|いのちのたま,オボンのみ,グラスシード
+Sneasler|36.6|インファイト,フェイタルクロー,ねこだまし,まもる|グラスシード,サイコシード,しろいハーブ
+Incineroar|28.5|ねこだまし,すてゼリフ,フレアドライブ,ＤＤラリアット|オボンのみ,ゴツゴツメット,たべのこし
+Salamence|26|ハイパーボイス,まもる,すてみタックル,おいかぜ|ボーマンダナイト,ゴツゴツメット,いのちのたま
+Kingambit|25|ドゲザン,ふいうち,まもる,アイアンヘッド|ヨプのみ,いのちのたま,きあいのタスキ
+Basculegion|23.8|ウェーブタックル,おはかまいり,アクアジェット,まもる|いのちのたま,オボンのみ,ゴツゴツメット
+Golisopod|21.7|きゅうけつ,アイアンヘッド,であいがしら,まもる|グソクムシャ用メガストーン,ゴツゴツメット,いのちのたま
+Indeedee-F|21.6|このゆびとまれ,てだすけ,トリックルーム,サイコキネシス|サイコシード,オボンのみ,ナモのみ
+Farigiraf|18|トリックルーム,サイコキネシス,てだすけ,１０まんボルト|オボンのみ,グラスシード,ナモのみ
+Garchomp|15.4|まもる,じしん,いわなだれ,ドラゴンクロー|いのちのたま,ガブリアス用メガストーンZ,オボンのみ
+Pelipper|14.8|ぼうふう,ウェザーボール,おいかぜ,ワイドガード|オボンのみ,きあいのタスキ,いのちのたま
+Sinistcha|13.9|いかりのこな,シャカシャカほう,トリックルーム,まもる|オボンのみ,たべのこし,ナモのみ
+Whimsicott|11.4|おいかぜ,ムーンフォース,アンコール,まもる|きあいのタスキ,いのちのたま,たべのこし
+Gholdengo|10.4|ゴールドラッシュ,シャドーボール,まもる,わるだくみ|いのちのたま,グラスシード,たべのこし
+Archaludon|10.1|エレクトロビーム,まもる,りゅうのはどう,ラスターカノン|たべのこし,オボンのみ,サイコシード
+Floette-Eternal|10|マジカルシャイン,まもる,めいそう,ムーンフォース|フラエッテ用メガストーン,ゴツゴツメット,たべのこし
+Tyranitar|8.9|いわなだれ,はたきおとす,まもる,りゅうのまい|バンギラスナイト,ヨプのみ,ゴツゴツメット
+Baxcalibur|8.4|まもる,きょけんとつげき,こおりのつぶて,つららおとし|セグレイブ用メガストーン,いのちのたま,ゴツゴツメット
+Lucario|8.3|はどうだん,ラスターカノン,まもる,めいそう|ルカリオ用メガストーンZ,ルカリオナイト,ゴツゴツメット
+Milotic|8.3|ねっとう,まもる,こごえるかぜ,とぐろをまく|たべのこし,オボンのみ,グラスシード
+Charizard|8|ねっぷう,まもる,ウェザーボール,げんしのちから|リザードナイトＹ,リザードナイトＸ,いのちのたま
+Sylveon|7.8|ハイパーボイス,はかいこうせん,みきり,まもる|いのちのたま,ようせいのハネ,たべのこし
+Gardevoir|7.6|ハイパーボイス,ワイドフォース,まもる,トリックルーム|サーナイトナイト,いのちのたま,きあいのタスキ
+Torkoal|7|ふんか,まもる,ウェザーボール,ねっぷう|いのちのたま,たべのこし,もくたん
+Arcanine-Hisui|6.1|フレアドライブ,もろはのずつき,まもる,しんそく|きあいのタスキ,いのちのたま,ゴツゴツメット
+Armarouge|5.9|ワイドフォース,アーマーキャノン,まもる,トリックルーム|いのちのたま,サイコシード,きあいのタスキ
+Raichu|5.7|でんじほう,ねこだまし,まもる,きあいだま|ライチュウ用メガストーンY,ライチュウ用メガストーンX,ゴツゴツメット
+Excadrill|5.6|まもる,１０まんばりき,アイアンヘッド,いわなだれ|きあいのタスキ,いのちのたま,ゴツゴツメット
+Froslass|5.5|ふぶき,オーロラベール,まもる,シャドーボール|ユキメノコ用メガストーン
+Ninetales-Alola|5.4|オーロラベール,ふぶき,まもる,フリーズドライ|きあいのタスキ,たべのこし,いのちのたま
+Staraptor|5.4|インファイト,まもる,ブレイブバード,いのちがけ|ムクホーク用メガストーン,ゴツゴツメット,きあいのタスキ
+Hatterene|5.3|ワイドフォース,トリックルーム,マジカルシャイン,まもる|いのちのたま,サイコシード,たべのこし
+Pawmot|5.1|でんこうそうげき,インファイト,ねこだまし,さいきのいのり|きあいのタスキ,いのちのたま,ヒメリのみ
+Absol|5|つじぎり,シャドークロー,まもる,インファイト|アブソル用メガストーンZ,ゴツゴツメット,アブソルナイト
+Aerodactyl|4.8|いわなだれ,おいかぜ,ダブルウイング,ワイドガード|プテラナイト,きあいのタスキ,ゴツゴツメット
+Indeedee|4.5|ワイドフォース,マジカルシャイン,まもる,トリックルーム|きあいのタスキ,サイコシード,オボンのみ
+Grimmsnarl|4.4|リフレクター,ひかりのかべ,すてゼリフ,ソウルクラッシュ|ゴツゴツメット,ひかりのねんど,ロゼルのみ
+Primarina|4.3|ハイパーボイス,まもる,ムーンフォース,めいそう|たべのこし,いのちのたま,オボンのみ
+Talonflame|3.9|おいかぜ,ブレイブバード,フレアドライブ,まもる|きあいのタスキ,いのちのたま,ゴツゴツメット
+Dragonite|3.7|りゅうのはどう,まもる,ねっぷう,しんそく|カイリュー用メガストーン,いのちのたま,たべのこし
+Volcarona|3.6|ちょうのまい,まもる,ほのおのまい,いかりのこな|グラスシード,たべのこし,オボンのみ
+Sableye|3.5|ひかりのかべ,リフレクター,あまごい,ねこだまし|ロゼルのみ,オボンのみ,きあいのタスキ
+Politoed|3.5|ウェザーボール,まもる,だくりゅう,ほろびのうた|オボンのみ,いのちのたま,たべのこし
+Glimmora|3.5|パワージェム,ニードルガード,だいちのちから,ヘドロばくだん|キラフロル用メガストーン,きあいのタスキ,いのちのたま
+Metagross|3.4|サイコファング,まもる,アイアンヘッド,アイアンローラー|メタグロスナイト,ゴツゴツメット,ノーマルジュエル
+Swampert|3.4|ウェーブタックル,まもる,じしん,れいとうパンチ|ラグラージナイト,ゴツゴツメット,たべのこし
+Maushold|3.4|このゆびとまれ,まもる,ネズミざん,いかりのまえば|きあいのタスキ,ヨプのみ,オボンのみ
+Delphox|3.1|ねっぷう,まもる,ワイドフォース,わるだくみ|マフォクシー用メガストーン,いのちのたま,サイコシード
+Gengar|2.9|まもる,ほろびのうた,シャドーボール,ヘドロばくだん|ゲンガナイト,きあいのタスキ,たべのこし
+Venusaur|2.8|ヘドロばくだん,ねむりごな,まもる,だいちのちから|フシギバナイト,いのちのたま,きあいのタスキ
+Blastoise|2.7|しおふき,まもる,からをやぶる,あくのはどう|カメックスナイト,しろいハーブ,オボンのみ
+Camerupt|2.7|ねっぷう,だいちのちから,まもる,げんしのちから|バクーダナイト
+Rotom-Wash|2.5|ハイドロポンプ,おにび,１０まんボルト,ボルトチェンジ|たべのこし,オボンのみ,いのちのたま
+Annihilape|2.2|ふんどのこぶし,ドレインパンチ,まもる,ビルドアップ|オボンのみ,たべのこし,ゴツゴツメット
+Alakazam|2.2|ワイドフォース,まもる,マジカルシャイン,わるだくみ|フーディナイト,きあいのタスキ,こだわりスカーフ
+Corviknight|2|ブレイブバード,おいかぜ,ボディプレス,はねやすめ|たべのこし,オボンのみ,ゴツゴツメット
+Gallade|2|せいなるつるぎ,サイコカッター,トリックルーム,ワイドガード|いのちのたま,きあいのタスキ,オボンのみ
+Tsareena|1.7|トリプルアクセル,パワーウィップ,まもる,けたぐり|オボンのみ,いのちのたま,ゴツゴツメット
+Blaziken|1.7|フレアドライブ,まもる,みきり,インファイト|バシャーモナイト,いのちのたま,ゴツゴツメット
+Toxapex|1.7|どくどく,まとわりつく,トーチカ,ワイドガード|たべのこし,だっしゅつボタン,ひかりのねんど
+Mawile|1.6|じゃれつく,まもる,ふいうち,アイアンヘッド|クチートナイト,ゴツゴツメット
+Pincurchin|1.6|ライジングボルト,でんじは,エレキネット,ふいうち|エレキシード,いのちのたま,ふうせん
+Ceruledge|1.6|むねんのつるぎ,かげうち,ビルドアップ,まもる|いのちのたま,ナモのみ,きあいのタスキ
+Scovillain|1.6|いかりのこな,まもる,オーバーヒート,ギガドレイン|スコヴィラン用メガストーン,きあいのタスキ
+Lycanroc|1.5|いわなだれ,まもる,アクセルロック,インファイト|きあいのタスキ,いのちのたま,ゴツゴツメット
+Typhlosion-Hisui|1.5|ふんか,シャドーボール,ねっぷう,ふんえん|こだわりスカーフ,いのちのたま
+Hydreigon|1.4|あくのはどう,りゅうせいぐん,だいちのちから,バークアウト|いのちのたま,きあいのタスキ,たべのこし
+Dragapult|1.3|ドラゴンアロー,おにび,リフレクター,ゴーストダイブ|いのちのたま,きあいのタスキ,オボンのみ
+Weavile|1.3|はたきおとす,ねこだまし,アイススピナー,まもる|きあいのタスキ,いのちのたま,ゴツゴツメット
+Araquanid|1.3|アクアブレイク,ワイドガード,きゅうけつ,まもる|たべのこし,ゴツゴツメット,オボンのみ
+Kommo-o|1.3|スケイルノイズ,まもる,ソウルビート,はどうだん|たべのこし,いのちのたま,グラスシード
+Clefable|1.2|このゆびとまれ,ムーンフォース,まもる,いのちのしずく|たべのこし,ピクシー用メガストーン,オボンのみ
+Aegislash|1.1|キングシールド,アイアンヘッド,ポルターガイスト,ワイドガード|たべのこし,いのちのたま,ふうせん
+Scizor|1.1|バレットパンチ,むしくい,まもる,つるぎのまい|ハッサムナイト,いのちのたま,オボンのみ
+Bellibolt|1.1|パラボラチャージ,１０まんボルト,みずびたし,だくりゅう|オボンのみ,たべのこし,エレキシード
+Rotom-Heat|1|オーバーヒート,ボルトチェンジ,おにび,１０まんボルト|オボンのみ,たべのこし,しろいハーブ
+Crabominable|1|ドレインパンチ,アイスハンマー,まもる,いわなだれ|ケケンカニ用メガストーン,いのちのたま,ゴツゴツメット
+Mamoswine|1|１０まんばりき,こおりのつぶて,まもる,じしん|いのちのたま,きあいのタスキ,ゴツゴツメット
+Tinkaton|1|ねこだまし,デカハンマー,まもる,じゃれつく|ふうせん,たべのこし,オボンのみ
+Inteleon|1|ねらいうち,まもる,れいとうビーム,きあいだめ|いのちのたま,きあいのタスキ,ピントレンズ
+Meganium|1|ウェザーボール,まもる,マジカルシャイン,ソーラービーム|メガニウム用メガストーン
+Starmie|0.9|アクアブレイク,まもる,ワイドフォース,アイススピナー|スターミー用メガストーン,ゴツゴツメット,こだわりスカーフ
+Golurk|0.9|ぶちかまし,ポルターガイスト,まもる,れいとうパンチ|ゴルーグ用メガストーン,ゴツゴツメット,オボンのみ
+Zoroark-Hisui|0.9|トリック,シャドーボール,かえんほうしゃ|まがったスプーン
+Gyarados|0.9|たきのぼり,まもる,りゅうのまい,かみくだく|ギャラドスナイト,オボンのみ,たべのこし
+Meowscarada|0.9|トリプルアクセル,はたきおとす,トリックフラワー,まもる|いのちのたま,きあいのタスキ,こだわりスカーフ
+Vanilluxe|0.9|ふぶき,フリーズドライ,まもる,オーロラベール|いのちのたま,とけないこおり
+Slowking-Galar|0.8|トリックルーム,さむいギャグ,ヘドロばくだん,サイコノイズ|たべのこし,ナモのみ,オボンのみ
+Kleavor|0.8|がんせきアックス,シザークロス,まもる,おいかぜ|きあいのタスキ,ゴツゴツメット,いのちのたま
+Kangaskhan|0.8|ねこだまし,すてみタックル,アームハンマー,とっておき|いのちのたま,ガルーラナイト,ゴツゴツメット
+Oranguru|0.8|トリックルーム,さいはい,アンコール,サイコキネシス|たべのこし,ナモのみ,メンタルハーブ
+Scrafty|0.8|ねこだまし,はたきおとす,まもる,インファイト|ズルズキン用メガストーン,しろいハーブ,いのちのたま
+Grapploct|0.7|やまあらし,マッハパンチ,たこがため,まもる|いのちのたま,たべのこし,オボンのみ
+Vivillon|0.7|ねむりごな,おいかぜ,ぼうふう,まもる|きあいのタスキ,ゴツゴツメット
+Empoleon|0.7|ラスターカノン,まもる,ハイドロポンプ,れいとうビーム|たべのこし,いのちのたま,ふうせん
+Snorlax|0.7|じわれ,まもる,たくわえる,ボディプレス|たべのこし,オボンのみ,ノーマルジュエル
+Toxtricity|0.7|オーバードライブ,まもる,ヘドロばくだん,ばくおんぱ|いのちのたま,ふうせん,ノーマルジュエル
+Espathra|0.7|めいそう,まもる,バトンタッチ,ルミナコリジョン|グラスシード,きあいのタスキ,たべのこし
+Drampa|0.6|ハイパーボイス,まもる,１０まんボルト,だいちのちから|ジジーロン用メガストーン,いのちのたま,ハバンのみ
+Overqwil|0.6|ちいさくなる,たくわえる,かみくだく,まもる|たべのこし,オボンのみ,いのちのたま
+Chandelure|0.6|ねっぷう,まもる,シャドーボール,トリックルーム|シャンデラ用メガストーン,きあいのタスキ,ふうせん
+Sceptile|0.6|りゅうのはどう,まもる,だいちのちから,エナジーボール|ジュカインナイト,サイコシード,グラスシード
+Slowbro|0.6|ワイドフォース,トリックルーム,まもる,てっぺき|ヤドランナイト,ゴツゴツメット,たべのこし
+`;
+const data={};
+for(const line of RAW.trim().split(/\n/)){const [en,usage,moves,items]=line.split('|');data[en]={usage:Number(usage)||0,moves:(moves||'').split(',').filter(Boolean).map(name=>({name})),items:(items||'').split(',').filter(Boolean).map(name=>({name})),updatedAt:'2026-09-17'};}
+root.PC_COMPETITIVE_FALLBACK=data;if(typeof module==='object'&&module.exports)module.exports=data;
+})(typeof globalThis!=='undefined'?globalThis:this);
+
+</script>
+<script>
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  root.PCCore = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+
+  const CAUSE_LABELS = {
+    selection: '選出',
+    plan: 'ゲームプラン',
+    turn: 'ターン判断',
+    knowledge: '知識不足',
+    execution: '操作・時間',
+    luck: '運要素',
+    unknown: '未分類'
+  };
+
+  function clamp(n, min, max) {
+    return Math.min(max, Math.max(min, n));
+  }
+
+  function uniqNames(value) {
+    if (Array.isArray(value)) {
+      return [...new Set(value.map(v => String(v).trim()).filter(Boolean))];
+    }
+    return [...new Set(String(value || '')
+      .split(/[\n,、，/]+/)
+      .map(v => v.trim())
+      .filter(Boolean))];
+  }
+
+  function pct(value) {
+    if (!Number.isFinite(value)) return 0;
+    return Math.round(value * 100);
+  }
+
+  function dateValue(match) {
+    const v = Date.parse(match.date || '') || 0;
+    return v;
+  }
+
+  function sortedMatches(matches) {
+    return [...(matches || [])].sort((a, b) => dateValue(b) - dateValue(a));
+  }
+
+  function calculateStats(matches) {
+    const list = sortedMatches(matches);
+    const total = list.length;
+    const wins = list.filter(m => m.result === 'win').length;
+    const losses = list.filter(m => m.result === 'loss').length;
+    const recent = list.slice(0, 10);
+    const recentWins = recent.filter(m => m.result === 'win').length;
+
+    let streak = 0;
+    let streakResult = null;
+    for (const m of list) {
+      if (!streakResult) streakResult = m.result;
+      if (m.result !== streakResult) break;
+      streak += 1;
+    }
+
+    const causeCounts = {};
+    for (const m of list.filter(m => m.result === 'loss')) {
+      const cause = m.cause || 'unknown';
+      causeCounts[cause] = (causeCounts[cause] || 0) + 1;
+    }
+    const topCause = Object.entries(causeCounts).sort((a, b) => b[1] - a[1])[0] || null;
+
+    return {
+      total,
+      wins,
+      losses,
+      winRate: total ? wins / total : 0,
+      recentCount: recent.length,
+      recentWinRate: recent.length ? recentWins / recent.length : 0,
+      streak,
+      streakResult,
+      topLossCause: topCause ? topCause[0] : null,
+      topLossCauseCount: topCause ? topCause[1] : 0
+    };
+  }
+
+  function aggregateOpponentPokemon(matches) {
+    const sorted = sortedMatches(matches);
+    const totalMatches = sorted.length || 1;
+    const recentIds = new Set(sorted.slice(0, 10).map(m => m.id));
+    const map = new Map();
+
+    for (const m of sorted) {
+      for (const name of uniqNames(m.opponentTeam)) {
+        if (!map.has(name)) {
+          map.set(name, { name, appearances: 0, wins: 0, losses: 0, recent: 0 });
+        }
+        const row = map.get(name);
+        row.appearances += 1;
+        if (m.result === 'win') row.wins += 1;
+        if (m.result === 'loss') row.losses += 1;
+        if (recentIds.has(m.id)) row.recent += 1;
+      }
+    }
+
+    const maxAppearances = Math.max(1, ...[...map.values()].map(v => v.appearances));
+    return [...map.values()].map(row => {
+      const samples = row.wins + row.losses;
+      const lossRate = samples ? row.losses / samples : 0;
+      const frequency = row.appearances / maxAppearances;
+      const recentShare = row.recent / Math.min(10, totalMatches);
+      const dangerScore = clamp(frequency * 0.50 + lossRate * 0.35 + recentShare * 0.15, 0, 1);
+      return {
+        ...row,
+        lossRate,
+        winRate: samples ? row.wins / samples : 0,
+        dangerScore,
+        sampleSize: samples
+      };
+    }).sort((a, b) => b.dangerScore - a.dangerScore || b.appearances - a.appearances);
+  }
+
+  function aggregateOwnSelections(matches) {
+    const map = new Map();
+    for (const m of matches || []) {
+      for (const name of uniqNames(m.selectedTeam)) {
+        if (!map.has(name)) map.set(name, { name, picks: 0, wins: 0, losses: 0 });
+        const row = map.get(name);
+        row.picks += 1;
+        if (m.result === 'win') row.wins += 1;
+        if (m.result === 'loss') row.losses += 1;
+      }
+    }
+    return [...map.values()].map(row => ({
+      ...row,
+      winRate: row.picks ? row.wins / row.picks : 0
+    })).sort((a, b) => b.picks - a.picks || b.winRate - a.winRate);
+  }
+
+  function analyzeMatch(match, history) {
+    const opponent = uniqNames(match.opponentTeam);
+    const selected = uniqNames(match.selectedTeam);
+    const threats = aggregateOpponentPokemon([...(history || []), match]);
+    const knownProblems = threats.filter(t => opponent.includes(t.name) && t.sampleSize >= 2 && t.lossRate >= 0.6).slice(0, 2);
+
+    const result = {
+      headline: '',
+      summary: '',
+      checks: [],
+      nextAction: ''
+    };
+
+    if (match.result === 'win') {
+      result.headline = '勝ち筋の再現性を残す';
+      result.summary = '勝利でも結果だけで終わらせず、選出理由と最も重要だった分岐を残すと、再現できる勝ち方になります。';
+      result.checks.push(`選出: ${selected.length ? selected.join(' / ') : '未記録'}`);
+      if (match.selectionReason) result.checks.push(`事前プラン: ${match.selectionReason}`);
+      if (match.planOutcome && PLAN_OUTCOME_LABELS[match.planOutcome]) result.checks.push(`プラン結果: ${PLAN_OUTCOME_LABELS[match.planOutcome]}`);
+      if (match.keyTurn) result.checks.push(`重要ターン: ${match.keyTurn}`);
+      result.nextAction = '次戦でも同じ条件なら同じ選出をするか、1行で理由を残す。';
+      return result;
+    }
+
+    const cause = match.cause || 'unknown';
+    if (cause === 'selection') {
+      result.headline = 'ターン操作より先に選出を修正';
+      result.summary = '敗因が選出なら、細かな技選択を直す前に「相手6体に対する役割不足」を確認する方が改善効率が高いです。';
+      result.nextAction = '相手の最大2つの脅威に対して、選出3/4体の誰が回答するかを書き直す。';
+    } else if (cause === 'plan') {
+      result.headline = '初手からの勝ち筋を明文化';
+      result.summary = '個々の技より「何を通せば勝ちか」が曖昧だった可能性があります。初手・中盤・詰めの役割を分けて振り返ります。';
+      result.nextAction = '次戦前に「最終的に誰を通すか」を1体だけ決めて選出する。';
+    } else if (cause === 'turn') {
+      result.headline = '重要ターンを1つだけ再検証';
+      result.summary = '全ターンを反省するより、勝率を大きく変えた1手を切り出す方が改善点を固定しやすいです。';
+      result.nextAction = 'そのターン時点で判明していた情報だけを使い、安全策・強気択・交換の3案を比較する。';
+    } else if (cause === 'knowledge') {
+      result.headline = '知識穴を次戦までに1つ埋める';
+      result.summary = '新ポケモン・持ち物・素早さ・技範囲の知識不足は、プレイ精度とは別問題として扱います。';
+      result.nextAction = '分からなかったポケモン/技/持ち物を環境メモへ登録し、次回の警戒事項にする。';
+    } else if (cause === 'luck') {
+      result.headline = '運要素と判断を分離';
+      result.summary = '急所・命中・追加効果だけを敗因にせず、その前にリスクを下げられる選択肢があったかだけ確認します。';
+      result.nextAction = '同じ乱数・命中外しが起きなくても妥当な選択だったかを判定し、妥当なら修正対象にしない。';
+    } else {
+      result.headline = '敗因を1カテゴリに仮置き';
+      result.summary = '原因を完全に当てる必要はありません。選出・ゲームプラン・ターン判断・知識のどこから見直すかを仮決めします。';
+      result.nextAction = '最も早い時点で「不利になった」と感じた場面を1つ記録する。';
+    }
+
+    if (knownProblems.length) {
+      result.checks.push(`要警戒: ${knownProblems.map(v => `${v.name}（ログ上敗戦率${pct(v.lossRate)}%）`).join(' / ')}`);
+    }
+    if (match.confidence && Number(match.confidence) <= 2) {
+      result.checks.push('判断確信度が低い: 知識不足と読み負けを分けて確認');
+    }
+    if (match.selectionReason) result.checks.push(`事前プラン: ${match.selectionReason}`);
+    if (match.keyTurn) result.checks.push(`重要ターン: ${match.keyTurn}`);
+    if (match.planOutcome && PLAN_OUTCOME_LABELS[match.planOutcome]) result.checks.push(`プラン結果: ${PLAN_OUTCOME_LABELS[match.planOutcome]}`);
+    if (match.learning) result.checks.push(`自分の学び: ${match.learning}`);
+    return result;
+  }
+
+
+  const BASE_KNOWLEDGE_VERSION = 'Regulation M-C / 2026-09-18';
+  const BASE_KNOWLEDGE = [
+    { names:['メガボーマンダ','ボーマンダ'], formats:['double'], priority:.95, role:'高速アタッカー / いかく / 素早さ操作', focus:'「いかく」で物理火力を下げられた上で、おいかぜや範囲打点を通される展開を警戒。', watch:['メガ前の「いかく」','「おいかぜ」による素早さ操作','スカイスキン＋ハイパーボイス系の範囲打点'], tags:['speed','spread','intimidate'] },
+    { names:['ゴリランダー'], formats:['double'], priority:.92, role:'フィールド / ねこだまし / 先制技', focus:'初手の「ねこだまし」と、グラスフィールド下の先制技で行動順を崩される点を先に確認。', watch:['「ねこだまし」で片側を止める動き','グラスフィールド','グラススライダーなどの先制圧力'], tags:['fakeout','priority','field'] },
+    { names:['オオニューラ'], formats:['double'], priority:.9, role:'高速アタッカー / 妨害', focus:'高い素早さから攻撃と補助の両方を取れるため、初手で自由に動かせない。', watch:['「ねこだまし」','フェイタルクローの追加効果','コーチングなどの補助'], tags:['fakeout','speed','disrupt'] },
+    { names:['ドドゲザン'], formats:['double'], priority:.89, role:'低速高火力 / 先制技 / いかく牽制', focus:'「いかく」を安易に入れると「まけんき」で逆に強化される可能性。削れた終盤は「ふいうち」圏内も確認。', watch:['「まけんき」','「ふいうち」','格闘弱点を突けるか'], tags:['priority','antiIntimidate'] },
+    { names:['イダイトウ','イダイトウ（オス）','イダイトウ（オスのすがた）'], formats:['double'], priority:.88, role:'高火力アタッカー / 雨適性', focus:'ねこだましが通らず、雨や終盤の高火力で一気に詰められる展開を警戒。', watch:['ゴーストタイプで「ねこだまし」無効','雨＋すいすいの可能性','終盤の高火力'], tags:['weather','speed'] },
+    { names:['イエッサン','イエッサン♀','イエッサン（メス）','イエッサン（メスのすがた）'], formats:['double'], priority:.87, role:'サイコフィールド / このゆび / トリックルーム', focus:'「このゆびとまれ」で攻撃先をずらしながらトリックルーム等を通す並びを最優先で確認。', watch:['サイコフィールドで先制技を止める','「このゆびとまれ」','「トリックルーム」'], tags:['redirect','trickroom','field'] },
+    { names:['リキキリン'], formats:['double'], priority:.86, role:'先制技封じ / トリックルーム', focus:'テイルアーマーで先制技が止まりやすい。トリックルーム始動を許すかどうかを初手から判断。', watch:['テイルアーマー','「トリックルーム」','高めの耐久'], tags:['trickroom','priorityBlock'] },
+    { names:['ヤバソチャ'], formats:['double'], priority:.82, role:'回復 / いかりのこな / トリックルーム', focus:'味方を回復しながら攻撃先をずらしたりトリックルームを通したりする支援役として警戒。', watch:['おもてなしによる味方回復','「いかりのこな」','「トリックルーム」'], tags:['redirect','trickroom'] },
+    { names:['ガオガエン'], formats:['double'], priority:.84, role:'いかく / ねこだまし / サイクル支援', focus:'初手の「ねこだまし」と「いかく」でテンポを取られやすい。物理偏重の選出になっていないか確認。', watch:['「いかく」','「ねこだまし」','すてゼリフ等での交代支援'], tags:['fakeout','intimidate'] },
+    { names:['エルフーン'], formats:['double'], priority:.81, role:'高速支援 / 素早さ操作', focus:'補助技からテンポを取る役。特においかぜ等の素早さ操作を自由に通させない。', watch:['おいかぜ等の素早さ操作','先制補助技','ちょうはつ等の妨害'], tags:['speed','disrupt'] },
+    { names:['ブリジュラス'], formats:['double'], priority:.8, role:'高耐久アタッカー', focus:'物理で殴るほど耐久が上がる型や、一度は行動を保証する型を想定して処理順を決める。', watch:['じきゅうりょく','がんじょう','特殊打点を通せるか'], tags:['bulky'] },
+    { names:['フシギバナ'], formats:['double'], priority:.79, role:'晴れ高速化 / 眠り妨害', focus:'晴れ下では素早さが上がり、ねむりごなから試合を崩されやすい。天候要員との並びを確認。', watch:['ようりょくそ','「ねむりごな」','晴れ要員との同時選出'], tags:['weather','speed','sleep'] },
+    { names:['メガライチュウY'], formats:['double'], priority:.8, role:'高速特殊 / 命中安定化 / ねこだまし', focus:'高速から高火力・妨害を両立しやすい。ノーガードによる命中不安技の必中化も前提にする。', watch:['ノーガード','でんじほう等の高威力技','「ねこだまし」'], tags:['speed','fakeout','disrupt'] },
+    { names:['メガグソクムシャ','グソクムシャ'], formats:['double','single'], priority:.82, role:'高耐久物理アタッカー', focus:'非常に高い物理耐久と高火力を両立するため、物理だけで正面突破しない。', watch:['高い物理耐久','かたいツメ','低速を逆利用する展開'], tags:['bulky','physical'] },
+    { names:['メガガブリアスZ'], formats:['double','single'], priority:.87, role:'超高速特殊寄りアタッカー', focus:'非常に高い素早さから動き、ふゆうで地面技が無効。従来のガブリアスと同じ処理をしない。', watch:['素早さ151相当','「ふゆう」で地面無効','特殊火力'], tags:['speed','groundImmune'] },
+    { names:['メガルカリオZ'], formats:['double','single'], priority:.86, role:'超高速特殊アタッカー', focus:'非常に高い素早さと特殊火力を持つため、上から処理する前提を置きにくい。', watch:['素早さ151相当','高い特殊火力','かくとう・はがね打点'], tags:['speed'] },
+    { names:['メガセグレイブ','セグレイブ'], formats:['double','single'], priority:.84, role:'高火力物理アタッカー', focus:'高い攻撃と耐久で一度動かれると負荷が大きい。炎技で強化される可能性も確認。', watch:['高い物理火力','ねつこうかん','氷・ドラゴン打点'], tags:['physical','bulky'] },
+    { names:['メガアブソルZ'], formats:['double','single'], priority:.8, role:'超高速物理アタッカー', focus:'非常に高い素早さと攻撃から切れ味対象技の火力を押し付ける型を警戒。', watch:['素早さ151相当','「きれあじ」','低耐久ゆえ先制技圏内か'], tags:['speed','physical'] },
+
+    { names:['ブリジュラス'], formats:['single'], priority:.94, role:'高耐久 / 型が複数', focus:'「がんじょう」と「じきゅうりょく」の両方を想定し、物理だけで押し切る計画にしない。', watch:['がんじょう','じきゅうりょく','特殊打点'], tags:['bulky'] },
+    { names:['カバルドン'], formats:['single'], priority:.93, role:'起点作成 / 物理受け', focus:'ステルスロック＋あくびで交代を強要される展開を最優先でケア。', watch:['「ステルスロック」','「あくび」','「なまける」'], tags:['hazard','yawn','bulky'] },
+    { names:['ガブリアス'], formats:['single'], priority:.92, role:'高速物理 / 型が多い', focus:'タスキ・スカーフ・起点作成など型の幅が広い。最初の1手で型を決め打ちしない。', watch:['こだわりスカーフ','きあいのタスキ','ステルスロック/まきびし'], tags:['speed','hazard'] },
+    { names:['ゴリランダー'], formats:['single'], priority:.87, role:'物理アタッカー / 先制技', focus:'グラスフィールド下のグラススライダーで終盤の削れたポケモンを縛られる。', watch:['グラスフィールド','「グラススライダー」','高火力草打点'], tags:['priority','field'] },
+    { names:['ミミッキュ'], formats:['single'], priority:.83, role:'行動保証 / 積み / 先制技', focus:'ばけのかわで一度動かれる前提を置き、積み技からの全抜きを許さない。', watch:['ばけのかわ','積み技','かげうち等の先制技'], tags:['setup','priority'] },
+    { names:['サーフゴー'], formats:['single','double'], priority:.81, role:'特殊アタッカー / 変化技耐性', focus:'変化技で止める計画が通りにくい。攻撃技で処理できるルートを残す。', watch:['変化技無効化系の特性','高火力特殊打点','はがね・ゴーストの耐性'], tags:['special'] },
+    { names:['キラフロル'], formats:['single'], priority:.79, role:'起点作成 / 特殊', focus:'接触・物理で雑に触ると場を荒らされやすい。先発時は起点作成を疑う。', watch:['設置技','どく展開','特殊火力'], tags:['hazard'] },
+    { names:['ギルガルド'], formats:['single'], priority:.78, role:'フォルム変化 / 受けと攻めの切替', focus:'キングシールド等で攻撃タイミングをずらされるため、接触技の連打を避ける。', watch:['キングシールド','フォルム変化','先制技'], tags:['priority','disrupt'] },
+    { names:['アシレーヌ'], formats:['single'], priority:.78, role:'特殊アタッカー / 高特殊耐久', focus:'特殊同士の打ち合いだけで処理しようとせず、物理打点や上からの圧力を確認。', watch:['みず・フェアリー打点','高い特殊耐久','回復・耐久寄りの型'], tags:['special','bulky'] }
+  ];
+
+
+  const TEAM_PROFILE_OVERRIDES = [
+    {names:['メガボーマンダ','ボーマンダ'],formats:['double'],tags:['attacker','fast','speedControl','intimidate','finisher'],lead:88,back:88},
+    {names:['ゴリランダー'],formats:['double'],tags:['attacker','support','fakeout','priority','field','pivot'],lead:92,back:76},
+    {names:['オオニューラ'],formats:['double'],tags:['attacker','fast','fakeout','disrupt'],lead:90,back:78},
+    {names:['ドドゲザン'],formats:['double'],tags:['attacker','priority','finisher','antiIntimidate','bulky'],lead:58,back:92},
+    {names:['イダイトウ','イダイトウ（オス）','イダイトウ（オスのすがた）'],formats:['double'],tags:['attacker','fast','weather','finisher'],lead:64,back:92},
+    {names:['イエッサン','イエッサン♀','イエッサン（メス）','イエッサン（メスのすがた）'],formats:['double'],tags:['support','redirect','trickroom','field'],lead:94,back:48},
+    {names:['リキキリン'],formats:['double'],tags:['support','trickroom','priorityBlock','bulky'],lead:88,back:58},
+    {names:['ヤバソチャ'],formats:['double'],tags:['support','redirect','trickroom','sustain'],lead:84,back:62},
+    {names:['ガオガエン'],formats:['double'],tags:['support','fakeout','intimidate','pivot','bulky'],lead:96,back:72},
+    {names:['エルフーン'],formats:['double'],tags:['support','speedControl','disrupt'],lead:96,back:46},
+    {names:['フシギバナ'],formats:['double'],tags:['attacker','fast','weather','disrupt'],lead:76,back:78},
+    {names:['メガライチュウY'],formats:['double'],tags:['attacker','fast','fakeout','disrupt'],lead:92,back:82},
+    {names:['メガグソクムシャ','グソクムシャ'],formats:['double'],tags:['attacker','bulky','slow','finisher'],lead:62,back:92},
+    {names:['メガガブリアスZ'],formats:['double'],tags:['attacker','fast','special','finisher'],lead:82,back:92},
+    {names:['メガルカリオZ'],formats:['double'],tags:['attacker','fast','special','finisher'],lead:84,back:92},
+    {names:['メガセグレイブ','セグレイブ'],formats:['double'],tags:['attacker','bulky','physical','finisher'],lead:72,back:92},
+    {names:['メガアブソルZ'],formats:['double'],tags:['attacker','fast','physical','finisher'],lead:82,back:92},
+    {names:['サーフゴー'],formats:['double'],tags:['attacker','special','spread','finisher'],lead:74,back:90},
+    {names:['カイリュー'],formats:['double'],tags:['attacker','bulky','priority','finisher'],lead:66,back:92},
+    {names:['モロバレル'],formats:['double'],tags:['support','redirect','sleep','sustain','bulky'],lead:92,back:58},
+    {names:['ウーラオス'],formats:['double'],tags:['attacker','physical','fast','priority'],lead:82,back:86},
+    {names:['ブリムオン'],formats:['double'],tags:['attacker','special','trickroom','slow'],lead:78,back:86},
+    {names:['ペリッパー'],formats:['double'],tags:['support','weather','pivot'],lead:90,back:56},
+    {names:['コータス'],formats:['double'],tags:['attacker','weather','slow','spread'],lead:62,back:88},
+    {names:['トルネロス'],formats:['double'],tags:['support','speedControl','weather','disrupt'],lead:96,back:48},
+
+    {names:['ブリジュラス'],formats:['single'],tags:['attacker','bulky','special'],lead:76,back:86},
+    {names:['カバルドン'],formats:['single'],tags:['support','hazard','yawn','bulky'],lead:94,back:58},
+    {names:['ガブリアス'],formats:['single'],tags:['attacker','fast','hazard'],lead:88,back:86},
+    {names:['ゴリランダー'],formats:['single'],tags:['attacker','priority','field','finisher'],lead:76,back:90},
+    {names:['ミミッキュ'],formats:['single'],tags:['attacker','setup','priority','finisher'],lead:72,back:94},
+    {names:['サーフゴー'],formats:['single'],tags:['attacker','special','finisher'],lead:78,back:90},
+    {names:['キラフロル'],formats:['single'],tags:['support','hazard','special'],lead:94,back:52},
+    {names:['ギルガルド'],formats:['single'],tags:['attacker','bulky','priority'],lead:70,back:86},
+    {names:['アシレーヌ'],formats:['single'],tags:['attacker','special','bulky'],lead:68,back:88},
+    {names:['カイリュー'],formats:['single'],tags:['attacker','setup','priority','bulky','finisher'],lead:72,back:94},
+    {names:['メガグソクムシャ','グソクムシャ'],formats:['single'],tags:['attacker','bulky','slow','finisher'],lead:60,back:92},
+    {names:['メガガブリアスZ'],formats:['single'],tags:['attacker','fast','special','finisher'],lead:84,back:94},
+    {names:['メガルカリオZ'],formats:['single'],tags:['attacker','fast','special','finisher'],lead:86,back:94},
+    {names:['メガセグレイブ','セグレイブ'],formats:['single'],tags:['attacker','bulky','physical','finisher'],lead:72,back:92},
+    {names:['メガアブソルZ'],formats:['single'],tags:['attacker','fast','physical','finisher'],lead:84,back:94}
+  ];
+
+  const TEAM_TAG_LABELS = {
+    attacker:'攻撃役', support:'支援役', fast:'高速', slow:'低速', speedControl:'素早さ操作',
+    fakeout:'ねこだまし', redirect:'攻撃先変更', trickroom:'トリックルーム', priority:'先制技',
+    priorityBlock:'先制技封じ', intimidate:'いかく', antiIntimidate:'いかく牽制', field:'フィールド',
+    weather:'天候', setup:'積み', hazard:'設置技', yawn:'あくび', sleep:'眠り', disrupt:'妨害',
+    bulky:'耐久', sustain:'回復', pivot:'交代支援', finisher:'終盤役', physical:'物理', special:'特殊', spread:'範囲打点'
+  };
+
+  function findTeamProfile(name, format) {
+    const target = String(name || '').trim();
+    const mode = format === 'single' ? 'single' : 'double';
+    if (!target) return null;
+    const override = TEAM_PROFILE_OVERRIDES.find(row => row.names.includes(target) && row.formats.includes(mode));
+    if (override) return {...override, name:target, known:true};
+    const base = findBaseKnowledge(target, mode);
+    if (!base) return null;
+    const role = String(base.role || '');
+    const tags = new Set(base.tags || []);
+    if (/アタッカー|高火力|物理|特殊/.test(role)) tags.add('attacker');
+    if (/支援|いかく|フィールド|トリックルーム|妨害/.test(role)) tags.add('support');
+    if (/高速/.test(role)) tags.add('fast');
+    if (/低速/.test(role)) tags.add('slow');
+    if (/素早さ操作/.test(role)) tags.add('speedControl');
+    if (tags.has('priority') && tags.has('attacker')) tags.add('finisher');
+    return {name:target,names:[target],formats:[mode],tags:[...tags],lead:tags.has('support')?82:72,back:tags.has('attacker')?84:62,known:true};
+  }
+
+  function buildTeamFoundation(teamMembers, format, userPlan) {
+    const mode = format === 'single' ? 'single' : 'double';
+    const members = uniqNames(teamMembers).slice(0,6);
+    const profiles = members.map((name,index) => {
+      const p = findTeamProfile(name, mode);
+      return p ? {...p, originalIndex:index, labels:p.tags.map(t=>TEAM_TAG_LABELS[t]||t)} : {name,known:false,tags:[],labels:[],lead:50,back:50,originalIndex:index};
+    });
+    const known = profiles.filter(p=>p.known);
+    const coverage = members.length ? known.length / members.length : 0;
+    const count = tag => known.filter(p=>p.tags.includes(tag)).length;
+    const has = tag => count(tag) > 0;
+    const attackers = known.filter(p=>p.tags.includes('attacker'));
+    const supports = known.filter(p=>p.tags.includes('support') || ['fakeout','redirect','intimidate','speedControl','trickroom','hazard','yawn'].some(t=>p.tags.includes(t)));
+    const finishers = known.filter(p=>p.tags.includes('finisher') || p.tags.includes('priority') || (p.tags.includes('attacker') && p.tags.includes('fast')));
+
+    const strengths=[];
+    const gaps=[];
+    const pushStrength=(text)=>{if(strengths.length<3&&!strengths.includes(text))strengths.push(text)};
+    const pushGap=(text)=>{if(gaps.length<3&&!gaps.includes(text))gaps.push(text)};
+    if (mode === 'double') {
+      if (has('speedControl') || has('trickroom')) pushStrength('行動順を動かす手段を初期モデルで確認できる。');
+      else pushGap('登録名だけでは、素早さ操作・トリックルームのような行動順管理を確認できない。技構成にあるなら基本勝ち筋へ追記する。');
+      if (has('fakeout') || has('redirect') || has('intimidate') || has('disrupt')) pushStrength('初手の行動回数を作る支援・妨害役が見える。');
+      else pushGap('初手を安定させる支援・妨害役を初期モデルでは確認できない。');
+      if (attackers.length >= 2) pushStrength('攻撃役を複数確認でき、1体を温存する基本プランを作りやすい。');
+      else pushGap('攻めの軸を自動判定できるポケモンが少ない。基本勝ち筋を1行だけ手入力すると精度が上がる。');
+    } else {
+      if (has('hazard') || has('yawn')) pushStrength('先発から相手の交代・削りを動かす役が見える。');
+      if (has('setup')) pushStrength('積みから終盤を作る勝ち筋を確認できる。');
+      if (has('priority') || has('fast')) pushStrength('終盤の行動順を確保しやすい役が見える。');
+      else pushGap('高速処理・先制技など終盤の行動順を確保する要素を初期モデルでは確認できない。');
+      if (attackers.length < 2) pushGap('攻めの軸を自動判定できるポケモンが少ない。基本勝ち筋を1行だけ手入力すると精度が上がる。');
+      if (!has('hazard') && !has('setup') && !has('yawn')) pushGap('先発から試合を動かす手段を初期モデルでは確認できない。');
+    }
+    if (members.length < 6) pushGap('6体すべて登録すると、基本選出と役割の抜けを判定しやすくなる。');
+    if (members.length && coverage < .5) pushGap('初期モデル未登録のポケモンが多いため、提案は低確信。手入力の基本勝ち筋を優先する。');
+
+    let generatedPlan='';
+    let planPattern='generic';
+    if (mode === 'double') {
+      if (has('trickroom') && (has('slow') || has('bulky'))) { generatedPlan='トリックルームを通すターンを先に作り、低速・高耐久の攻撃役を動かす。終盤役はトリックルーム終了後まで残す。'; planPattern='trickroom'; }
+      else if (has('speedControl') && attackers.length >= 2) { generatedPlan='素早さ操作を先に通し、攻撃役の行動回数を確保する。序盤で全員を削り切ろうとせず、終盤役を1体残す。'; planPattern='speed'; }
+      else if ((has('fakeout') || has('redirect') || has('intimidate')) && attackers.length) { generatedPlan='支援・妨害で安全な1ターンを作り、攻撃役を動かす。攻撃役を同時に失わず、最後に1体を残す。'; planPattern='support'; }
+      else if (has('weather') && attackers.length) { generatedPlan='天候を利用するターンを明確にし、その間に攻撃役の行動回数を稼ぐ。天候が切れた後の終盤役も1体残す。'; planPattern='weather'; }
+      else if (attackers.length) { generatedPlan='攻撃役を1体だけ「最後に残す役」と決め、もう1体で先に相手を削る。初手からエース2体を同時に失わない。'; planPattern='attacker'; }
+    } else {
+      if (has('hazard') || has('yawn')) { generatedPlan='先発で交代・削りを発生させ、相手の終盤回答を先に消耗させる。最後は高速役・先制技・積み役のいずれかを通す。'; planPattern='chip'; }
+      else if (has('setup')) { generatedPlan='積み役をすぐ出すのではなく、相手の止め役を先に削る。止め役が弱った段階で積みから終盤を作る。'; planPattern='setup'; }
+      else if (finishers.length) { generatedPlan='序盤は相手の受け・高速役を削り、終盤役を温存する。最後に上から、または先制技で取り切る形を目指す。'; planPattern='finisher'; }
+      else if (attackers.length) { generatedPlan='最も通しやすい攻撃役を1体決め、そのポケモンが止まる相手を先に削る。選出3体すべてを同時に役割消耗させない。'; planPattern='attacker'; }
+    }
+    if (!generatedPlan) generatedPlan='まず「最後に残したい1体」を決め、そのポケモンが動きやすくなるように残りの選出で1～2ターンを作る。';
+    const plan = String(userPlan || '').trim() || generatedPlan;
+    const planSource = String(userPlan || '').trim() ? 'user' : 'starter';
+
+    const leadSorted=[...known].sort((a,b)=>b.lead-a.lead||a.originalIndex-b.originalIndex);
+    const backSorted=[...known].sort((a,b)=>b.back-a.back||a.originalIndex-b.originalIndex);
+    const picks=[];
+    const addPick=p=>{if(p&&!picks.includes(p.name))picks.push(p.name)};
+    const sortLead=list=>[...list].sort((a,b)=>b.lead-a.lead||a.originalIndex-b.originalIndex);
+    const sortBack=list=>[...list].sort((a,b)=>b.back-a.back||a.originalIndex-b.originalIndex);
+    if (mode === 'double') {
+      const pureAttackers=attackers.filter(p=>!p.tags.includes('support'));
+      if (planPattern === 'trickroom') {
+        const trSupport=supports.filter(p=>p.tags.includes('trickroom'));
+        const trAttack=attackers.filter(p=>p.tags.includes('trickroom'));
+        addPick(sortLead(trSupport)[0] || sortLead(trAttack)[0]);
+        addPick(sortLead(trAttack).find(p=>!picks.includes(p.name)) || sortLead(attackers).find(p=>!picks.includes(p.name)));
+        sortBack(attackers.filter(p=>p.tags.includes('slow') || p.tags.includes('bulky') || p.tags.includes('finisher'))).forEach(addPick);
+      } else if (planPattern === 'speed') {
+        const speedControllers=known.filter(p=>p.tags.includes('speedControl'));
+        addPick(sortLead(speedControllers)[0]);
+        addPick(sortLead(pureAttackers).find(p=>!picks.includes(p.name)) || sortLead(attackers).find(p=>!picks.includes(p.name)));
+        sortBack(finishers).forEach(addPick);
+      } else if (planPattern === 'weather') {
+        const weatherSupport=supports.filter(p=>p.tags.includes('weather'));
+        const weatherAttack=attackers.filter(p=>p.tags.includes('weather'));
+        addPick(sortLead(weatherSupport)[0] || sortLead(weatherAttack)[0]);
+        addPick(sortLead(weatherAttack).find(p=>!picks.includes(p.name)) || sortLead(pureAttackers).find(p=>!picks.includes(p.name)));
+        sortBack(finishers).forEach(addPick);
+      } else {
+        const supportLead=sortLead(supports)[0];
+        const attackLead=sortLead(pureAttackers).find(p=>p.name!==supportLead?.name) || sortLead(attackers).find(p=>p.name!==supportLead?.name);
+        addPick(supportLead || leadSorted[0]); addPick(attackLead || leadSorted.find(p=>!picks.includes(p.name)));
+        sortBack(finishers).forEach(addPick);
+      }
+      backSorted.forEach(addPick);
+    } else {
+      const opener=[...known].sort((a,b)=>b.lead-a.lead||a.originalIndex-b.originalIndex)[0];
+      addPick(opener);
+      sortBack(finishers).forEach(addPick);
+      backSorted.forEach(addPick);
+    }
+    const pickCount=mode==='single'?3:4;
+    const basicSelection = known.length >= pickCount && coverage >= .5 ? picks.slice(0,pickCount) : [];
+    const selectionConfidence = basicSelection.length
+      ? (coverage >= .83 && (supports.length || mode==='single') && attackers.length >= 2 ? 'mid' : 'low')
+      : 'none';
+    const basicLead = basicSelection.length ? basicSelection.slice(0, mode==='single'?1:2) : [];
+    const basicBack = basicSelection.length ? basicSelection.slice(mode==='single'?1:2, pickCount) : [];
+
+    const roleSummary = profiles.map(p=>({name:p.name,known:p.known,labels:p.labels.slice(0,4)}));
+    return {
+      version:BASE_KNOWLEDGE_VERSION,format:mode,members,profiles:roleSummary,coverage,
+      strengths,gaps,plan,generatedPlan,planSource,planPattern,basicSelection,basicLead,basicBack,selectionConfidence,
+      counts:{known:known.length,attackers:attackers.length,supports:supports.length,finishers:finishers.length}
+    };
+  }
+
+  const PLAN_OUTCOME_LABELS = {held:'機能した',partial:'途中まで',broken:'早めに崩れた',unknown:'未記録'};
+
+  function buildProgressSnapshot(matches, foundation) {
+    const mode = foundation?.format;
+    const list = sortedMatches(matches || []).filter(m => !mode || (m.format === 'single' ? 'single' : 'double') === mode);
+    const total = list.length;
+    const recent = list.slice(0,5);
+    const prepCount = recent.filter(m=>String(m.selectionReason||'').trim()).length;
+    const reviewCount = recent.filter(m=>String(m.keyTurn||'').trim() || String(m.learning||'').trim()).length;
+    const outcomes = recent.filter(m=>['held','partial','broken'].includes(m.planOutcome));
+    const outcomeScore = outcomes.length ? outcomes.reduce((sum,m)=>sum+(m.planOutcome==='held'?1:m.planOutcome==='partial'?.5:0),0)/outcomes.length : null;
+    const losses = recent.filter(m=>m.result==='loss');
+    const causeCounts={};
+    losses.forEach(m=>{const c=m.cause||'unknown';causeCounts[c]=(causeCounts[c]||0)+1});
+    const repeat = Object.entries(causeCounts).sort((a,b)=>b[1]-a[1])[0] || null;
+    const repeatedCause = repeat && repeat[1] >= 2 ? repeat[0] : null;
+    let stage='foundation',stageLabel='土台作り',message='まず基本戦術を1本に絞り、勝敗より「同じ考え方で試せたか」を確認する段階です。';
+    if (total>=1 && total<=2) { stage='stabilize';stageLabel='型を固定';message='まだ構築を頻繁に変えず、同じ基本選出・勝ち筋を数戦試して崩れる場所を見ます。'; }
+    else if (total>=3 && total<=5) { stage='diagnose';stageLabel='負け方を整理';message='勝率より、同じ敗因が繰り返されているかを優先して見ます。'; }
+    else if (total>=6) { stage='personalize';stageLabel='個人最適化';message='個人ログを選出・要警戒・基本戦術へ反映できる段階です。'; }
+
+    const causeAction={selection:'次の数戦は構築変更より、相手の最大2脅威に回答できる基本選出を固定する。',plan:'選出を変える前に「最後に誰を残すか」を1体だけ決めてから対戦する。',turn:'基本選出は維持し、最も勝敗を動かした1ターンだけ比較する。',knowledge:'分からなかったポケモン・技を1つだけ環境メモへ追加して次戦へ進む。',execution:'時間切れ・操作を減らすため、初手の方針を対戦前に1行で決める。',luck:'同じ運要素がなくても妥当な択だったかだけ確認し、妥当なら構築を変えない。',unknown:'最初に不利になった場面を1つだけ敗因カテゴリへ仮置きする。'};
+    let nextFocus='';
+    if (!total) {
+      if (foundation?.basicSelection?.length) nextFocus=`まず基本選出のたたき台「${foundation.basicSelection.join(' / ')}」を1～2戦試し、勝敗よりプランがどこで崩れたかだけ記録する。`;
+      else if (foundation?.gaps?.length) nextFocus=foundation.gaps[0];
+      else nextFocus='構築6体を登録すると、0戦から基本戦術の仮説を作れます。';
+    } else if (repeatedCause) nextFocus=causeAction[repeatedCause] || causeAction.unknown;
+    else if (outcomes.length && outcomeScore < .5) nextFocus='勝敗より先に、事前プランが崩れた最初の場面を1つ記録する。構築変更はその後で判断する。';
+    else if (prepCount < Math.min(2,recent.length)) nextFocus='次の対戦は、選出前に「最後に残したい1体」を1行だけ記録する。';
+    else if (total <= 5) nextFocus='同じ基本戦術を継続し、同じ敗因が2回出るまでは大きな構築変更を保留する。';
+    else nextFocus='個人環境の上位脅威と選出実績を見て、基本選出の例外条件を1つだけ追加する。';
+
+    return {
+      total,stage,stageLabel,message,nextFocus,
+      recentCount:recent.length,prepRate:recent.length?prepCount/recent.length:null,
+      reviewRate:recent.length?reviewCount/recent.length:null,
+      planOutcomeCount:outcomes.length,planExecutionRate:outcomeScore,
+      repeatedCause,repeatedCauseCount:repeat?repeat[1]:0
+    };
+  }
+
+  const SIGNAL_LABELS = {
+    speed: '素早さ操作・高速展開',
+    fakeout: 'ねこだまし',
+    redirect: '攻撃先変更',
+    trickroom: 'トリックルーム',
+    priority: '先制技',
+    priorityBlock: '先制技封じ',
+    intimidate: 'いかく',
+    antiIntimidate: 'いかく牽制',
+    field: 'フィールド',
+    weather: '天候',
+    setup: '積み',
+    hazard: '設置技',
+    yawn: 'あくび',
+    sleep: '眠り',
+    disrupt: '妨害'
+  };
+
+  function findBaseKnowledge(name, format) {
+    const target = String(name || '').trim();
+    if (!target) return null;
+    return BASE_KNOWLEDGE.find(row => row.names.includes(target) && row.formats.includes(format === 'single' ? 'single' : 'double')) || null;
+  }
+
+  function buildBeginnerGuide(opponentTeam, format, matches, metaNotes) {
+    const mode = format === 'single' ? 'single' : 'double';
+    const opponent = uniqNames(opponentTeam).slice(0, 6);
+    const historyRows = aggregateOpponentPokemon((matches || []).filter(m => (m.format === 'single' ? 'single' : 'double') === mode));
+    const notes = Array.isArray(metaNotes) ? metaNotes : [];
+    const riskValue = { high: .95, mid: .65, low: .35 };
+
+    const rows = opponent.map((name, index) => {
+      const base = findBaseKnowledge(name, mode);
+      const history = historyRows.find(r => r.name === name) || null;
+      const pokemonNotes = notes.filter(n => String(n?.pokemon || '').trim() === name);
+      const metaRisk = pokemonNotes.length ? Math.max(...pokemonNotes.map(n => riskValue[n.risk] || .65)) : 0;
+      const components = [];
+      if (base) components.push({value:base.priority, weight:.55});
+      if (history) {
+        const confidence = Math.min(1, (history.sampleSize || 0) / 4);
+        const shrunkHistory = .45 * (1 - confidence) + history.dangerScore * confidence;
+        components.push({value:shrunkHistory, weight:.30});
+      }
+      if (metaRisk) components.push({value:metaRisk, weight:.15});
+      const totalWeight = components.reduce((sum, c) => sum + c.weight, 0);
+      const score = totalWeight ? components.reduce((sum, c) => sum + c.value*c.weight, 0) / totalWeight : .2;
+      const customWatch = pokemonNotes.map(n => String(n.watch || '').trim()).filter(Boolean);
+      return {
+        name,
+        score: clamp(score, 0, 1),
+        known: Boolean(base),
+        role: base?.role || pokemonNotes.map(n => n.role).filter(Boolean).join(' / ') || '基本ガイド未登録',
+        focus: customWatch[0] || base?.focus || '過去ログや自分のメモが増えると、この相手で優先して見る点を絞れます。',
+        watch: [...(base?.watch || []), ...customWatch].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4),
+        tags: [...(base?.tags || [])],
+        appearances: history?.appearances || 0,
+        lossRate: history?.lossRate || 0,
+        noteAnswer: pokemonNotes.map(n => String(n.answer || '').trim()).filter(Boolean).join(' / '),
+        originalIndex: index
+      };
+    }).sort((a,b) => b.score-a.score || b.appearances-a.appearances || a.originalIndex-b.originalIndex);
+
+    const signalCounts = new Map();
+    rows.forEach(r => r.tags.forEach(tag => signalCounts.set(tag, (signalCounts.get(tag) || 0) + 1)));
+    const principles = [];
+    const add = (tag, text) => { if ((signalCounts.get(tag) || 0) > 0 && principles.length < 4) principles.push({tag,label:SIGNAL_LABELS[tag] || tag,text}); };
+    if (mode === 'double') {
+      add('trickroom','トリックルームを止めるのか、張られた後を受けるのかを選出段階で決める。');
+      add('speed','おいかぜ・高速アタッカーなど、行動順を相手に握られる要素を先に確認する。');
+      add('fakeout','初手は片側を「ねこだまし」で止められる前提でも成立する組み合わせにする。');
+      add('redirect','このゆびとまれ・いかりのこな等で集中攻撃をずらされても崩れないか確認する。');
+      add('priority','終盤は先制技圏内を意識し、削れた勝ち筋を不用意に残さない。');
+      add('intimidate','物理アタッカーだけに寄せると、いかくで火力を落とされ続ける可能性を確認する。');
+      add('weather','天候で素早さや火力が変わる相手は、天候始動役とエースをセットで見る。');
+    } else {
+      add('hazard','ステルスロック等を置かれた後の交代回数まで含めて、受け回しが成立するか確認する。');
+      add('yawn','あくびで交代を強制される前提で、起点にされないルートを残す。');
+      add('setup','一度積まれてから止める手段があるかを選出前に確認する。');
+      add('priority','終盤の先制技圏内を意識し、削れたエースを残すだけで安心しない。');
+      add('speed','スカーフや高速アタッカーを含め、上から処理できるという思い込みを避ける。');
+    }
+
+    const unknown = rows.filter(r => !r.known).map(r => r.name);
+    return {
+      format: mode,
+      version: BASE_KNOWLEDGE_VERSION,
+      priorities: rows.slice(0, Math.min(3, rows.length)),
+      all: rows,
+      principles,
+      unknown,
+      coverage: opponent.length ? (opponent.length - unknown.length) / opponent.length : 0
+    };
+  }
+
+
+  function buildSelectionAssist(opponentTeam, ownTeam, matches, metaNotes, format, teamPlan) {
+    const mode = format === 'single' ? 'single' : 'double';
+    const opponent = uniqNames(opponentTeam).slice(0, 6);
+    const own = uniqNames(ownTeam).slice(0, 6);
+    const list = sortedMatches(matches || []).filter(m => (m.format === 'single' ? 'single' : 'double') === mode);
+    const notes = Array.isArray(metaNotes) ? metaNotes : [];
+    const pickCount = mode === 'single' ? 3 : 4;
+    const threatRows = aggregateOpponentPokemon(list);
+    const ownRows = aggregateOwnSelections(list);
+    const beginnerGuide = buildBeginnerGuide(opponent, format, list, notes);
+    const teamFoundation = buildTeamFoundation(own, format, teamPlan);
+
+    const riskValue = { high: 0.9, mid: 0.6, low: 0.3 };
+    const noteByPokemon = new Map();
+    for (const note of notes) {
+      const name = String(note?.pokemon || '').trim();
+      if (!name) continue;
+      if (!noteByPokemon.has(name)) noteByPokemon.set(name, []);
+      noteByPokemon.get(name).push(note);
+    }
+
+    const threats = opponent.map(name => {
+      const history = threatRows.find(r => r.name === name) || null;
+      const pokemonNotes = noteByPokemon.get(name) || [];
+      const noteRisk = pokemonNotes.length ? Math.max(...pokemonNotes.map(n => riskValue[n.risk] || 0.6)) : 0;
+      const guideRow = beginnerGuide.all.find(r => r.name === name) || null;
+      const baseRisk = guideRow?.known ? guideRow.score : 0;
+      const values = [];
+      if (history) values.push({value:history.dangerScore,weight:.35});
+      if (noteRisk) values.push({value:noteRisk,weight:.25});
+      if (baseRisk) values.push({value:baseRisk,weight:.40});
+      const denom = values.reduce((sum,v)=>sum+v.weight,0);
+      const score = denom ? values.reduce((sum,v)=>sum+v.value*v.weight,0)/denom : 0.2;
+      return {
+        name,
+        score,
+        baseRole: guideRow?.role || '',
+        baseFocus: guideRow?.focus || '',
+        baseWatch: guideRow?.watch || [],
+        baseKnown: Boolean(guideRow?.known),
+        appearances: history?.appearances || 0,
+        lossRate: history?.lossRate || 0,
+        sampleSize: history?.sampleSize || 0,
+        risk: pokemonNotes[0]?.risk || '',
+        watch: pokemonNotes.map(n => n.watch).filter(Boolean).join(' / '),
+        answer: pokemonNotes.map(n => n.answer).filter(Boolean).join(' / '),
+        hasNote: pokemonNotes.length > 0,
+        hasAnswer: pokemonNotes.some(n => String(n.answer || '').trim())
+      };
+    }).sort((a, b) => b.score - a.score || b.appearances - a.appearances);
+
+    const candidates = own.map((name, index) => {
+      const explicitFor = [];
+      for (const opp of opponent) {
+        const oppNotes = noteByPokemon.get(opp) || [];
+        if (oppNotes.some(n => String(n.answer || '').includes(name))) explicitFor.push(opp);
+      }
+
+      let weightedSamples = 0;
+      let weightedWins = 0;
+      let relevantMatches = 0;
+      const relevantOpponentNames = new Set();
+      for (const m of list) {
+        if (!uniqNames(m.selectedTeam).includes(name)) continue;
+        const matchOpp = uniqNames(m.opponentTeam);
+        const overlap = opponent.filter(o => matchOpp.includes(o));
+        if (!overlap.length) continue;
+        const weight = overlap.length / Math.max(1, opponent.length);
+        weightedSamples += weight;
+        if (m.result === 'win') weightedWins += weight;
+        relevantMatches += 1;
+        overlap.forEach(o => relevantOpponentNames.add(o));
+      }
+
+      const matchupRate = weightedSamples > 0 ? (weightedWins + 1) / (weightedSamples + 2) : 0.5;
+      const overall = ownRows.find(r => r.name === name) || null;
+      const overallRate = overall ? (overall.wins + 1) / (overall.picks + 2) : 0.5;
+      let score = 50;
+      score += Math.min(24, explicitFor.length * 12);
+      if (weightedSamples > 0) score += (matchupRate - 0.5) * 30;
+      if (overall) score += (overallRate - 0.5) * 10;
+      score = Math.round(clamp(score, 0, 100));
+
+      const evidencePoints = explicitFor.length * 3 + Math.min(4, relevantMatches) + (overall ? Math.min(2, Math.floor(overall.picks / 3) + 1) : 0);
+      const evidenceLevel = evidencePoints >= 6 ? 'high' : evidencePoints >= 3 ? 'mid' : evidencePoints > 0 ? 'low' : 'none';
+      const reasons = [];
+      if (explicitFor.length) reasons.push(`対策メモで ${explicitFor.join(' / ')} への回答に指定`);
+      if (relevantMatches) reasons.push(`今回と共通する相手への選出ログ ${relevantMatches}件`);
+      if (overall) reasons.push(`全体で${overall.picks}回選出・${pct(overall.winRate)}%`);
+      if (!reasons.length) reasons.push('この相手に対する根拠データはまだありません');
+
+      return {
+        name,
+        score,
+        evidenceLevel,
+        evidencePoints,
+        explicitFor,
+        relevantMatches,
+        relevantOpponentCount: relevantOpponentNames.size,
+        matchupRate,
+        overallPicks: overall?.picks || 0,
+        overallWinRate: overall?.winRate || 0,
+        reasons,
+        originalIndex: index
+      };
+    }).sort((a, b) => b.score - a.score || b.evidencePoints - a.evidencePoints || a.originalIndex - b.originalIndex);
+
+    const evidenceAvailable = candidates.some(c => c.explicitFor.length > 0 || c.relevantMatches > 0);
+    let recommendationSource = 'none';
+    let recommended = [];
+    if (evidenceAvailable) {
+      recommended = candidates.slice(0, Math.min(pickCount, candidates.length)).map(c => c.name);
+      recommendationSource = 'personal';
+    } else if (teamFoundation.basicSelection.length === pickCount) {
+      recommended = [...teamFoundation.basicSelection];
+      recommendationSource = 'starter';
+    }
+
+    const minOverlap = opponent.length >= 4 ? 2 : 1;
+    const pastFailures = list.filter(m => m.result === 'loss').map(m => {
+      const matchOpp = uniqNames(m.opponentTeam);
+      const overlap = opponent.filter(o => matchOpp.includes(o));
+      return {
+        id: m.id,
+        date: m.date || '',
+        overlap,
+        overlapCount: overlap.length,
+        selectedTeam: uniqNames(m.selectedTeam),
+        cause: m.cause || 'unknown',
+        keyTurn: String(m.keyTurn || ''),
+        learning: String(m.learning || ''),
+        selectionReason: String(m.selectionReason || '')
+      };
+    }).filter(r => r.overlapCount >= minOverlap)
+      .sort((a, b) => b.overlapCount - a.overlapCount || (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0))
+      .slice(0, 3);
+
+    const warnings = [];
+    if (!own.length) warnings.push('自分の構築6体を先に登録してください。');
+    if (own.length && own.length < pickCount) warnings.push(`選出候補を出すには自分の構築を${pickCount}体以上登録してください。`);
+    if (!opponent.length) warnings.push('相手のポケモンを入力してください。');
+    if (opponent.length && own.length >= pickCount && !evidenceAvailable && recommendationSource === 'none') warnings.push('自分の構築との直接データが不足し、初期モデルでも役割判定の確信が低いため、選出候補は断定していません。');
+    if (recommendationSource === 'starter') warnings.push('選出候補は個人ログではなく、構築の役割から作った初期モデルです。技・持ち物が異なる場合は基本勝ち筋を優先してください。');
+    if (recommended.length && recommendationSource === 'personal') {
+      const directCount = candidates.slice(0, Math.min(pickCount, candidates.length)).filter(c => c.explicitFor.length || c.relevantMatches).length;
+      if (directCount < recommended.length) warnings.push(`仮候補${recommended.length}体のうち${recommended.length - directCount}体は、今回の相手への直接根拠がまだありません（※表示）。`);
+    }
+
+    return {
+      format: format === 'single' ? 'single' : 'double',
+      pickCount,
+      opponent,
+      own,
+      threats,
+      candidates,
+      recommended,
+      evidenceAvailable,
+      pastFailures,
+      warnings,
+      beginnerGuide,
+      teamFoundation,
+      recommendationSource
+    };
+  }
+
+  function validateMatch(match) {
+    const errors = [];
+    if (!match) return ['対戦データがありません'];
+    if (!['win', 'loss'].includes(match.result)) errors.push('勝敗を選択してください');
+    const opponent = uniqNames(match.opponentTeam);
+    const selected = uniqNames(match.selectedTeam);
+    const maxSelected = match.format === 'single' ? 3 : 4;
+    if (!opponent.length) errors.push('相手のポケモンを1匹以上入力してください');
+    if (opponent.length > 6) errors.push('相手のポケモンは6匹までです');
+    if (!selected.length) errors.push('自分の選出を1匹以上入力してください');
+    if (selected.length > maxSelected) errors.push(`自分の選出は${maxSelected}匹までです`);
+    return errors;
+  }
+
+
+  // ---- v0.5 catalog / beginner team builder ---------------------------------
+  // Catalog is loaded from pokemon-data.js in the browser. Functions accept an
+  // explicit catalog too so they remain deterministic and unit-testable.
+  const TYPE_NAMES = ['ノーマル','ほのお','みず','でんき','くさ','こおり','かくとう','どく','じめん','ひこう','エスパー','むし','いわ','ゴースト','ドラゴン','あく','はがね','フェアリー'];
+  const META_PRIOR_VERSION='Regulation M-C / public data 2026-09-09–14';
+  const META_PRIOR_DOUBLE={rillaboom:10,sneasler:10,salamence:9,incineroar:9,kingambit:8,indeedee:8,indeedeef:8,basculegion:8,basculegionf:7,golisopod:8,farigiraf:7,pelipper:7,archaludon:6,sylveon:6,gholdengo:6,arcaninehisui:6,charizard:5,garchomp:5,whimsicott:5,volcarona:5,torkoal:5,raichu:4,gardevoir:4,baxcalibur:4,sinistcha:4};
+  const META_PRIOR_SINGLE={salamence:10,garchomp:10,primarina:9,golisopod:9,hippowdon:9,baxcalibur:8,lucario:8,gholdengo:8,archaludon:8,aegislash:8,mimikyu:7,meowscarada:7,rillaboom:7,corviknight:7,gyarados:7,basculegion:7,glimmora:6,greninja:6,charizard:6,ninetalesalola:6,cinderace:6,rotomwash:6,sneasler:6,volcarona:5,hydreigon:5,pawmot:5,skeledirge:5,indeedee:5,sylveon:5,dragonite:5,metagross:5};
+  function getMetaPrior(pokemon,format){if(!pokemon)return 0;const map=format==='single'?META_PRIOR_SINGLE:META_PRIOR_DOUBLE;return map[pokemon.id]||0;}
+  const TYPE_EFFECT = {
+    'ノーマル': {'いわ':.5,'ゴースト':0,'はがね':.5},
+    'ほのお': {'ほのお':.5,'みず':.5,'くさ':2,'こおり':2,'むし':2,'いわ':.5,'ドラゴン':.5,'はがね':2},
+    'みず': {'ほのお':2,'みず':.5,'くさ':.5,'じめん':2,'いわ':2,'ドラゴン':.5},
+    'でんき': {'みず':2,'でんき':.5,'くさ':.5,'じめん':0,'ひこう':2,'ドラゴン':.5},
+    'くさ': {'ほのお':.5,'みず':2,'くさ':.5,'どく':.5,'じめん':2,'ひこう':.5,'むし':.5,'いわ':2,'ドラゴン':.5,'はがね':.5},
+    'こおり': {'ほのお':.5,'みず':.5,'くさ':2,'こおり':.5,'じめん':2,'ひこう':2,'ドラゴン':2,'はがね':.5},
+    'かくとう': {'ノーマル':2,'こおり':2,'どく':.5,'ひこう':.5,'エスパー':.5,'むし':.5,'いわ':2,'ゴースト':0,'あく':2,'はがね':2,'フェアリー':.5},
+    'どく': {'くさ':2,'どく':.5,'じめん':.5,'いわ':.5,'ゴースト':.5,'はがね':0,'フェアリー':2},
+    'じめん': {'ほのお':2,'でんき':2,'くさ':.5,'どく':2,'ひこう':0,'むし':.5,'いわ':2,'はがね':2},
+    'ひこう': {'でんき':.5,'くさ':2,'かくとう':2,'むし':2,'いわ':.5,'はがね':.5},
+    'エスパー': {'かくとう':2,'どく':2,'エスパー':.5,'あく':0,'はがね':.5},
+    'むし': {'ほのお':.5,'くさ':2,'かくとう':.5,'どく':.5,'ひこう':.5,'エスパー':2,'ゴースト':.5,'あく':2,'はがね':.5,'フェアリー':.5},
+    'いわ': {'ほのお':2,'こおり':2,'かくとう':.5,'じめん':.5,'ひこう':2,'むし':2,'はがね':.5},
+    'ゴースト': {'ノーマル':0,'エスパー':2,'ゴースト':2,'あく':.5},
+    'ドラゴン': {'ドラゴン':2,'はがね':.5,'フェアリー':0},
+    'あく': {'かくとう':.5,'エスパー':2,'ゴースト':2,'あく':.5,'フェアリー':.5},
+    'はがね': {'ほのお':.5,'みず':.5,'でんき':.5,'こおり':2,'いわ':2,'はがね':.5,'フェアリー':2},
+    'フェアリー': {'ほのお':.5,'かくとう':2,'どく':.5,'ドラゴン':2,'あく':2,'はがね':.5}
+  };
+
+  const CATALOG_INDEX_CACHE = typeof WeakMap !== 'undefined' ? new WeakMap() : null;
+  function getCatalogIndex(catalog) {
+    if(CATALOG_INDEX_CACHE && CATALOG_INDEX_CACHE.has(catalog)) return CATALOG_INDEX_CACHE.get(catalog);
+    const map=new Map();
+    catalog.forEach(p=>[p.id,p.name,p.en].forEach(v=>map.set(normalizeLookup(v),p)));
+    if(CATALOG_INDEX_CACHE) CATALOG_INDEX_CACHE.set(catalog,map);
+    return map;
+  }
+
+  function getCatalog(explicitCatalog) {
+    if (Array.isArray(explicitCatalog)) return explicitCatalog;
+    if (typeof globalThis !== 'undefined' && Array.isArray(globalThis.PC_POKEMON_CATALOG)) return globalThis.PC_POKEMON_CATALOG;
+    return [];
+  }
+
+  function normalizeLookup(value) {
+    return String(value || '').toLowerCase().normalize('NFKC').replace(/[\s・･._'’\-（）()]/g, '');
+  }
+
+  function findCatalogPokemon(value, explicitCatalog) {
+    const catalog = getCatalog(explicitCatalog);
+    const key = normalizeLookup(value);
+    if (!key) return null;
+    const index=getCatalogIndex(catalog);
+    const exact=index.get(key);
+    if(exact) return exact;
+    // v0.4 and earlier allowed mega forms to be typed as team members. Team
+    // preview in v0.5 uses the base species, so migrate those labels safely.
+    const raw=String(value||'').normalize('NFKC').trim();
+    let base=raw.replace(/^メガ/,'').replace(/[XYZＸＹＺ]$/i,'').replace(/^Mega\s*/i,'').replace(/[- ]Mega(?:[- ]?[XYZ])?$/i,'');
+    const baseKey=normalizeLookup(base);
+    if(baseKey && baseKey!==key){
+      const migrated=index.get(baseKey);
+      if(migrated) return migrated;
+    }
+    return null;
+  }
+
+  function catalogSearch(query, type, explicitCatalog) {
+    const catalog = getCatalog(explicitCatalog);
+    const q = normalizeLookup(query);
+    return catalog.filter(p => {
+      if (type && type !== 'all' && !p.types.includes(type)) return false;
+      if (!q) return true;
+      return [p.name,p.en,p.id,String(p.dex)].some(v => normalizeLookup(v).includes(q));
+    });
+  }
+
+  function typeMultiplier(attackType, defenderTypes) {
+    return (defenderTypes || []).reduce((m, d) => m * ((TYPE_EFFECT[attackType] && TYPE_EFFECT[attackType][d] != null) ? TYPE_EFFECT[attackType][d] : 1), 1);
+  }
+
+  function catalogRoleProfile(pokemon, format) {
+    if (!pokemon) return {labels:[], tags:[], known:false, style:'役割を確認'};
+    const [hp,atk,def,spa,spd,spe] = pokemon.stats || [0,0,0,0,0,0];
+    const tags = [];
+    if (spe >= 110) tags.push('fast');
+    if (spe <= 60) tags.push('slow');
+    if (atk >= 110 && atk >= spa + 10) tags.push('physical');
+    if (spa >= 110 && spa >= atk + 10) tags.push('special');
+    if (Math.max(atk,spa) >= 110) tags.push('attacker');
+    if (def >= 120 || spd >= 120 || hp + def + spd >= 300) tags.push('bulky');
+    const known = findTeamProfile(pokemon.name, format);
+    if (known && known.known) known.tags.forEach(t => { if (!tags.includes(t)) tags.push(t); });
+    const labels=[];
+    if (tags.includes('fast')) labels.push('すばやい');
+    if (tags.includes('physical')) labels.push('物理寄り');
+    if (tags.includes('special')) labels.push('特殊寄り');
+    if (tags.includes('bulky')) labels.push('耐久寄り');
+    if (tags.includes('speedControl')) labels.push('素早さ補助');
+    if (tags.includes('support')) labels.push('サポート');
+    if (!labels.length) labels.push(Math.max(atk,spa) >= 100 ? '攻撃参加' : 'バランス');
+    return {tags:[...new Set(tags)], labels:[...new Set(labels)].slice(0,3), known:!!(known && known.known), style:labels.slice(0,2).join(' / ')};
+  }
+
+  function teamTypePressure(team, explicitCatalog) {
+    const mons=uniqNames(team).map(n=>findCatalogPokemon(n,explicitCatalog)).filter(Boolean);
+    return TYPE_NAMES.map(type => {
+      let weak=0,resist=0,immune=0;
+      mons.forEach(p=>{const m=typeMultiplier(type,p.types);if(m>1)weak++;else if(m===0)immune++;else if(m<1)resist++;});
+      return {type,weak,resist,immune,net:weak-resist-immune*1.25};
+    }).sort((a,b)=>b.net-a.net || b.weak-a.weak || a.type.localeCompare(b.type,'ja'));
+  }
+
+  function teamCatalogSummary(team, format, explicitCatalog) {
+    const mons=uniqNames(team).map(n=>findCatalogPokemon(n,explicitCatalog)).filter(Boolean);
+    const profiles=mons.map(p=>catalogRoleProfile(p,format));
+    const countTag=t=>profiles.filter(r=>r.tags.includes(t)).length;
+    const weaknesses=teamTypePressure(mons.map(p=>p.name),explicitCatalog).filter(x=>x.weak>=2 && x.net>0).slice(0,4);
+    return {mons, profiles, weaknesses, counts:{fast:countTag('fast'),physical:countTag('physical'),special:countTag('special'),bulky:countTag('bulky'),support:countTag('support'),speedControl:countTag('speedControl')}};
+  }
+
+  function scoreStarterCandidate(candidate, currentTeam, format, explicitCatalog, prepared) {
+    const catalog=getCatalog(explicitCatalog);
+    const current=prepared?.current || uniqNames(currentTeam).map(n=>findCatalogPokemon(n,catalog)).filter(Boolean);
+    if (!candidate || current.some(p=>p.id===candidate.id || p.dex===candidate.dex)) return {score:-Infinity,reasons:['同じ種族は重ねません']};
+    const summary=prepared?.summary || teamCatalogSummary(current.map(p=>p.name),format,catalog);
+    const profile=catalogRoleProfile(candidate,format);
+    let score=0; const reasons=[];
+    summary.weaknesses.slice(0,3).forEach(w=>{
+      const mult=typeMultiplier(w.type,candidate.types);
+      if(mult===0){score+=15;reasons.push(`${w.type}を無効化`);} else if(mult<1){score+=10;reasons.push(`${w.type}を半減`);} else if(mult>1){score-=7;}
+    });
+    const need=[['fast','高速枠',8],['physical','物理火力',6],['special','特殊火力',6],['bulky','耐久枠',6]];
+    need.forEach(([tag,label,pts])=>{if(summary.counts[tag]===0 && profile.tags.includes(tag)){score+=pts;reasons.push(`${label}を補う`);}});
+    if(format==='double' && summary.counts.support===0 && profile.tags.includes('support')){score+=7;reasons.push('サポート役を補う');}
+    if(format==='double' && summary.counts.speedControl===0 && profile.tags.includes('speedControl')){score+=9;reasons.push('素早さ操作を補う');}
+    const existingTypes=new Set(current.flatMap(p=>p.types));
+    const typeCounts={};current.flatMap(p=>p.types).forEach(t=>typeCounts[t]=(typeCounts[t]||0)+1);
+    const fresh=candidate.types.filter(t=>!existingTypes.has(t)).length;
+    score+=fresh*2;
+    candidate.types.forEach(t=>{if((typeCounts[t]||0)>=2)score-=5;});
+    if(fresh) reasons.push('タイプの偏りを減らす');
+    if(profile.known){score+=3;reasons.push('役割を説明しやすい');}
+    const metaPrior=getMetaPrior(candidate,format); if(metaPrior){score+=metaPrior*.65;if(metaPrior>=7)reasons.push('現行環境で採用例が多い');}
+    const [hp,atk,def,spa,spd,spe]=candidate.stats;
+    const bst=hp+atk+def+spa+spd+spe;
+    score += Math.max(-4,Math.min(8,(bst-500)/20));
+    // A small stability bonus. It is deliberately weaker than complement logic.
+    if(Math.max(def,spd)>=110 && hp>=70) score+=2;
+    if(spe>=100) score+=1;
+    return {score,reasons:[...new Set(reasons)].slice(0,3),profile};
+  }
+
+  function suggestPartners(anchorOrTeam, format, limit, explicitCatalog, unowned) {
+    const catalog=getCatalog(explicitCatalog);
+    const currentNames=uniqNames(anchorOrTeam);
+    const blocked=normalizeUnowned(unowned,catalog);
+    const current=currentNames.map(n=>findCatalogPokemon(n,catalog)).filter(Boolean);
+    const summary=teamCatalogSummary(current.map(p=>p.name),format,catalog);
+    const prepared={current,summary};
+    const n=Math.max(1,Math.min(20,Number(limit)||8));
+    return catalog.filter(p=>!blocked.has(p.id)).map(p=>({pokemon:p,...scoreStarterCandidate(p,currentNames,format,catalog,prepared)}))
+      .filter(x=>Number.isFinite(x.score))
+      .sort((a,b)=>b.score-a.score || b.pokemon.stats.reduce((s,v)=>s+v,0)-a.pokemon.stats.reduce((s,v)=>s+v,0) || a.pokemon.dex-b.pokemon.dex)
+      .slice(0,n);
+  }
+
+  function completeStarterTeam(team, format, explicitCatalog, unowned) {
+    const catalog=getCatalog(explicitCatalog);
+    const blocked=normalizeUnowned(unowned,catalog);
+    const initial=uniqNames(team).map(n=>findCatalogPokemon(n,catalog)).filter(p=>p && !blocked.has(p.id));
+    const members=[]; const dexSeen=new Set();
+    initial.forEach(p=>{if(members.length<6 && !dexSeen.has(p.dex)){members.push(p.name);dexSeen.add(p.dex);}});
+    const steps=[];
+    while(members.length<6){
+      const pick=suggestPartners(members,format,12,catalog,[...blocked]).find(x=>!dexSeen.has(x.pokemon.dex));
+      if(!pick) break;
+      members.push(pick.pokemon.name); dexSeen.add(pick.pokemon.dex);
+      steps.push({name:pick.pokemon.name,reasons:pick.reasons,score:pick.score});
+    }
+    return {members,steps,warnings:members.length===6?[]:['6体まで自動補完できませんでした。']};
+  }
+
+  function buildStarterTeam(anchor, format, explicitCatalog, unowned) {
+    const catalog=getCatalog(explicitCatalog);
+    const first=findCatalogPokemon(anchor,catalog);
+    if(!first) return {members:[],steps:[],warnings:['好きなポケモンを1体選んでください。']};
+    if(normalizeUnowned(unowned,catalog).has(first.id)) return {members:[],steps:[],warnings:[`${first.name}は未所持として登録されています。`]};
+    const built=completeStarterTeam([first.name],format,catalog,unowned);
+    return {...built,anchor:first.name};
+  }
+
+  function validateCatalogTeam(team, explicitCatalog) {
+    const catalog=getCatalog(explicitCatalog), names=uniqNames(team), errors=[];
+    if(names.length>6) errors.push('構築は6体までです');
+    const resolved=names.map(n=>findCatalogPokemon(n,catalog));
+    const unknown=names.filter((n,i)=>!resolved[i]);
+    if(unknown.length) errors.push(`未登録のポケモン: ${unknown.join(' / ')}`);
+    const dexSeen=new Set(); const dup=[];
+    resolved.filter(Boolean).forEach(p=>{if(dexSeen.has(p.dex))dup.push(p.name);dexSeen.add(p.dex);});
+    if(dup.length) errors.push(`同じ種族の別フォームを同時には登録できません: ${dup.join(' / ')}`);
+    return errors;
+  }
+
+
+  // ---- v0.6 ownership / starter training ------------------------------------
+  const STAT_POINT_KEYS = ['HP','こうげき','ぼうぎょ','とくこう','とくぼう','すばやさ'];
+  const STARTER_NATURES = ['ようき','いじっぱり','おくびょう','ひかえめ','ゆうかん','れいせい','わんぱく','ずぶとい','しんちょう','おだやか'];
+  const CUSTOM_ITEM_LABELS = {
+    2559:'ピクシー用メガストーン',2560:'ウツボット用メガストーン',2561:'スターミー用メガストーン',2562:'カイリュー用メガストーン',2563:'メガニウム用メガストーン',2564:'オーダイル用メガストーン',2565:'エアームド用メガストーン',2566:'ユキメノコ用メガストーン',2569:'エンブオー用メガストーン',2571:'ペンドラー用メガストーン',2572:'ズルズキン用メガストーン',2573:'シビルドン用メガストーン',2574:'シャンデラ用メガストーン',2575:'ブリガロン用メガストーン',2576:'マフォクシー用メガストーン',2578:'カエンジシ用メガストーン',2579:'フラエッテ用メガストーン',2580:'カラマネロ用メガストーン',2581:'ガメノデス用メガストーン',2582:'ドラミドロ用メガストーン',2583:'ルチャブル用メガストーン',2585:'ジジーロン用メガストーン',2587:'タイレーツ用メガストーン',2635:'ライチュウ用メガストーンX',2636:'ライチュウ用メガストーンY',2637:'チリーン用メガストーン',2638:'アブソル用メガストーンZ',2639:'ムクホーク用メガストーン',2640:'ガブリアス用メガストーンZ',2641:'ルカリオ用メガストーンZ',2642:'ゴルーグ用メガストーン',2643:'ニャオニクス用メガストーン',2644:'ケケンカニ用メガストーン',2645:'グソクムシャ用メガストーン',2647:'スコヴィラン用メガストーン',2648:'セグレイブ用メガストーン',2650:'キラフロル用メガストーン'
+  };
+
+  function normalizeUnowned(values, explicitCatalog) {
+    const catalog=getCatalog(explicitCatalog), out=new Set();
+    (Array.isArray(values)?values:uniqNames(values)).forEach(v=>{
+      const mon=findCatalogPokemon(v,catalog); if(mon) out.add(mon.id); else if(catalog.some(p=>p.id===String(v))) out.add(String(v));
+    });
+    return out;
+  }
+
+  function statPointSpread(pokemon, format) {
+    const p=typeof pokemon==='string'?findCatalogPokemon(pokemon):pokemon;
+    if(!p) return null;
+    const [hp,atk,def,spa,spd,spe]=p.stats;
+    const profile=catalogRoleProfile(p,format);
+    const physical=atk>=spa+8 || profile.tags.includes('physical');
+    const special=spa>=atk+8 || profile.tags.includes('special');
+    const fast=spe>=100 || profile.tags.includes('fast');
+    const slow=spe<=60 || profile.tags.includes('slow');
+    const bulky=profile.tags.includes('bulky');
+    const support=profile.tags.includes('support');
+    const trickroom=profile.tags.includes('trickroom');
+    const points={HP:0,'こうげき':0,'ぼうぎょ':0,'とくこう':0,'とくぼう':0,'すばやさ':0};
+    let nature=''; let explanation='';
+    if(support && bulky && !trickroom){
+      points.HP=32;
+      if(def<=spd){points['ぼうぎょ']=32;points['とくぼう']=2;nature=spa>=atk?'ずぶとい':'わんぱく';}
+      else {points['とくぼう']=32;points['ぼうぎょ']=2;nature=spa>=atk?'おだやか':'しんちょう';}
+      explanation='支援役として場に残りやすくするため、HPと低い方の耐久を補うスターター配分です。';
+    }
+    else if(physical && fast){points['こうげき']=32;points['すばやさ']=32;points.HP=2;nature='ようき';explanation='物理火力と行動順を優先する、分かりやすい高速型です。';}
+    else if(special && fast){points['とくこう']=32;points['すばやさ']=32;points.HP=2;nature='おくびょう';explanation='特殊火力と行動順を優先する、分かりやすい高速型です。';}
+    else if(physical && trickroom){points.HP=32;points['こうげき']=32;points['とくぼう']=2;nature='ゆうかん';explanation='トリックルーム下での行動を想定し、素早さを上げずに耐久と物理火力を優先します。';}
+    else if(special && trickroom){points.HP=32;points['とくこう']=32;points['ぼうぎょ']=2;nature='れいせい';explanation='トリックルーム下での行動を想定し、素早さを上げずに耐久と特殊火力を優先します。';}
+    else if(physical){points.HP=32;points['こうげき']=32;points['すばやさ']=2;nature='いじっぱり';explanation=slow?'低速でも素早さ下降を決め打ちせず、まず耐久と物理火力を伸ばすスターター配分です。':'まず耐久と物理火力を最大まで伸ばすスターター配分です。';}
+    else if(special){points.HP=32;points['とくこう']=32;points['すばやさ']=2;nature='ひかえめ';explanation=slow?'低速でも素早さ下降を決め打ちせず、まず耐久と特殊火力を伸ばすスターター配分です。':'まず耐久と特殊火力を最大まで伸ばすスターター配分です。';}
+    else if(bulky || Math.max(def,spd)>=110){
+      points.HP=32;
+      if(def<=spd){points['ぼうぎょ']=32;points['とくぼう']=2;nature=spa>=atk?'ずぶとい':'わんぱく';}
+      else {points['とくぼう']=32;points['ぼうぎょ']=2;nature=spa>=atk?'おだやか':'しんちょう';}
+      explanation='HPと低い方の耐久を補い、まず場に残りやすくする配分です。';
+    } else {
+      const offense=atk>=spa?'こうげき':'とくこう'; points[offense]=32; points['すばやさ']=32; points.HP=2;
+      nature=atk>=spa?'ようき':'おくびょう'; explanation='役割が固まる前は、主な攻撃能力と素早さを伸ばして試しやすくします。';
+    }
+    return {points,nature,explanation,total:Object.values(points).reduce((a,b)=>a+b,0)};
+  }
+
+  function normalizeMetaEntry(meta) {
+    if(!meta || typeof meta!=='object') return null;
+    const moves=(meta.moves||[]).map(x=>typeof x==='string'?{name:x,usage:null}:x).filter(x=>x&&x.name).slice(0,6);
+    const items=(meta.items||[]).map(x=>typeof x==='string'?{name:x,usage:null}:x).filter(x=>x&&x.name).slice(0,6);
+    return {usage:Number(meta.usage)||0,moves,items,updatedAt:meta.updatedAt||''};
+  }
+
+  function starterItemCandidates(pokemon, format, meta) {
+    const entry=normalizeMetaEntry(meta), profile=catalogRoleProfile(pokemon,format), out=[];
+    if(entry) entry.items.forEach(x=>{if(!out.includes(x.name))out.push(x.name);});
+    const attacker=profile.tags.includes('attacker')||Math.max(pokemon.stats[1],pokemon.stats[3])>=105;
+    const fast=profile.tags.includes('fast')||pokemon.stats[5]>=100;
+    const bulky=profile.tags.includes('bulky');
+    const fallback=attacker?(fast?['いのちのたま','きあいのタスキ','こだわりスカーフ','オボンのみ']:['いのちのたま','オボンのみ','たべのこし','きあいのタスキ']):(bulky?['たべのこし','オボンのみ','ゴツゴツメット','メンタルハーブ']:['オボンのみ','きあいのタスキ','たべのこし','ゴツゴツメット']);
+    fallback.forEach(x=>{if(!out.includes(x))out.push(x);});
+    return out.slice(0,6);
+  }
+
+  function buildStarterTrainingSet(pokemon, format, meta) {
+    const p=typeof pokemon==='string'?findCatalogPokemon(pokemon):pokemon;
+    if(!p) return null;
+    const entry=normalizeMetaEntry(meta), spread=statPointSpread(p,format), items=starterItemCandidates(p,format,entry);
+    const moves=entry?entry.moves.slice(0,4):[];
+    const dataStrength=entry&&entry.moves.length>=3&&entry.items.length? (entry.usage>=1?'実戦データあり':'少数実戦データ') : '実戦データ不足';
+    return {pokemon:p.name,id:p.id,nature:spread.nature,statPoints:spread.points,statPointTotal:spread.total,statExplanation:spread.explanation,item:items[0]||'',itemAlternatives:items.slice(1,4),moves,usage:entry?.usage||0,dataStrength,source:entry?'Reg M-C実戦データ＋スターター配分':'スターター配分'};
+  }
+
+  function buildTeamStarterSets(team, format, metaById, explicitCatalog) {
+    const catalog=getCatalog(explicitCatalog), usedItems=new Set();
+    return uniqNames(team).map(name=>findCatalogPokemon(name,catalog)).filter(Boolean).map(p=>{
+      const rawMeta=metaById?.[p.id]||metaById?.[p.en]||null;
+      const set=buildStarterTrainingSet(p,format,rawMeta);
+      const candidates=[set.item,...set.itemAlternatives,...starterItemCandidates(p,format,rawMeta)].filter(Boolean);
+      const chosen=candidates.find(x=>!usedItems.has(x))||set.item||'';
+      if(chosen) usedItems.add(chosen);
+      const changed=chosen!==set.item && !!set.item;
+      return {...set,item:chosen,itemAdjustedForClause:changed,itemAlternatives:candidates.filter(x=>x!==chosen).slice(0,3)};
+    });
+  }
+
+  function scoreReplacementCandidate(candidate, target, remainingTeam, format, explicitCatalog, unowned) {
+    const catalog=getCatalog(explicitCatalog), blocked=normalizeUnowned(unowned,catalog);
+    if(!candidate || blocked.has(candidate.id)) return {score:-Infinity,reasons:['未所持として除外']};
+    const base=scoreStarterCandidate(candidate,remainingTeam,format,catalog);
+    if(!Number.isFinite(base.score)) return base;
+    const tp=catalogRoleProfile(target,format), cp=catalogRoleProfile(candidate,format);
+    const shared=cp.tags.filter(t=>tp.tags.includes(t));
+    let score=base.score+shared.length*5;
+    const commonTypes=candidate.types.filter(t=>target.types.includes(t)); score+=commonTypes.length*2;
+    const reasons=[...base.reasons];
+    if(shared.length) reasons.unshift(`役割が近い: ${cp.labels.join('・')}`);
+    if(commonTypes.length) reasons.push(`${commonTypes.join('/')}タイプを維持`);
+    return {score,reasons:[...new Set(reasons)].slice(0,4),profile:cp};
+  }
+
+  function suggestReplacements(targetValue, team, format, limit, explicitCatalog, unowned) {
+    const catalog=getCatalog(explicitCatalog), target=findCatalogPokemon(targetValue,catalog);
+    if(!target) return [];
+    const blocked=normalizeUnowned([...(Array.isArray(unowned)?unowned:[]),target.id],catalog);
+    const remaining=uniqNames(team).filter(n=>findCatalogPokemon(n,catalog)?.dex!==target.dex);
+    const n=Math.max(1,Math.min(12,Number(limit)||5));
+    return catalog.map(p=>({pokemon:p,...scoreReplacementCandidate(p,target,remaining,format,catalog,[...blocked])}))
+      .filter(x=>Number.isFinite(x.score))
+      .sort((a,b)=>b.score-a.score || a.pokemon.dex-b.pokemon.dex).slice(0,n);
+  }
+
+  return {
+    CAUSE_LABELS,
+    clamp,
+    uniqNames,
+    pct,
+    calculateStats,
+    aggregateOpponentPokemon,
+    aggregateOwnSelections,
+    analyzeMatch,
+    findBaseKnowledge,
+    buildBeginnerGuide,
+    findTeamProfile,
+    buildTeamFoundation,
+    buildProgressSnapshot,
+    buildSelectionAssist,
+    validateMatch,
+    BASE_KNOWLEDGE_VERSION,
+    PLAN_OUTCOME_LABELS,
+    TYPE_NAMES,
+    META_PRIOR_VERSION,
+    getMetaPrior,
+    findCatalogPokemon,
+    catalogSearch,
+    typeMultiplier,
+    catalogRoleProfile,
+    teamTypePressure,
+    teamCatalogSummary,
+    scoreStarterCandidate,
+    suggestPartners,
+    buildStarterTeam,
+    completeStarterTeam,
+    validateCatalogTeam,
+    STAT_POINT_KEYS,
+    STARTER_NATURES,
+    CUSTOM_ITEM_LABELS,
+    normalizeUnowned,
+    statPointSpread,
+    buildStarterTrainingSet,
+    buildTeamStarterSets,
+    suggestReplacements
+  };
+});
+
+</script>
+<script>
+(() => {
+  'use strict';
+  const C = window.PCCore;
+  const STORAGE_KEY = 'championCoach.v1';
+  const catalog = Array.isArray(window.PC_POKEMON_CATALOG) ? window.PC_POKEMON_CATALOG : [];
+  const state = loadState();
+  let lastAssist = null;
+  let competitiveMeta = {};
+  let competitiveMetaUpdatedAt = '';
+  const META_CACHE_KEY = 'championCoach.regmcMeta.v1';
+  let teamDraft = [...(state.team.members || [])];
+  let favoriteDraft = state.team.favorite || teamDraft[0] || '';
+  let assistOpponentDraft = [];
+  let logOpponentDraft = [];
+  let selectedTeamDraft = [];
+  let pickerContext = null;
+  let replacementTarget = '';
+
+  function defaultState() {
+    return { version: 6, rank: '', team: { name: '', format: 'double', members: [], favorite: '', plan: '', weak: '' }, inventory: { unowned: [] }, matches: [], metaNotes: [] };
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      const parsed = JSON.parse(raw);
+      return sanitizeImported(parsed);
+    } catch (_) { return defaultState(); }
+  }
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function el(id) { return document.getElementById(id); }
+  function text(node, value) { node.textContent = value; }
+  function make(tag, className, content) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (content !== undefined) node.textContent = content;
+    return node;
+  }
+  function fmtPct(v) { return `${C.pct(v)}%`; }
+  function causeLabel(v) { return C.CAUSE_LABELS[v] || '未分類'; }
+
+
+  function resolveMon(value) { return C.findCatalogPokemon(value, catalog); }
+  function normalizedMemberNames(values) {
+    return C.uniqNames(values).map(v => resolveMon(v)?.name || v).slice(0, 6);
+  }
+  function spriteUrl(mon) {
+    return mon && mon.dex > 0 ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${mon.dex}.png` : '';
+  }
+  function monImage(mon, className) {
+    if (!mon) return make('div','sprite-fallback','?');
+    const img=make('img',className || 'slot-img'); img.alt=mon.name; img.loading='lazy'; img.decoding='async'; img.src=spriteUrl(mon);
+    img.addEventListener('error',()=>{const fallback=make('div','sprite-fallback',mon.name.slice(0,1));img.replaceWith(fallback);},{once:true});
+    return img;
+  }
+  function syncShadow(id, values) { const node=el(id); if(node) node.value=C.uniqNames(values).join(', '); }
+  function formatTypes(mon) { return mon ? mon.types.join(' / ') : 'データ未登録'; }
+
+  function unownedIds() { return new Set(state.inventory?.unowned || []); }
+  function isUnowned(monOrValue) { const mon=typeof monOrValue==='string'?resolveMon(monOrValue):monOrValue; return !!(mon && unownedIds().has(mon.id)); }
+  function markUnowned(monOrValue) {
+    const mon=typeof monOrValue==='string'?resolveMon(monOrValue):monOrValue; if(!mon) return;
+    state.inventory ||= {unowned:[]};
+    if(!state.inventory.unowned.includes(mon.id)) state.inventory.unowned.push(mon.id);
+    replacementTarget=mon.name;
+    teamDraft=teamDraft.filter(v=>resolveMon(v)?.id!==mon.id);
+    state.team.members=(state.team.members||[]).filter(v=>resolveMon(v)?.id!==mon.id);
+    if(state.team.favorite && resolveMon(state.team.favorite)?.id===mon.id) state.team.favorite=state.team.members[0]||'';
+    if(favoriteDraft && resolveMon(favoriteDraft)?.id===mon.id) favoriteDraft=teamDraft[0]||'';
+    saveState(); renderTeamDraft(); renderSavedTeamAnalysis(); renderOwnSelection();
+    const advice=el('teamStarterAdvice'); if(advice){advice.hidden=false;advice.textContent=`${mon.name}を未所持として除外しました。下の候補は未所持を除いて更新されています。`;}
+  }
+  function restoreOwned(id) {
+    state.inventory ||= {unowned:[]}; state.inventory.unowned=state.inventory.unowned.filter(v=>v!==id); if(resolveMon(replacementTarget)?.id===id) replacementTarget=''; saveState(); renderTeamDraft(); renderSavedTeamAnalysis();
+  }
+
+  function loadFallbackCompetitiveMeta() {
+    const fallback=window.PC_COMPETITIVE_FALLBACK || {}; const out={};
+    Object.entries(fallback).forEach(([en,meta])=>{const mon=resolveMon(en);if(mon)out[mon.id]=meta;});
+    competitiveMeta=out; competitiveMetaUpdatedAt='2026-09-17';
+    try { const cached=JSON.parse(localStorage.getItem(META_CACHE_KEY)||'null'); if(cached&&cached.data&&typeof cached.data==='object'){competitiveMeta={...competitiveMeta,...cached.data};competitiveMetaUpdatedAt=cached.updatedAt||competitiveMetaUpdatedAt;} } catch(_) {}
+  }
+  function parseNameCsv(csv) {
+    const out={}; String(csv||'').split(/\r?\n/).slice(1).forEach(line=>{const p=line.split(',');if(p.length>=3&&(p[1]==='1'||p[1]==='11')&&!out[p[0]])out[p[0]]=p.slice(2).join(',');}); return out;
+  }
+  async function refreshCompetitiveMeta() {
+    if(typeof fetch!=='function') return;
+    try {
+      const [battleRes,moveRes,itemRes]=await Promise.all([
+        fetch('https://eurekaffeine.github.io/pokemon-champions-scraper/battle_meta.json',{cache:'no-store'}),
+        fetch('https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_names.csv'),
+        fetch('https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/item_names.csv')
+      ]);
+      if(!battleRes.ok||!moveRes.ok||!itemRes.ok) throw new Error('meta fetch failed');
+      const [battle,moveCsv,itemCsv]=await Promise.all([battleRes.json(),moveRes.text(),itemRes.text()]);
+      const moveNames=parseNameCsv(moveCsv), itemNames=parseNameCsv(itemCsv), out={...competitiveMeta};
+      (battle.pokemon_usage||[]).forEach(row=>{
+        const mon=resolveMon(row.name); if(!mon) return;
+        const moves=(row.top_moves||[]).slice(0,6).map(v=>({name:moveNames[v.id]||'',usage:Number(v.usage)||0})).filter(v=>v.name);
+        const items=(row.top_items||[]).slice(0,6).map(v=>({name:itemNames[v.id]||C.CUSTOM_ITEM_LABELS[v.id]||'',usage:Number(v.usage)||0})).filter(v=>v.name);
+        out[mon.id]={usage:(Number(row.usage_rate)||0)*100,moves,items,updatedAt:battle.updated_at||''};
+      });
+      competitiveMeta=out; competitiveMetaUpdatedAt=String(battle.updated_at||'').slice(0,10)||competitiveMetaUpdatedAt;
+      localStorage.setItem(META_CACHE_KEY,JSON.stringify({updatedAt:competitiveMetaUpdatedAt,data:competitiveMeta}));
+      renderTeamBuilds();
+    } catch(_) { /* bundled fallback remains active */ }
+  }
+
+  function renderMemberSlots(targetId, members, options={}) {
+    const target=el(targetId); if(!target) return;
+    const max=options.max || 6; const list=C.uniqNames(members).slice(0,max); target.replaceChildren();
+    for(let i=0;i<max;i++){
+      const value=list[i]; const slot=make('div',`team-slot${value?' filled':''}${value && options.favorite===value?' anchor':''}`);
+      if(!value){slot.append(make('div','slot-empty',`${i+1}枠目`));target.append(slot);continue;}
+      const mon=resolveMon(value); slot.append(monImage(mon));
+      const body=make('div','slot-text'); body.append(make('div','slot-name',mon?.name || value),make('div','slot-types',formatTypes(mon)));
+      if(options.favorite===value) body.append(make('span','slot-anchor','★ 軸'));
+      slot.append(body);
+      const actions=make('div','slot-actions');
+      if(options.onFavorite){const fav=make('button','slot-action',options.favorite===value?'★':'☆');fav.type='button';fav.title='このポケモンを軸にする';fav.addEventListener('click',()=>options.onFavorite(value));actions.append(fav);}
+      if(options.onUnowned){const no=make('button','slot-action inventory-action','未');no.type='button';no.title='持っていない';no.addEventListener('click',()=>options.onUnowned(value));actions.append(no);}
+      if(options.onRemove){const rm=make('button','slot-action','×');rm.type='button';rm.title='外す';rm.addEventListener('click',()=>options.onRemove(value));actions.append(rm);}
+      slot.append(actions); target.append(slot);
+    }
+  }
+
+  function renderTeamDraft() {
+    teamDraft=normalizedMemberNames(teamDraft);
+    if(favoriteDraft && !teamDraft.includes(favoriteDraft)) favoriteDraft=teamDraft[0] || '';
+    if(!favoriteDraft && teamDraft.length) favoriteDraft=teamDraft[0];
+    syncShadow('teamMembers',teamDraft); text(el('teamMemberCount'),`${teamDraft.length}/6`);
+    renderMemberSlots('teamMemberBuilder',teamDraft,{max:6,favorite:favoriteDraft,onFavorite:value=>{favoriteDraft=value;renderTeamDraft();},onUnowned:value=>markUnowned(value),onRemove:value=>{teamDraft=teamDraft.filter(v=>v!==value);if(favoriteDraft===value)favoriteDraft=teamDraft[0]||'';renderTeamDraft();}});
+    const advice=el('teamStarterAdvice');
+    if(!teamDraft.length){advice.hidden=true;advice.textContent='';}
+    else {advice.hidden=false;advice.textContent=teamDraft.length===1?`「${favoriteDraft || teamDraft[0]}」を軸にしました。残り5体は自分で選んでも、おまかせで仮組みしても構いません。`:`${favoriteDraft || teamDraft[0]}を軸に、現在${teamDraft.length}体です。候補は弱点と役割の偏りを減らす順で表示します。`;}
+    renderPartnerSuggestions();
+  }
+
+  function renderPartnerSuggestions() {
+    const box=el('teamPartnerSuggestions'); if(!box) return; box.replaceChildren();
+    if(!teamDraft.length || teamDraft.length>=6) return;
+    const format=el('teamFormat')?.value || state.team.format;
+    const suggestions=replacementTarget ? C.suggestReplacements(replacementTarget,teamDraft,format,4,catalog,[...unownedIds()]) : C.suggestPartners(teamDraft,format,4,catalog,[...unownedIds()]);
+    if(replacementTarget) box.append(make('div','replacement-banner',`${replacementTarget}の代替候補：役割の近さと現在の構築補完を合わせて表示しています。`));
+    suggestions.forEach(s=>{
+      const card=make('article','partner-card');card.append(monImage(s.pokemon,'slot-img'));
+      const body=make('div'); body.append(make('strong','',s.pokemon.name));
+      const reason=s.reasons.length?s.reasons.join(' / '):C.catalogRoleProfile(s.pokemon,el('teamFormat')?.value || state.team.format).style;
+      body.append(make('small','',`${s.pokemon.types.join('/')} ・ ${reason}`)); card.append(body);
+      const actions=make('div','partner-actions');
+      const b=make('button','',`候補に追加`);b.type='button';b.addEventListener('click',()=>{if(teamDraft.length<6){teamDraft.push(s.pokemon.name);replacementTarget='';renderTeamDraft();}});
+      const no=make('button','ghost-btn','持っていない');no.type='button';no.addEventListener('click',()=>markUnowned(s.pokemon));actions.append(b,no);card.append(actions);box.append(card);
+    });
+  }
+
+  function renderOpponentDraft(kind) {
+    const isAssist=kind==='assist'; const draft=isAssist?assistOpponentDraft:logOpponentDraft;
+    syncShadow(isAssist?'assistOpponentTeam':'opponentTeam',draft);
+    text(el(isAssist?'assistOpponentCount':'logOpponentCount'),`${draft.length}/6`);
+    renderMemberSlots(isAssist?'assistOpponentBuilder':'logOpponentBuilder',draft,{max:6,onRemove:value=>{if(isAssist)assistOpponentDraft=assistOpponentDraft.filter(v=>v!==value);else logOpponentDraft=logOpponentDraft.filter(v=>v!==value);renderOpponentDraft(kind);}});
+  }
+
+  function renderOwnSelection() {
+    const box=el('selectedTeamPicker'); if(!box) return; box.replaceChildren();
+    const max=el('matchFormat')?.value==='single'?3:4;
+    selectedTeamDraft=C.uniqNames(selectedTeamDraft).filter(v=>state.team.members.includes(v)).slice(0,max);
+    syncShadow('selectedTeam',selectedTeamDraft); text(el('selectedTeamCount'),`${selectedTeamDraft.length}/${max}体選出`);
+    if(!state.team.members.length){box.append(make('div','empty','先に構築を登録すると、ここはタップ選択になります。'));return;}
+    state.team.members.forEach(value=>{const b=make('button',`own-pick-btn${selectedTeamDraft.includes(value)?' selected':''}`,value);b.type='button';b.addEventListener('click',()=>{if(selectedTeamDraft.includes(value))selectedTeamDraft=selectedTeamDraft.filter(v=>v!==value);else if(selectedTeamDraft.length<max)selectedTeamDraft.push(value);renderOwnSelection();});box.append(b);});
+  }
+
+  let pickerVisibleLimit=48;
+  function openPokemonPicker(kind) {
+    const configs={
+      team:{title:'構築に入れるポケモン',help:'最初の1体は「好き」で選んで大丈夫です。フォーム違いは同じ種族として重複できません。',max:6,selected:teamDraft},
+      assist:{title:'相手のポケモン',help:'名前を知らなくても、画像とタイプを見て6体まで選べます。',max:6,selected:assistOpponentDraft},
+      log:{title:'相手のポケモン',help:'対戦画面を見ながら6体をタップしてください。',max:6,selected:logOpponentDraft},
+      meta:{title:'環境メモのポケモン',help:'画像から1体選ぶと名前を自動入力します。',max:1,selected:C.uniqNames(el('metaPokemon').value)}
+    };
+    const c=configs[kind]; if(!c) return;
+    pickerContext={kind,max:c.max,selected:normalizedMemberNames(c.selected)}; pickerVisibleLimit=48;
+    text(el('pokemonPickerTitle'),c.title);text(el('pokemonPickerHelp'),c.help);el('pokemonSearch').value='';el('pokemonTypeFilter').value='all';
+    renderPokemonCatalog();el('pokemonPickerDialog').showModal();
+  }
+
+  function renderPokemonCatalog() {
+    if(!pickerContext) return;
+    const pickerFormat=pickerContext.kind==='team'?(el('teamFormat').value||state.team.format):pickerContext.kind==='assist'?(el('assistFormat').value||state.team.format):pickerContext.kind==='log'?(el('matchFormat').value||state.team.format):state.team.format;
+    const query=el('pokemonSearch').value; const type=el('pokemonTypeFilter').value;
+    const results=C.catalogSearch(query,type,catalog).sort((a,b)=>a.dex-b.dex || a.name.localeCompare(b.name,'ja'));
+    const box=el('pokemonCatalogGrid');box.replaceChildren();
+    const selectedMons=pickerContext.selected.map(resolveMon).filter(Boolean); const selectedDex=new Set(selectedMons.map(p=>p.dex));
+    results.slice(0,pickerVisibleLimit).forEach(mon=>{
+      const selected=pickerContext.selected.includes(mon.name); const sameSpecies=selectedDex.has(mon.dex)&&!selected; const unavailable=pickerContext.kind==='team'&&isUnowned(mon);
+      const card=make('button',`pokemon-card${selected?' selected':''}${sameSpecies||unavailable?' disabled':''}`);card.type='button';card.disabled=sameSpecies||unavailable;
+      card.append(monImage(mon,'pokemon-card-img'),make('div','pokemon-card-name',mon.name));
+      const meta=make('div','pokemon-card-meta',mon.types.join(' / ')); if(mon.mega) meta.append(make('span','mega-badge',mon.mega>1?`メガ${mon.mega}種`:'メガ可')); card.append(meta);
+      const role=C.catalogRoleProfile(mon,pickerFormat).style; card.append(make('div','pokemon-card-meta',role));
+      if(C.getMetaPrior(mon,pickerFormat)>=7) card.append(make('div','pokemon-card-meta','大会でよく見る'));
+      if(unavailable) card.append(make('div','pokemon-card-meta unavailable-label','未所持'));
+      if(selected) card.append(make('span','pokemon-card-check','✓'));
+      card.addEventListener('click',()=>{
+        if(selected) pickerContext.selected=pickerContext.selected.filter(v=>v!==mon.name);
+        else if(pickerContext.selected.length<pickerContext.max) pickerContext.selected.push(mon.name);
+        else if(pickerContext.max===1) pickerContext.selected=[mon.name];
+        renderPokemonCatalog();
+      });box.append(card);
+    });
+    if(results.length>pickerVisibleLimit){const more=make('button','secondary-btn',`さらに表示（残り${results.length-pickerVisibleLimit}）`);more.type='button';more.addEventListener('click',()=>{pickerVisibleLimit+=48;renderPokemonCatalog();});box.append(more);}
+    text(el('pokemonPickerSelected'),`${pickerContext.selected.length}/${pickerContext.max} 選択`);text(el('pokemonCatalogCount'),`${results.length}件中 ${Math.min(results.length,pickerVisibleLimit)}件表示`);
+  }
+
+  function commitPokemonPicker() {
+    if(!pickerContext) return; const picked=normalizedMemberNames(pickerContext.selected);
+    if(pickerContext.kind==='team'){teamDraft=picked;if(!favoriteDraft||!teamDraft.includes(favoriteDraft))favoriteDraft=teamDraft[0]||'';renderTeamDraft();}
+    else if(pickerContext.kind==='assist'){assistOpponentDraft=picked;renderOpponentDraft('assist');}
+    else if(pickerContext.kind==='log'){logOpponentDraft=picked;renderOpponentDraft('log');}
+    else if(pickerContext.kind==='meta'){el('metaPokemon').value=picked[0]||'';}
+    pickerContext=null;el('pokemonPickerDialog').close();
+  }
+
+  function navigate(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
+    el(`screen-${name}`).classList.add('active');
+    const nav = el(`nav-${name}`); if (nav) nav.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function sanitizeImported(data) {
+    const clean = defaultState();
+    if (!data || typeof data !== 'object' || !Array.isArray(data.matches)) throw new Error('invalid');
+    clean.rank = typeof data.rank === 'string' ? data.rank.slice(0, 80) : '';
+    const team = data.team && typeof data.team === 'object' ? data.team : {};
+    const normalizedTeam=[]; const seenDex=new Set();
+    C.uniqNames(team.members).forEach(v=>{const mon=C.findCatalogPokemon(v,catalog);if(mon && normalizedTeam.length<6 && !seenDex.has(mon.dex)){normalizedTeam.push(mon.name);seenDex.add(mon.dex);}});
+    const rawFavorite=typeof team.favorite === 'string' ? C.findCatalogPokemon(team.favorite,catalog)?.name : '';
+    clean.team = {
+      name: typeof team.name === 'string' ? team.name.slice(0, 120) : '',
+      format: team.format === 'single' ? 'single' : 'double',
+      members: normalizedTeam,
+      favorite: rawFavorite && normalizedTeam.includes(rawFavorite) ? rawFavorite : (normalizedTeam[0] || ''),
+      plan: typeof team.plan === 'string' ? team.plan.slice(0, 3000) : '',
+      weak: typeof team.weak === 'string' ? team.weak.slice(0, 3000) : ''
+    };
+    const inv = data.inventory && typeof data.inventory === 'object' ? data.inventory : {};
+    clean.inventory = { unowned: [...C.normalizeUnowned(Array.isArray(inv.unowned) ? inv.unowned : [], catalog)].slice(0, 258) };
+    if(clean.inventory.unowned.length){
+      const blocked=new Set(clean.inventory.unowned);
+      clean.team.members=clean.team.members.filter(v=>{const mon=C.findCatalogPokemon(v,catalog);return mon && !blocked.has(mon.id);});
+      if(!clean.team.members.includes(clean.team.favorite)) clean.team.favorite=clean.team.members[0]||'';
+    }
+    clean.matches = data.matches.slice(0, 5000).map((m, i) => ({
+      id: typeof m.id === 'string' ? m.id : `import-${Date.now()}-${i}`,
+      date: typeof m.date === 'string' ? m.date.slice(0, 20) : '',
+      format: m.format === 'single' ? 'single' : 'double',
+      opponentTeam: C.uniqNames(m.opponentTeam).slice(0, 12),
+      selectedTeam: C.uniqNames(m.selectedTeam).slice(0, 12),
+      result: ['win','loss'].includes(m.result) ? m.result : '',
+      cause: C.CAUSE_LABELS[m.cause] ? m.cause : 'unknown',
+      selectionReason: typeof m.selectionReason === 'string' ? m.selectionReason.slice(0, 3000) : '',
+      planOutcome: ['held','partial','broken','unknown'].includes(m.planOutcome) ? m.planOutcome : 'unknown',
+      keyTurn: typeof m.keyTurn === 'string' ? m.keyTurn.slice(0, 3000) : '',
+      confidence: Math.max(1, Math.min(5, Number(m.confidence) || 3)),
+      learning: typeof m.learning === 'string' ? m.learning.slice(0, 3000) : '',
+      createdAt: typeof m.createdAt === 'string' ? m.createdAt : ''
+    })).filter(m => !C.validateMatch(m).length);
+    clean.metaNotes = Array.isArray(data.metaNotes) ? data.metaNotes.slice(0, 1000).map((n,i) => ({
+      id: n.id || `note-${i}`,
+      pokemon: typeof n.pokemon === 'string' ? n.pokemon.slice(0, 120) : '',
+      risk: ['high','mid','low'].includes(n.risk) ? n.risk : 'mid',
+      role: typeof n.role === 'string' ? n.role.slice(0, 300) : '',
+      watch: typeof n.watch === 'string' ? n.watch.slice(0, 3000) : '',
+      answer: typeof n.answer === 'string' ? n.answer.slice(0, 3000) : ''
+    })).filter(n => n.pokemon) : [];
+    return clean;
+  }
+
+  function renderDashboard() {
+    const s = C.calculateStats(state.matches);
+    text(el('rankChip'), `RANK ${state.rank || '未設定'}`);
+    text(el('statTotal'), s.total);
+    text(el('statWinRate'), s.total ? fmtPct(s.winRate) : '—');
+    text(el('statRecent'), s.recentCount ? fmtPct(s.recentWinRate) : '—');
+    text(el('statStreak'), s.streak ? `${s.streak}${s.streakResult === 'win' ? '連勝' : '連敗'}` : '—');
+
+    const foundation = C.buildTeamFoundation(state.team.members, state.team.format, state.team.plan);
+    renderHomeFoundation(foundation);
+    renderProgress(C.buildProgressSnapshot(state.matches, foundation));
+    renderThreats(el('homeThreats'), 3);
+    const quick=el('quickStartButton');
+    if(quick){const ready=state.team.members.length>=3;quick.dataset.nav=ready?'assist':'team';text(quick,ready?'対戦準備を始める':'好きな1体を選んで始める');}
+  }
+
+  function foundationBadge(foundation) {
+    if (!foundation.members.length) return {cls:'mid',text:'未登録'};
+    const coverage=Math.round(foundation.coverage*100);
+    return coverage>=80?{cls:'low',text:`土台 ${coverage}%`}:coverage>=50?{cls:'mid',text:`土台 ${coverage}%`}:{cls:'high',text:`土台 ${coverage}%`};
+  }
+
+  function renderPicks(target, picks, sourceLabel) {
+    target.replaceChildren();
+    if (!picks?.length) { target.append(make('div','empty','役割判定の確信が足りないため、基本選出はまだ固定しません。')); return; }
+    if (sourceLabel) target.append(make('div','assist-label',sourceLabel));
+    const row=make('div','pick-chips');
+    picks.forEach(v=>row.append(make('span','pick-chip supported',v)));
+    target.append(row);
+  }
+
+  function renderFoundationPicks(target, foundation) {
+    target.replaceChildren();
+    if (!foundation?.basicSelection?.length) { target.append(make('div','empty','役割判定の確信が足りないため、基本選出はまだ固定しません。')); return; }
+    const leadLabel=foundation.format==='single'?'先発候補':'先発2体';
+    const backLabel=foundation.format==='single'?'残り2体':'後発2体';
+    const leadWrap=make('div','foundation-pick-line'); leadWrap.append(make('span','assist-label',leadLabel));
+    const leadRow=make('div','pick-chips'); foundation.basicLead.forEach(v=>leadRow.append(make('span','pick-chip supported',v))); leadWrap.append(leadRow);
+    const backWrap=make('div','foundation-pick-line'); backWrap.append(make('span','assist-label',backLabel));
+    const backRow=make('div','pick-chips'); foundation.basicBack.forEach(v=>backRow.append(make('span','pick-chip supported',v))); backWrap.append(backRow);
+    target.append(leadWrap,backWrap);
+  }
+
+  function teamPlanForFormat(format) {
+    return (state.team.format || 'double') === (format === 'single' ? 'single' : 'double') ? state.team.plan : '';
+  }
+
+  function renderHomeFoundation(foundation) {
+    const badge=foundationBadge(foundation);
+    const b=el('homeFoundationBadge'); b.className=`tag ${badge.cls}`; text(b,badge.text);
+    text(el('homeFoundationPlan'), foundation.members.length ? foundation.plan : '構築6体を登録すると、役割から基本戦術の仮説を作ります。');
+    renderFoundationPicks(el('homeFoundationPicks'), foundation);
+    const gaps=el('homeFoundationGaps'); gaps.replaceChildren();
+    if (!foundation.members.length) gaps.append(make('div','empty','対戦ログを待たず、まず構築画面から6体を登録してください。'));
+    else if (!foundation.gaps.length) gaps.append(make('div','foundation-good','初期モデル上、大きな役割抜けは検出していません。実際の技・持ち物で確認してください。'));
+    else foundation.gaps.slice(0,2).forEach(v=>gaps.append(make('div','foundation-gap',v)));
+  }
+
+  function renderProgress(progress) {
+    text(el('progressStage'), progress.stageLabel);
+    const badge=el('progressStage'); badge.className=`tag ${progress.stage==='personalize'?'low':progress.stage==='diagnose'?'mid':'mid'}`;
+    text(el('progressMessage'),progress.message);
+    text(el('progressNext'),progress.nextFocus);
+    const box=el('progressMetrics'); box.replaceChildren();
+    const items=[];
+    if (!progress.total) items.push(['対戦数','0戦','まず土台を試す']);
+    else {
+      items.push(['事前プラン',progress.prepRate==null?'—':fmtPct(progress.prepRate),`直近${progress.recentCount}戦`]);
+      items.push(['振り返り',progress.reviewRate==null?'—':fmtPct(progress.reviewRate),'重要場面/学び']);
+      items.push(['プラン維持',progress.planExecutionRate==null?'—':fmtPct(progress.planExecutionRate),progress.planOutcomeCount?`${progress.planOutcomeCount}戦記録`:'未記録']);
+    }
+    items.forEach(([label,value,small])=>{const card=make('div','progress-metric');card.append(make('span','',label),make('strong','',value),make('small','',small));box.append(card);});
+  }
+
+  function renderThreats(target, limit) {
+    target.replaceChildren();
+    const rows = C.aggregateOpponentPokemon(state.matches).slice(0, limit || 100);
+    if (!rows.length) { target.append(make('div', 'empty', '対戦を記録すると、遭遇頻度と敗戦率から要警戒ポケモンを抽出します。')); return; }
+    rows.forEach(r => {
+      const row = make('div', 'threat-row');
+      const left = make('div');
+      left.append(make('div', 'threat-name', r.name), make('div', 'threat-meta', `${r.appearances}回遭遇 ・ 対戦勝率 ${fmtPct(r.winRate)} ・ 直近10戦で${r.recent}回`));
+      const meter = make('div', 'meter'); const bar = make('span'); bar.style.width = `${Math.round(r.dangerScore * 100)}%`; meter.append(bar); left.append(meter);
+      const score = make('div', 'score'); score.append(make('strong', '', Math.round(r.dangerScore * 100)), make('span', 'threat-meta', '警戒度'));
+      row.append(left, score); target.append(row);
+    });
+  }
+
+  function renderHistory() {
+    const box = el('matchHistory'); box.replaceChildren();
+    const list = [...state.matches].sort((a,b) => Date.parse(b.date)-Date.parse(a.date)).slice(0, 12);
+    if (!list.length) { box.append(make('div','empty','まだ対戦ログがありません。最初は詳細に書かず、相手・選出・勝敗だけでも十分です。')); return; }
+    list.forEach(m => {
+      const card = make('article','history-card');
+      const top = make('div','history-top');
+      top.append(make('h3','',`${m.date || '日付なし'} ・ ${m.format === 'single' ? 'シングル' : 'ダブル'}`), make('span',`result ${m.result}`,m.result==='win'?'WIN':'LOSS'));
+      const opp = C.uniqNames(m.opponentTeam).join(' / ');
+      const selected = C.uniqNames(m.selectedTeam).join(' / ');
+      card.append(top, make('p','',`相手: ${opp}`), make('p','',`選出: ${selected}`));
+      if (m.selectionReason) card.append(make('p','',`事前プラン: ${m.selectionReason}`));
+      if (m.result==='loss') card.append(make('p','',`敗因仮説: ${causeLabel(m.cause)}`));
+      box.append(card);
+    });
+  }
+
+  function renderMetaNotes() {
+    const box = el('metaNotes'); box.replaceChildren();
+    if (!state.metaNotes.length) { box.append(make('div','empty','「分からなかったもの」から登録してください。全部の型を覚える必要はありません。')); return; }
+    [...state.metaNotes].reverse().forEach(note => {
+      const card = make('article','meta-card');
+      const h = make('h3'); h.append(make('span',`tag ${note.risk}`,note.risk==='high'?'高警戒':note.risk==='mid'?'中警戒':'低警戒'), document.createTextNode(` ${note.pokemon}`));
+      card.append(h);
+      if(note.role) card.append(make('p','',`分類: ${note.role}`));
+      if(note.watch) card.append(make('p','',`警戒: ${note.watch}`));
+      if(note.answer) card.append(make('p','',`自分の回答: ${note.answer}`));
+      box.append(card);
+    });
+  }
+
+  function renderInventory() {
+    const box=el('teamInventory'); if(!box) return; box.replaceChildren();
+    const ids=[...(state.inventory?.unowned||[])]; text(el('teamInventoryCount'),`${ids.length}体`);
+    if(!ids.length){box.append(make('span','small muted','未所持登録はありません。'));return;}
+    ids.forEach(id=>{const mon=catalog.find(p=>p.id===id);if(!mon)return;const chip=make('span','inventory-chip');chip.append(make('span','',mon.name));const b=make('button','','所持に戻す');b.type='button';b.addEventListener('click',()=>restoreOwned(id));chip.append(b);box.append(chip);});
+  }
+
+  function renderTeamBuilds() {
+    const box=el('teamTrainingCards'); if(!box) return; box.replaceChildren();
+    text(el('teamTrainingMeta'),state.team.format==='double'?(competitiveMetaUpdatedAt?`M-C ダブル ${competitiveMetaUpdatedAt}`:'M-C ダブル 内蔵'):'シングル スターター');
+    if(!(state.team.members||[]).length){box.append(make('div','empty','構築を保存すると、6体それぞれのスターター型を表示します。'));return;}
+    const sets=C.buildTeamStarterSets(state.team.members,state.team.format,state.team.format==='double'?competitiveMeta:{},catalog);
+    sets.forEach(set=>{
+      const mon=resolveMon(set.pokemon); const card=make('article','training-card');
+      const head=make('div','training-head'),title=make('div','training-title');title.append(monImage(mon,'slot-img'));const titleText=make('div');titleText.append(make('strong','',set.pokemon),make('div','small muted',`${formatTypes(mon)} ・ ${set.dataStrength}`));title.append(titleText);head.append(title);
+      const no=make('button','ghost-btn','未所持');no.type='button';no.addEventListener('click',()=>markUnowned(mon));head.append(no);card.append(head);
+      const item=make('div','training-section');item.append(make('span','training-label','持ち物'));item.append(make('div','item-main',set.item||'候補を確認中'));
+      if(set.itemAdjustedForClause)item.append(make('div','training-note','構築内の持ち物重複を避けるため、次候補へ変更しました。'));
+      if(set.itemAlternatives.length)item.append(make('div','item-alt',`代替: ${set.itemAlternatives.join(' / ')}`));card.append(item);
+      const nature=make('div','training-section');nature.append(make('span','training-label','性格'),make('strong','',set.nature));card.append(nature);
+      const stat=make('div','training-section');stat.append(make('span','training-label',`能力ポイント（合計 ${set.statPointTotal}）`));const chips=make('div','stat-point-list');Object.entries(set.statPoints).filter(([,v])=>v>0).forEach(([k,v])=>chips.append(make('span','stat-point-chip',`${k} ${v}`)));stat.append(chips,make('div','training-note',set.statExplanation));card.append(stat);
+      const moves=make('div','training-section');moves.append(make('span','training-label','技候補'));if(set.moves.length){const ul=make('ul','move-list');set.moves.forEach(m=>ul.append(make('li','',m.name)));moves.append(ul);}else moves.append(make('div','training-note','現行M-Cの実戦サンプルが不足しているため、技は断定していません。ゲーム内の習得技を確認してください。'));card.append(moves);
+      card.append(make('div','training-note',`${set.source}${set.usage?` ・ 使用率目安 ${set.usage.toFixed(1)}%`:''}`));box.append(card);
+    });
+  }
+
+  function renderSavedTeamAnalysis() {
+    el('assistOwnTeam').value = (state.team.members || []).join(' / ');
+    if (!lastAssist) el('assistFormat').value = state.team.format || 'double';
+    const foundation=C.buildTeamFoundation(state.team.members,state.team.format,state.team.plan);
+    const badge=foundationBadge(foundation); const foundationBadgeNode=el('teamFoundationBadge');
+    foundationBadgeNode.className=`tag ${badge.cls}`; text(foundationBadgeNode,badge.text);
+    text(el('teamFoundationPlan'),foundation.plan);
+    el('adoptFoundationPlan').hidden = !foundation.members.length || foundation.planSource==='user';
+    renderFoundationPicks(el('teamFoundationPicks'),foundation);
+    const roles=el('teamFoundationRoles'); roles.replaceChildren();
+    if(!foundation.members.length) roles.append(make('div','empty','6体を登録すると、一般的な役割から土台を生成します。'));
+    foundation.profiles.forEach(p=>{const card=make('div',`role-card ${p.known?'known':'unknown'}`);card.append(make('strong','',p.name));card.append(make('span','',p.known?(p.labels.join(' / ')||'役割確認済み'):'初期モデル未登録'));roles.append(card);});
+    const strengths=el('teamFoundationStrengths'); strengths.replaceChildren();
+    (foundation.strengths.length?foundation.strengths:['初期モデルで確認できる強みはまだありません。']).forEach(v=>strengths.append(make('div',foundation.strengths.length?'foundation-good':'empty',v)));
+    const gaps=el('teamFoundationGaps'); gaps.replaceChildren();
+    (foundation.gaps.length?foundation.gaps:['初期モデル上、大きな役割抜けは検出していません。']).forEach(v=>gaps.append(make('div',foundation.gaps.length?'foundation-gap':'foundation-good',v)));
+    renderInventory(); renderTeamBuilds();
+  }
+
+  function renderTeam() {
+    teamDraft=[...(state.team.members || [])]; favoriteDraft=state.team.favorite || teamDraft[0] || '';
+    el('teamName').value = state.team.name || '';
+    el('teamFormat').value = state.team.format || 'double';
+    syncShadow('teamMembers',teamDraft);
+    renderTeamDraft();
+    el('teamPlan').value = state.team.plan || '';
+    el('teamWeak').value = state.team.weak || '';
+    renderSavedTeamAnalysis();
+
+    const box = el('selectionStats'); box.replaceChildren();
+    const rows = C.aggregateOwnSelections(state.matches);
+    if(!rows.length){ box.append(make('div','empty','対戦ログが増えると、各ポケモンの選出回数と選出時勝率を表示します。初期は上の基本戦術を使ってください。')); return; }
+    rows.forEach(r => {
+      const row=make('div','threat-row');
+      const left=make('div'); left.append(make('div','threat-name',r.name),make('div','threat-meta',`${r.picks}回選出 ・ ${r.wins}勝${r.losses}敗`));
+      const right=make('div','score'); right.append(make('strong','',fmtPct(r.winRate)),make('span','threat-meta','選出時勝率'));
+      row.append(left,right); box.append(row);
+    });
+  }
+
+
+  function evidenceLabel(level) {
+    return level === 'high' ? '根拠 高' : level === 'mid' ? '根拠 中' : level === 'low' ? '根拠 少' : '根拠なし';
+  }
+
+  function renderAssist(assist) {
+    lastAssist = assist;
+    const panels = ['assistFocusPanel','assistResult','assistThreatPanel','assistCandidatesPanel','assistFailuresPanel'];
+    panels.forEach(id => { el(id).hidden = false; });
+
+    const guide = assist.beginnerGuide;
+    const coverage = Math.round((guide?.coverage || 0) * 100);
+    const coverageBadge = el('assistGuideCoverage');
+    coverageBadge.className = `tag ${coverage >= 80 ? 'low' : coverage >= 50 ? 'mid' : 'high'}`;
+    text(coverageBadge, `基本ガイド ${coverage}%`);
+    text(el('assistFocusSummary'), guide?.priorities?.length
+      ? '上から順に確認してください。全部の型を覚える必要はなく、この対戦で起こりやすい崩れ方だけを先に見ます。'
+      : '相手を入力すると、基本ガイドと自分の履歴から優先して見る点を整理します。');
+
+    const focusList = el('assistFocusList'); focusList.replaceChildren();
+    if (!guide?.priorities?.length) {
+      focusList.append(make('div','empty','相手のポケモンを入力してください。'));
+    } else {
+      guide.priorities.forEach((r, i) => {
+        const card = make('article',`focus-card ${r.known ? 'known' : 'unknown'}`);
+        const head = make('div','focus-head');
+        const left = make('div'); left.append(make('span','focus-rank',`${i+1}`), make('h3','',r.name));
+        head.append(left, make('span',`tag ${r.known ? 'low' : 'mid'}`,r.known ? '基本ガイドあり' : '基本ガイド外'));
+        card.append(head, make('p','focus-role',r.role), make('p','',r.focus));
+        if (r.watch.length) {
+          const ul = make('ul','focus-watch');
+          r.watch.forEach(v => { const li=make('li','',v); ul.append(li); });
+          card.append(ul);
+        }
+        if (r.appearances) card.append(make('p','personal-line',`自分の履歴: ${r.appearances}回遭遇・敗戦率 ${fmtPct(r.lossRate)}`));
+        if (r.noteAnswer) card.append(make('p','answer-line',`登録済みの自分の回答: ${r.noteAnswer}`));
+        focusList.append(card);
+      });
+    }
+
+    const principles = el('assistPrinciples'); principles.replaceChildren();
+    if (guide?.principles?.length) {
+      principles.append(make('div','assist-label','この並びで特に確認する展開'));
+      guide.principles.forEach(p => {
+        const row = make('div','principle-row');
+        row.append(make('span','tag mid',p.label), make('p','',p.text)); principles.append(row);
+      });
+    }
+    text(el('assistUnknowns'), guide?.unknown?.length
+      ? `基本ガイド未登録: ${guide.unknown.join(' / ')}。この相手は過去ログ・自分のメモがある場合だけ個別補正します。`
+      : `基本ガイド: ${guide?.version || C.BASE_KNOWLEDGE_VERSION}`);
+
+    const recommended = el('assistRecommended'); recommended.replaceChildren();
+    if (assist.recommended.length) {
+      const label = assist.recommendationSource === 'starter' ? `${assist.format === 'single' ? '3体' : '4体'}の基本選出（初期モデル）` : `${assist.format === 'single' ? '3体' : '4体'}の仮候補`;
+      recommended.append(make('div','assist-label',label));
+      const picks = make('div','pick-chips');
+      assist.recommended.forEach(name => {
+        const candidate = assist.candidates.find(c => c.name === name);
+        const direct = assist.recommendationSource === 'starter' || (candidate && (candidate.explicitFor.length || candidate.relevantMatches));
+        picks.append(make('span',`pick-chip ${direct ? 'supported' : 'provisional'}`,direct ? name : `${name} ※`));
+      });
+      recommended.append(picks);
+    } else {
+      recommended.append(make('div','empty','自分の構築との直接データがまだ少ないため、選出だけは自動確定しません。上の「今回まず見ること」を使って対戦し、ログが増えると候補が具体化します。'));
+    }
+
+    const highestEvidence = assist.candidates.reduce((max,c) => Math.max(max,c.evidencePoints),0);
+    const level = highestEvidence >= 6 ? 'high' : highestEvidence >= 3 ? 'mid' : highestEvidence > 0 ? 'low' : 'none';
+    const badge = el('assistEvidence');
+    badge.className = `tag ${level === 'high' ? 'low' : level === 'mid' ? 'mid' : 'high'}`;
+    text(badge, assist.recommendationSource === 'starter' ? '初期モデル' : evidenceLabel(level));
+
+    const summaryParts = [];
+    if (assist.teamFoundation?.plan) summaryParts.push(`${assist.teamFoundation.planSource==='user'?'基本勝ち筋':'初期モデルの勝ち筋'}: ${assist.teamFoundation.plan}`);
+    if (assist.warnings.length) summaryParts.push(assist.warnings.join(' / '));
+    text(el('assistSummary'), summaryParts.join('  ｜  ') || '自分の過去ログが増えるほど、選出候補の根拠が強くなります。');
+
+    const threats = el('assistThreats'); threats.replaceChildren();
+    if (!assist.threats.length) threats.append(make('div','empty','相手を入力すると詳細を表示します。'));
+    assist.threats.forEach(t => {
+      const card = make('article','assist-card');
+      const top = make('div','assist-card-top');
+      top.append(make('h3','',t.name), make('span',`tag ${t.baseKnown ? 'low' : t.risk || 'mid'}`,t.baseKnown ? '基本ガイド' : `${Math.round(t.score*100)} 警戒`));
+      card.append(top);
+      if (t.baseRole) card.append(make('p','focus-role',t.baseRole));
+      if (t.baseFocus) card.append(make('p','',t.baseFocus));
+      if (t.baseWatch?.length) card.append(make('p','',`基本確認: ${t.baseWatch.join(' / ')}`));
+      if (t.sampleSize) card.append(make('p','personal-line',`自分のログ: ${t.appearances}回遭遇・敗戦率 ${fmtPct(t.lossRate)}`));
+      if (t.watch) card.append(make('p','',`自分の警戒メモ: ${t.watch}`));
+      if (t.answer) card.append(make('p','answer-line',`自分の回答: ${t.answer}`));
+      const button = make('button','mini-btn',t.hasNote ? '自分のメモを更新' : '自分の回答を追加（任意）');
+      button.type='button'; button.dataset.metaPokemon=t.name; card.append(button);
+      threats.append(card);
+    });
+
+    const candidates = el('assistCandidates'); candidates.replaceChildren();
+    if (!assist.candidates.length) candidates.append(make('div','empty','構築画面で自分のポケモンを登録してください。'));
+    assist.candidates.forEach(c => {
+      const card = make('article','candidate-card');
+      const head = make('div','candidate-head');
+      const left = make('div'); left.append(make('h3','',c.name), make('span',`tag ${c.evidenceLevel === 'high' ? 'low' : c.evidenceLevel === 'mid' ? 'mid' : 'high'}`,evidenceLabel(c.evidenceLevel)));
+      const score = make('div','candidate-score'); score.append(make('strong','',c.score),make('span','', '参考指数'));
+      head.append(left,score); card.append(head);
+      c.reasons.forEach(r => card.append(make('p','',`・${r}`)));
+      candidates.append(card);
+    });
+
+    const failures = el('assistFailures'); failures.replaceChildren();
+    if (!assist.pastFailures.length) failures.append(make('div','empty','今回と2体以上共通する過去の敗戦はありません。'));
+    assist.pastFailures.forEach(f => {
+      const card=make('article','history-card');
+      card.append(make('h3','',`${f.date || '日付なし'} ・ 共通 ${f.overlap.join(' / ')}`));
+      card.append(make('p','',`その時の選出: ${f.selectedTeam.join(' / ') || '未記録'}`));
+      card.append(make('p','',`敗因仮説: ${causeLabel(f.cause)}`));
+      if(f.selectionReason) card.append(make('p','',`事前プラン: ${f.selectionReason}`));
+      if(f.keyTurn) card.append(make('p','',`重要場面: ${f.keyTurn}`));
+      if(f.learning) card.append(make('p','answer-line',`学び: ${f.learning}`));
+      failures.append(card);
+    });
+  }
+
+  function hideAssistView() {
+    lastAssist = null;
+    ['assistFocusPanel','assistResult','assistThreatPanel','assistCandidatesPanel','assistFailuresPanel'].forEach(id => { el(id).hidden = true; });
+    el('assistFocusList').replaceChildren();
+    el('assistPrinciples').replaceChildren();
+    el('assistRecommended').replaceChildren();
+    el('assistThreats').replaceChildren();
+    el('assistCandidates').replaceChildren();
+    el('assistFailures').replaceChildren();
+  }
+
+  function renderAll() {
+    renderDashboard(); renderHistory(); renderThreats(el('threatTable')); renderMetaNotes(); renderTeam(); renderOpponentDraft('assist'); renderOpponentDraft('log'); renderOwnSelection(); el('currentRank').value = state.rank || ''; if (lastAssist?.opponent?.length) renderAssist(C.buildSelectionAssist(lastAssist.opponent, state.team.members, state.matches, state.metaNotes, lastAssist.format, teamPlanForFormat(lastAssist.format)));
+  }
+
+  function showAnalysis(match) {
+    const analysis = C.analyzeMatch(match, state.matches.filter(m => m.id !== match.id));
+    el('latestAnalysis').hidden = false;
+    text(el('analysisHeadline'), analysis.headline); text(el('analysisSummary'), analysis.summary); text(el('analysisNext'), analysis.nextAction);
+    const checks = el('analysisChecks'); checks.replaceChildren();
+    analysis.checks.forEach(v => checks.append(make('div','check-item',v)));
+  }
+
+  function setToday() {
+    const d = new Date();
+    const local = new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    el('matchDate').value = local;
+  }
+
+  document.addEventListener('click', e => {
+    const nav = e.target.closest('[data-nav]'); if (nav) navigate(nav.dataset.nav);
+  });
+
+  el('confidence').addEventListener('input', e => text(el('confidenceValue'), e.target.value));
+  el('openSettings').addEventListener('click', () => el('settingsDialog').showModal());
+
+
+  // v0.6 visual selector controls
+  C.TYPE_NAMES.forEach(type=>{const o=document.createElement('option');o.value=type;o.textContent=type;el('pokemonTypeFilter').append(o);});
+  el('pickTeamMember').addEventListener('click',()=>openPokemonPicker('team'));
+  el('pickAssistOpponent').addEventListener('click',()=>openPokemonPicker('assist'));
+  el('pickLogOpponent').addEventListener('click',()=>openPokemonPicker('log'));
+  el('pickMetaPokemon').addEventListener('click',()=>openPokemonPicker('meta'));
+  el('closePokemonPicker').addEventListener('click',()=>{pickerContext=null;el('pokemonPickerDialog').close();});
+  el('pokemonPickerDone').addEventListener('click',commitPokemonPicker);
+  el('pokemonSearch').addEventListener('input',()=>{pickerVisibleLimit=48;renderPokemonCatalog();});
+  el('pokemonTypeFilter').addEventListener('change',()=>{pickerVisibleLimit=48;renderPokemonCatalog();});
+  el('clearTeamMembers').addEventListener('click',()=>{teamDraft=[];favoriteDraft='';renderTeamDraft();});
+  el('clearAssistOpponent').addEventListener('click',()=>{assistOpponentDraft=[];hideAssistView();renderOpponentDraft('assist');});
+  el('clearLogOpponent').addEventListener('click',()=>{logOpponentDraft=[];renderOpponentDraft('log');});
+  el('autoCompleteTeam').addEventListener('click',()=>{
+    const errorBox=el('teamErrors');
+    if(!teamDraft.length){errorBox.hidden=false;text(errorBox,'まず好きなポケモンを1体選んでください。');openPokemonPicker('team');return;}
+    const built=C.completeStarterTeam(teamDraft,el('teamFormat').value,catalog,[...unownedIds()]);
+    if(built.members.length){teamDraft=built.members;if(!favoriteDraft)favoriteDraft=teamDraft[0];renderTeamDraft();errorBox.hidden=true;
+      const added=built.steps.map(x=>`${x.name}（${x.reasons.join('・') || '役割補完'}）`).join(' / ');
+      const advice=el('teamStarterAdvice');advice.hidden=false;advice.textContent=`仮組みしました。${added ? '追加理由: '+added : '現在の6体を維持しました。'} 正解の断定ではなく、最初に試す土台です。`;
+    }
+  });
+  el('teamFormat').addEventListener('change',renderTeamDraft);
+  el('matchFormat').addEventListener('change',()=>{selectedTeamDraft=[];renderOwnSelection();});
+
+  el('matchForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const result = document.querySelector('input[name="result"]:checked')?.value || '';
+    const match = {
+      id: (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`),
+      date: el('matchDate').value,
+      format: el('matchFormat').value,
+      opponentTeam: normalizedMemberNames(logOpponentDraft),
+      selectedTeam: C.uniqNames(selectedTeamDraft),
+      result,
+      cause: el('cause').value,
+      selectionReason: el('selectionReason').value.trim(),
+      planOutcome: el('planOutcome').value,
+      keyTurn: el('keyTurn').value.trim(),
+      confidence: Number(el('confidence').value),
+      learning: el('learning').value.trim(),
+      createdAt: new Date().toISOString()
+    };
+    const errors = C.validateMatch(match);
+    const errorBox = el('formErrors');
+    if (errors.length) { errorBox.hidden=false; errorBox.textContent=errors.join(' / '); return; }
+    errorBox.hidden=true; state.matches.push(match); saveState(); showAnalysis(match);
+    e.target.reset(); logOpponentDraft=[]; selectedTeamDraft=[]; setToday(); el('confidence').value='3'; text(el('confidenceValue'),'3'); el('planOutcome').value='unknown';
+    renderAll(); el('latestAnalysis').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+
+
+  el('assistForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const rawOpponent = normalizedMemberNames(assistOpponentDraft);
+    const opponent = rawOpponent.slice(0,6);
+    const format = el('assistFormat').value;
+    const errorBox = el('assistErrors');
+    const errors = [];
+    if (!rawOpponent.length) errors.push('相手のポケモンを1匹以上入力してください');
+    if (rawOpponent.length > 6) errors.push('相手は6体まで入力してください');
+    if (errors.length) { errorBox.hidden=false; text(errorBox,errors.join(' / ')); return; }
+    errorBox.hidden=true;
+    renderAssist(C.buildSelectionAssist(opponent, state.team.members, state.matches, state.metaNotes, format, teamPlanForFormat(format)));
+    el('assistResult').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+
+  el('copyAssistToLog').addEventListener('click', () => {
+    if (!lastAssist) return;
+    el('matchForm').reset();
+    setToday();
+    el('confidence').value='3'; text(el('confidenceValue'),'3'); el('planOutcome').value='unknown';
+    el('matchFormat').value = lastAssist.format; selectedTeamDraft=[];
+    logOpponentDraft=[...lastAssist.opponent]; renderOpponentDraft('log'); renderOwnSelection();
+    const focusNames = lastAssist.beginnerGuide?.priorities?.map(r=>r.name).slice(0,2) || [];
+    const parts = [];
+    if (focusNames.length) parts.push(`事前警戒: ${focusNames.join(' / ')}`);
+    if (lastAssist.recommended.length) parts.push(`${lastAssist.recommendationSource==='starter'?'基本選出':'選出仮候補'}: ${lastAssist.recommended.join(' / ')}`);
+    if (lastAssist.teamFoundation?.plan) parts.push(`勝ち筋: ${lastAssist.teamFoundation.plan}`);
+    if (parts.length) el('selectionReason').value = `${parts.join('。')}。実際の判断に合わせて書き換える。`;
+    navigate('log');
+    el('pickLogOpponent').focus();
+  });
+
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-meta-pokemon]');
+    if (!btn) return;
+    el('metaPokemon').value = btn.dataset.metaPokemon;
+    navigate('environment');
+    el('metaWatch').focus();
+  });
+
+  el('metaForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const rawPokemon=el('metaPokemon').value.trim(); if(!rawPokemon) return;
+    const pokemon=resolveMon(rawPokemon)?.name || rawPokemon;
+    state.metaNotes.push({ id: Date.now(), pokemon, risk: el('metaRisk').value, role: el('metaRole').value.trim(), watch: el('metaWatch').value.trim(), answer: el('metaAnswer').value.trim() });
+    saveState(); e.target.reset(); renderMetaNotes(); if (lastAssist?.opponent?.length) renderAssist(C.buildSelectionAssist(lastAssist.opponent, state.team.members, state.matches, state.metaNotes, lastAssist.format, teamPlanForFormat(lastAssist.format)));
+  });
+
+  el('teamForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const members=normalizedMemberNames(teamDraft);
+    const errorBox=el('teamErrors');
+    const errors=C.validateCatalogTeam(members,catalog);
+    if (errors.length) { errorBox.hidden=false; text(errorBox,errors.join(' / ')); return; }
+    if(!members.length){errorBox.hidden=false;text(errorBox,'まず好きなポケモンを1体選んでください。');return;}
+    if(members.length<6){errorBox.hidden=false;text(errorBox,`あと${6-members.length}体選んでください。「残りをおまかせで仮組み」も使えます。`);return;}
+    errorBox.hidden=true;
+    state.team={ name:el('teamName').value.trim(), format:el('teamFormat').value==='single'?'single':'double', members, favorite:(favoriteDraft&&members.includes(favoriteDraft)?favoriteDraft:members[0]), plan:el('teamPlan').value.trim(), weak:el('teamWeak').value.trim() };
+    saveState(); renderAll();
+  });
+
+  el('adoptFoundationPlan').addEventListener('click', () => {
+    const foundation=C.buildTeamFoundation(state.team.members,state.team.format,'');
+    if (!foundation.members.length) return;
+    state.team.plan=foundation.generatedPlan; el('teamPlan').value=foundation.generatedPlan; saveState(); renderAll();
+  });
+
+  el('currentRank').addEventListener('input', e => { state.rank=e.target.value.trim().slice(0,80); saveState(); text(el('rankChip'), `RANK ${state.rank || '未設定'}`); });
+
+  el('exportData').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`champion-coach-${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(url);
+  });
+
+  el('importData').addEventListener('change', async e => {
+    const file=e.target.files?.[0]; if(!file) return;
+    try { const data=sanitizeImported(JSON.parse(await file.text())); Object.assign(state, data); assistOpponentDraft=[];logOpponentDraft=[];selectedTeamDraft=[];saveState(); hideAssistView(); renderAll(); alert('バックアップを読み込みました。'); }
+    catch(_){ alert('読み込めないJSONです。Champion Coachのバックアップを選んでください。'); }
+    e.target.value='';
+  });
+
+  el('clearData').addEventListener('click', () => {
+    if(!confirm('対戦ログ・環境メモ・構築をすべて削除します。よろしいですか？')) return;
+    Object.assign(state, defaultState());assistOpponentDraft=[];logOpponentDraft=[];selectedTeamDraft=[];teamDraft=[];favoriteDraft='';replacementTarget=''; saveState(); hideAssistView(); renderAll(); el('settingsDialog').close();
+  });
+
+  el('loadDemo').addEventListener('click', () => {
+    if(state.matches.length && !confirm('現在のデータにサンプル3試合を追加します。よろしいですか？')) return;
+    const samples=[
+      {id:`demo-${Date.now()}-1`,date:'2026-09-17',format:'double',opponentTeam:['ボーマンダ','ゴリランダー','ガオガエン','サーフゴー','メタグロス','パーモット'],selectedTeam:['ガオガエン','サーフゴー','カイリュー','パーモット'],result:'loss',cause:'selection',selectionReason:'メガボーマンダへの回答を曖昧なまま選出',keyTurn:'選出時点でメガボーマンダへの回答が薄かった',confidence:2,planOutcome:'broken',learning:'最大打点を受ける役を先に決める'},
+      {id:`demo-${Date.now()}-2`,date:'2026-09-16',format:'double',opponentTeam:['ボーマンダ','ゴリランダー','ガオガエン','イエッサン♀','ブリムオン','セグレイブ'],selectedTeam:['ガオガエン','サーフゴー','ブリムオン','カイリュー'],result:'loss',cause:'knowledge',selectionReason:'技範囲の確認なしで通常選出',keyTurn:'相手の技範囲を把握していなかった',confidence:1,planOutcome:'broken',learning:'メガボーマンダの警戒技を登録'},
+      {id:`demo-${Date.now()}-3`,date:'2026-09-15',format:'double',opponentTeam:['ガブリアス','ゴリランダー','サーフゴー','ガオガエン','カイリュー','ブリムオン'],selectedTeam:['サーフゴー','カイリュー','ガオガエン','ブリムオン'],result:'win',cause:'unknown',selectionReason:'終盤にカイリューを通す',keyTurn:'終盤の詰めを先に決められた',confidence:4,planOutcome:'held',learning:'勝ち筋を先に決めると選択が減る'}
+    ];
+    state.matches.push(...samples); saveState(); renderAll(); el('settingsDialog').close();
+  });
+
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  loadFallbackCompetitiveMeta(); setToday(); renderAll(); refreshCompetitiveMeta();
+})();
+
+</script>
+</body>
+</html>

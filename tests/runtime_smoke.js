@@ -31,6 +31,7 @@ for(const f of ['pokemon-data.js','competitive-data.js','core.js','app.js']) vm.
 if(!context.PC_POKEMON_CATALOG||context.PC_POKEMON_CATALOG.length!==258)throw new Error('catalog init failed');
 if(elements.teamMemberBuilder.children.length!==6)throw new Error('team slots not rendered');
 if(!elements.teamMembers.value.includes('ボーマンダ')||elements.teamMembers.value.includes('メガボーマンダ'))throw new Error('v0.5 mega-label migration failed');
+// Open selector, choose first Pokémon, commit, auto-complete and save the team.
 elements.pickTeamMember.emit('click');
 let card=elements.pokemonCatalogGrid.children.find(x=>String(x.className).includes('pokemon-card')&&!x.disabled);
 if(!card)throw new Error('picker card missing'); card.emit('click'); elements.pokemonPickerDone.emit('click');
@@ -47,6 +48,7 @@ if(!saved.inventory?.unowned?.length||saved.team.members.includes(removedName))t
 if(elements.assistOwnTeam.value.includes(removedName))throw new Error('saved analysis stayed stale after unowned removal');
 const restoreButton=elements.teamInventory.children.flatMap(x=>x.children||[]).find(x=>x.textContent==='所持に戻す');if(!restoreButton)throw new Error('restore-owned action missing');restoreButton.emit('click');
 saved=JSON.parse(store['championCoach.v1']);if(saved.inventory.unowned.length)throw new Error('restore-owned failed');
+// Select six opponent Pokémon through the same visual picker and run assist.
 elements.pickAssistOpponent.emit('click');
 for(let i=0;i<6;i++){
   const c=elements.pokemonCatalogGrid.children.find(x=>String(x.className).includes('pokemon-card')&&!String(x.className).includes('selected')&&!x.disabled);
