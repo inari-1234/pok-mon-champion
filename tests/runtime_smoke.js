@@ -14,7 +14,7 @@ class FakeNode{
  reset(){this.value='';}
 }
 const elements=Object.fromEntries(ids.map(id=>[id,new FakeNode('div',id)]));
-for(const id of ['teamFormat','assistFormat','matchFormat']) elements[id].value='double';
+for(const id of ['teamFormat','assistFormat','matchFormat']) elements[id].value='single';
 elements.pokemonTypeFilter.value='all'; elements.confidence.value='3'; elements.planOutcome.value='unknown';
 const document={
  getElementById:id=>elements[id]||null,
@@ -27,8 +27,9 @@ const store={'championCoach.v1':JSON.stringify({version:5,rank:'',team:{name:'�
 const context={console,document,localStorage,location:{protocol:'file:'},navigator:{},crypto:{randomUUID:()=>`id-${Date.now()}`},Blob:function(){},URL:{createObjectURL:()=>'',revokeObjectURL(){}},alert(){},confirm:()=>true,setTimeout,clearTimeout};
 context.window=context; context.globalThis=context; context.window.scrollTo=()=>{};
 vm.createContext(context);
-for(const f of ['pokemon-data.js','competitive-data.js','core.js','app.js']) vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),context,{filename:f});
+for(const f of ['pokemon-data.js','competitive-data.js','single-competitive-data.js','core.js','app.js']) vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),context,{filename:f});
 if(!context.PC_POKEMON_CATALOG||context.PC_POKEMON_CATALOG.length!==258)throw new Error('catalog init failed');
+if(!context.PC_SINGLE_COMPETITIVE_FALLBACK)throw new Error('singles fallback init failed');
 if(elements.teamMemberBuilder.children.length!==6)throw new Error('team slots not rendered');
 if(!elements.teamMembers.value.includes('ボーマンダ')||elements.teamMembers.value.includes('メガボーマンダ'))throw new Error('v0.5 mega-label migration failed');
 // Open selector, choose first Pokémon, commit, auto-complete and save the team.
