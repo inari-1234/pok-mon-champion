@@ -24,7 +24,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat             .bootstrap/payload.00 .bootstrap/payload.01 .bootstrap/payload.02 .bootstrap/payload.03 .bootstrap/payload.04             .bootstrap/tail.00 .bootstrap/tail.01 .bootstrap/tail.02 .bootstrap/tail.03 .bootstrap/tail.04             > /tmp/champion-coach.b64
+          cat             .bootstrap/payload.00 .bootstrap/payload.01 .bootstrap/payload.02 .bootstrap/payload.03             .bootstrap/tail.00 .bootstrap/tail.01 .bootstrap/tail.02 .bootstrap/tail.03 .bootstrap/tail.04             > /tmp/champion-coach.b64
           base64 --decode /tmp/champion-coach.b64 > /tmp/champion-coach.xz
           xz --test /tmp/champion-coach.xz
           mkdir -p /tmp/champion-coach-restore
