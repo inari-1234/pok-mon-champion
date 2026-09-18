@@ -1,0 +1,40 @@
+name: Validate Champion Coach
+
+on:
+  push:
+    branches-ignore: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Install static-check dependency
+        run: python -m pip install beautifulsoup4
+      - name: JavaScript syntax checks
+        run: |
+          node --check pokemon-data.js
+          node --check competitive-data.js
+          node --check core.js
+          node --check app.js
+          node --check sw.js
+      - name: Core and regression tests
+        run: node --test tests/core.test.js
+      - name: Runtime smoke test
+        run: node tests/runtime_smoke.js
+      - name: Static consistency check
+        run: python tests/static_check.py
