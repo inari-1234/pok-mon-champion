@@ -13,32 +13,36 @@ refs=set(re.findall(r"\bel\('([^']+)'\)",app))
 missing=sorted(refs-set(ids))
 assert not missing, f'missing DOM ids: {missing}'
 assert 'innerHTML' not in app, 'unsafe innerHTML use found'
-for src in ['pokemon-data.js','competitive-data.js','core.js','app.js']:
+for src in ['pokemon-data.js','competitive-data.js','single-competitive-data.js','core.js','app.js']:
     assert (root/src).exists(), f'missing {src}'
     assert soup.find('script',src=src), f'index does not load {src}'
 assert soup.find('link',rel='manifest'), 'manifest link missing'
 json.loads((root/'manifest.webmanifest').read_text())
 sw=(root/'sw.js').read_text()
-assert 'champion-coach-v6.1-repo1' in sw
+assert 'champion-coach-v6.2-repo1' in sw
 assert 'competitive-data.js' in sw
+assert 'single-competitive-data.js' in sw
 assert 'version.json' in sw
 assert 'latest.json' in sw
 assert (root/'version.json').exists(), 'version.json missing'
 assert (root/'latest.json').exists(), 'latest.json missing'
 latest=json.loads((root/'latest.json').read_text())
-assert latest.get('version')=='0.6.1' and latest.get('sw_cache')=='champion-coach-v6.1-repo1', 'latest metadata mismatch'
+assert latest.get('version')=='0.6.2' and latest.get('sw_cache')=='champion-coach-v6.1-repo1', 'latest metadata mismatch'
 version=json.loads((root/'version.json').read_text())
-assert version.get('version')=='0.6.1', 'wrong repository build version'
+assert version.get('version')=='0.6.2', 'wrong repository build version'
 assert (root/'.github/workflows/validate.yml').exists(), 'validation workflow missing'
 assert (root/'.github/workflows/pages.yml').exists(), 'pages workflow missing'
 assert 'data-shadow' in style and 'pokemon-grid' in style
-assert 'version-badge' in style and 'v0.6.1' in html
+assert 'version-badge' in style and 'v0.6.2' in html
 assert 'START WITH A FAVORITE' in html
 assert '残りをおまかせで仮組み' in html
 assert '改行・カンマ区切り' not in html, 'manual entry guidance still visible'
 assert 'buildCoachTasks' not in core
 assert len(soup.find_all('script',src='core.js'))==1, 'core.js loaded more than once'
 assert '持っていないポケモン' in html and '育成スターター' in html
+assert html.count('<option value="single">シングル</option><option value="double">ダブル</option>') >= 3, 'single must be the primary UI option'
+assert "format: 'single'" in app, 'new state must default to singles'
+assert 'シングルを主対象' in html, 'singles-first guidance missing'
 assert '能力ポイント' in html and '合計66' in html
 for text in [html,app,core]:
     assert '努力値' not in text, 'legacy effort-value wording exposed in app'
