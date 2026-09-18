@@ -1,11 +1,11 @@
-# Champion Coach v0.6.1
+# Champion Coach v0.6.2
 
-> **Repository edition:** v0.6.1 adds GitHub Actions validation, GitHub Pages deployment, `version.json`, and a cache revision so the repository can be the source of truth. App features are based on v0.6.0.
+> **Repository edition:** v0.6.2 switches the default experience to Single Battles while preserving explicit Doubles settings. It also adds a bundled Regulation M-C Singles starter dataset for representative current Pokémon.
 
 
 Pokémon Champions の復帰者・初心者向けに、**好きなポケモン1体から構築を始め、持っていないポケモンを避け、最初に試す育成案まで作る**ローカルWebアプリです。
 
-## v0.6.1 の目的
+## v0.6.2 の目的
 
 v0.5.0 では「好きな1体 → 残り5体を仮組み」まで進められるようになりました。v0.6.0 では、その次に起こる2つの問題を解消します。
 
@@ -192,6 +192,7 @@ https://www.pokemon.com/us/news/get-ready-for-regulation-set-m-c-in-pokemon-cham
 - `styles.css` — UI
 - `pokemon-data.js` — ポケモンセレクター用データ
 - `competitive-data.js` — Reg M-Cダブルのオフライン予備データ
+- `single-competitive-data.js` — Reg M-Cシングルの代表的な現行育成スターターデータ
 - `core.js` — 構築・代替・育成・分析ロジック
 - `app.js` — UI・保存・公開環境データ更新
 - `manifest.webmanifest` / `sw.js` — PWA
@@ -204,6 +205,6 @@ https://www.pokemon.com/us/news/get-ready-for-regulation-set-m-c-in-pokemon-cham
 ## 注意
 
 - 「育成スターター」は、最初に対戦へ出すための土台です。すべての相手・構築に対する最適解を保証しません。
-- 現行ダブルの技・持ち物は公開対戦データを根拠にしますが、性格・能力ポイントはアプリ側のスターター配分です。この2種類の根拠をUI上で分けて表示します。
+- 現在はシングルを主対象にします。代表的な現行シングル育成例がある場合は技・持ち物・性格・能力ポイントを優先し、未収録ポケモンは一般役割からスターター案を出します。ダブル機能も残します。
 - 少数使用のポケモンでは実戦データが不十分な場合があります。その場合は技を無理に断定しません。
 - 環境は更新されるため、Roster Info・ゲーム内情報を最終確認先にしてください。
