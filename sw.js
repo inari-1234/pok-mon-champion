@@ -1,5 +1,5 @@
-const CACHE='champion-coach-v6.1-repo1';
-const CORE=['./','./index.html','./styles.css','./pokemon-data.js','./competitive-data.js','./core.js','./app.js','./manifest.webmanifest','./version.json','./latest.json'];
+const CACHE='champion-coach-v6.2-repo1';
+const CORE=['./','./index.html','./styles.css','./pokemon-data.js','./competitive-data.js','./single-competitive-data.js','./core.js','./app.js','./manifest.webmanifest','./version.json','./latest.json'];
 const NETWORK_FIRST=new Set(['./','./index.html','./manifest.webmanifest','./version.json']);
 
 self.addEventListener('install',event=>{
