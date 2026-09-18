@@ -90,8 +90,11 @@ test('Indeedee female keeps female form',()=>assert.equal(C.findCatalogPokemon('
 
 // v0.6 ownership / training regressions
 const competitive=require('../competitive-data.js');
+const singleCompetitive=require('../single-competitive-data.js');
 const competitiveById={};
+const singleCompetitiveById={};
 for(const [key,value] of Object.entries(competitive)){const mon=C.findCatalogPokemon(key,catalog);if(mon)competitiveById[mon.id]=value;}
+for(const [key,value] of Object.entries(singleCompetitive)){const mon=C.findCatalogPokemon(key,catalog);if(mon)singleCompetitiveById[mon.id]=value;}
 
 test('all stat-point starter spreads obey Champions 32-per-stat and 66-total rule',()=>{
   for(const p of catalog) for(const format of ['single','double']){
@@ -114,6 +117,10 @@ test('bundled current M-C doubles data includes Rillaboom moves and items',()=>{
 test('bundled competitive data never exposes unresolved numeric item labels',()=>{for(const m of Object.values(competitive))for(const x of m.items||[])assert.doesNotMatch(x.name,/^(道具|item)#?\d+/i);});
 test('doubles starter set combines current meta with Champions stat points',()=>{const s=C.buildStarterTrainingSet(by('rillaboom'),'double',competitive.Rillaboom);assert.equal(s.statPointTotal,66);assert.ok(s.item);assert.equal(s.moves.length,4);assert.match(s.source,/Reg M-C/);});
 test('singles starter does not borrow doubles moves when no singles meta is provided',()=>{const s=C.buildStarterTrainingSet(by('rillaboom'),'single',null);assert.equal(s.moves.length,0);assert.equal(s.statPointTotal,66);assert.ok(s.item);});
+test('bundled M-C singles data includes current core threats',()=>{for(const key of ['Salamence','Garchomp','Primarina','Golisopod','Hippowdon']){assert.ok(singleCompetitive[key],key);assert.equal(singleCompetitive[key].moves.length,4,key);assert.ok(singleCompetitive[key].items.length>=3,key);}});
+test('singles starter uses singles nature and stat points when provided',()=>{const s=C.buildStarterTrainingSet(by('primarina'),'single',singleCompetitive.Primarina);assert.equal(s.nature,'ひかえめ');assert.equal(s.statPointTotal,66);assert.equal(s.statPoints.HP,32);assert.equal(s.statPoints['とくこう'],32);assert.match(s.source,/シングル/);});
+test('singles starter uses singles move set rather than doubles fallback',()=>{const s=C.buildStarterTrainingSet(by('garchomp'),'single',singleCompetitive.Garchomp);assert.deepEqual(s.moves.map(x=>x.name),['げきりん','じしん','がんせきふうじ','ステルスロック']);});
+test('six-member singles starter avoids held-item duplication when alternatives exist',()=>{const team=C.buildStarterTeam('ボーマンダ','single',catalog).members;const sets=C.buildTeamStarterSets(team,'single',singleCompetitiveById,catalog);const items=sets.map(x=>x.item).filter(Boolean);assert.equal(new Set(items).size,items.length);});
 test('six-member doubles starter avoids held-item duplication when alternatives exist',()=>{const team=C.buildStarterTeam('ゴリランダー','double',catalog).members;const sets=C.buildTeamStarterSets(team,'double',competitiveById,catalog);const items=sets.map(x=>x.item).filter(Boolean);assert.equal(new Set(items).size,items.length);});
 test('all generated doubles starter teams keep held items unique',()=>{for(const p of catalog){const team=C.buildStarterTeam(p.name,'double',catalog).members;const sets=C.buildTeamStarterSets(team,'double',competitiveById,catalog);const items=sets.map(x=>x.item).filter(Boolean);assert.equal(new Set(items).size,items.length,p.name);}});
 test('custom Champions mega-stone labels are human-readable',()=>{assert.equal(C.CUSTOM_ITEM_LABELS[2645],'グソクムシャ用メガストーン');assert.doesNotMatch(C.CUSTOM_ITEM_LABELS[2648],/\d/);});
