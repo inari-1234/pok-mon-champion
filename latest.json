@@ -1,0 +1,28 @@
+{
+  "app": "Champion Coach",
+  "version": "0.6.1",
+  "build": "2026-09-18-repo-1",
+  "sw_cache": "champion-coach-v6.1-repo1",
+  "runtime_files": [
+    "index.html",
+    "styles.css",
+    "pokemon-data.js",
+    "competitive-data.js",
+    "core.js",
+    "app.js",
+    "manifest.webmanifest",
+    "sw.js",
+    "version.json"
+  ],
+  "sha256": {
+    "index.html": "f413cbc487d83c8e2ca6e1c555fecf2611542a07778395084d6daf2b63c695ca",
+    "styles.css": "c87c7747be11ec352c079d0ad58bb7eba10b3fa7a081b0ca96f74d9d8ea85904",
+    "pokemon-data.js": "ae0a5521b06bacf41aa58a97ab82bd58f5d82a10439507ed99778204ffc92e8f",
+    "competitive-data.js": "78530427719d12ccc61809461423179fcff47bf00682551d670da0c1890bec86",
+    "core.js": "369127710fecbe335f65ee2d0956a7b82972ebab871cef31ecbcf41cc4e252a8",
+    "app.js": "b4ac5aa4c9483ae035b32596a47a1f9c44ef286382216abb83978730dde4ddbf",
+    "manifest.webmanifest": "baf0b90b56dee8463c995ab2c644bd25ad2b3d4ace6fec2b837863ef6304097b",
+    "sw.js": "732507ed79d34c399aec9de1285bed79f5202f6f5532fb1d16539816448c3ec1",
+    "version.json": "18e19397ea105edbb2fa7d14010e3183a70b57f8608b4ed58b17cff0f49bf427"
+  }
+}
