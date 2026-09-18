@@ -1,13 +1,14 @@
 {
   "app": "Champion Coach",
-  "version": "0.6.1",
-  "build": "2026-09-18-repo-1",
-  "sw_cache": "champion-coach-v6.1-repo1",
+  "version": "0.6.2",
+  "build": "2026-09-18-repo-2",
+  "sw_cache": "champion-coach-v6.2-repo1",
   "runtime_files": [
     "index.html",
     "styles.css",
     "pokemon-data.js",
     "competitive-data.js",
+    "single-competitive-data.js",
     "core.js",
     "app.js",
     "manifest.webmanifest",
