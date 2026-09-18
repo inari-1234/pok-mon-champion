@@ -34,7 +34,7 @@ jobs:
           test "$size" = "88044"
 
           base64 --decode /tmp/champion-coach.b64 > /tmp/champion-coach.tar.xz
-          echo "a5b57b560701be79bc0d57b986004e8c30704e79db7d74bf9174e538c40f71dc  /tmp/champion-coach.tar.xz" | sha256sum --check -
+          echo "5146ae3e4cb8a9ec158b01ab0ed262d2aacd53195d91717561f742f491eb355c  /tmp/champion-coach.tar.xz" | sha256sum --check -
           xz --test /tmp/champion-coach.tar.xz
 
           rm -rf /tmp/champion-coach-restore
