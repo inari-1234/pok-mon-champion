@@ -27,7 +27,7 @@ assert 'latest.json' in sw
 assert (root/'version.json').exists(), 'version.json missing'
 assert (root/'latest.json').exists(), 'latest.json missing'
 latest=json.loads((root/'latest.json').read_text())
-assert latest.get('version')=='0.6.2' and latest.get('sw_cache')=='champion-coach-v6.1-repo1', 'latest metadata mismatch'
+assert latest.get('version')=='0.6.2' and latest.get('sw_cache')=='champion-coach-v6.2-repo1', 'latest metadata mismatch'
 version=json.loads((root/'version.json').read_text())
 assert version.get('version')=='0.6.2', 'wrong repository build version'
 assert (root/'.github/workflows/validate.yml').exists(), 'validation workflow missing'
