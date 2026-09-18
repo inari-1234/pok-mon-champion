@@ -34,6 +34,7 @@ jobs:
         run: |
           node --check pokemon-data.js
           node --check competitive-data.js
+          node --check single-competitive-data.js
           node --check core.js
           node --check app.js
           node --check sw.js
@@ -53,7 +54,7 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir _site
-          cp index.html styles.css pokemon-data.js competitive-data.js core.js app.js manifest.webmanifest sw.js version.json latest.json .nojekyll _site/
+          cp index.html styles.css pokemon-data.js competitive-data.js single-competitive-data.js core.js app.js manifest.webmanifest sw.js version.json latest.json .nojekyll _site/
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
