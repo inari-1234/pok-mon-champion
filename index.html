@@ -7,145 +7,111 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Champion Coach">
-  <title>Champion Coach v0.7.0</title>
+  <title>Champion Coach v0.8.0</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="topbar">
-    <div>
-      <p class="eyebrow">Pokémon Champions はじめて対戦サポート</p>
-      <h1>Champion Coach <span class="version-badge" id="appVersionBadge">v0.7.0</span></h1>
-    </div>
-    <button id="openSettings" class="icon-btn" aria-label="設定">⚙</button>
+    <button id="backButton" class="header-text-btn" type="button" hidden>戻る</button>
+    <div class="brand"><strong>Champion Coach</strong><small id="appVersionBadge">v0.8.0</small></div>
+    <button id="openSettings" class="header-text-btn" type="button">設定</button>
   </header>
 
   <main>
-    <section id="screen-home" class="screen active" aria-labelledby="nav-home">
-      <section class="coach-home-card">
-        <div class="coach-home-top">
-          <div><span class="section-kicker">BEGINNER FLOW</span><span id="homeCoachStep" class="coach-step">STEP 1 / 4</span></div>
-          <div class="hero-tags"><span class="pill">REGULATION M-C</span><span id="rankChip" class="pill subtle">RANK 未設定</span></div>
-        </div>
-        <h2 id="homeCoachTitle">まず、使いたいポケモンを1匹選びましょう。</h2>
-        <p id="homeCoachBody">強さや役割はまだ考えなくて大丈夫です。好きなポケモンや使ってみたいポケモンから始めます。</p>
-        <div class="coach-route" aria-label="対戦開始までの流れ">
-          <div data-route-step="1"><b>1</b><span>好きな1匹</span></div><i></i>
-          <div data-route-step="2"><b>2</b><span>6匹を作る</span></div><i></i>
-          <div data-route-step="3"><b>3</b><span>育てる</span></div><i></i>
-          <div data-route-step="4"><b>4</b><span>対戦する</span></div>
-        </div>
-        <button id="quickStartButton" class="primary-btn coach-primary" type="button" data-nav="team">好きな1体を選んで始める</button>
-        <button class="ghost-btn coach-secondary" type="button" data-nav="log">対戦後の振り返りはこちら</button>
+    <section id="screen-home" class="screen active" aria-label="ホーム">
+      <section class="progress-card">
+        <div class="progress-top"><span class="step-label">あなたは今ここ</span><strong id="homeCoachStep">STEP 1 / 4</strong></div>
+        <div class="progress-track"><i id="homeProgressBar"></i></div>
+        <ol class="progress-list">
+          <li data-route-step="1"><b>1</b><span>使いたいポケモンを決める</span><em>今ここ</em></li>
+          <li data-route-step="2"><b>2</b><span>6匹のチームを決める</span></li>
+          <li data-route-step="3"><b>3</b><span>対戦用に育てる</span></li>
+          <li data-route-step="4"><b>4</b><span>対戦を始める</span></li>
+        </ol>
       </section>
 
-      <details class="home-drawer">
-        <summary><span>今の記録を見る</span><small id="homeStatsFormat">シングル</small></summary>
-        <div class="drawer-body">
+      <section class="next-card">
+        <span class="section-kicker">NEXT</span>
+        <h1 id="homeCoachTitle">まず、使いたいポケモンを1匹選びましょう。</h1>
+        <p id="homeCoachBody" hidden></p>
+        <button id="quickStartButton" class="primary-btn home-next-btn" type="button" data-nav="team">次に進む</button>
+      </section>
+
+      <details class="advanced-menu">
+        <summary>その他の機能</summary>
+        <div class="shortcut-grid">
+          <button type="button" data-nav="team" data-team-tab="plan">戦い方を見る</button>
+          <button type="button" data-nav="log">対戦記録</button>
+          <button type="button" data-nav="environment">対戦から学ぶ</button>
+          <button type="button" data-nav="team" data-team-tab="stats">選出実績</button>
+        </div>
+        <div class="advanced-data">
+          <div class="home-meta-line"><span class="pill">M-C</span><span id="rankChip" class="pill subtle">RANK 未設定</span><span id="homeStatsFormat" class="pill subtle">シングル</span></div>
           <div class="stats-grid">
-            <article class="stat"><span>対戦</span><strong id="statTotal">0</strong><small>試合</small></article>
-            <article class="stat"><span>勝率</span><strong id="statWinRate">—</strong><small>現在形式</small></article>
-            <article class="stat"><span>直近10戦</span><strong id="statRecent">—</strong><small>勝率</small></article>
-            <article class="stat"><span>現在</span><strong id="statStreak">—</strong><small>連勝/連敗</small></article>
+            <article class="stat"><span>対戦</span><strong id="statTotal">0</strong></article>
+            <article class="stat"><span>勝率</span><strong id="statWinRate">—</strong></article>
+            <article class="stat"><span>直近10戦</span><strong id="statRecent">—</strong></article>
+            <article class="stat"><span>連勝/連敗</span><strong id="statStreak">—</strong></article>
           </div>
-          <section class="progress-panel compact-panel">
-            <div class="panel-head"><div><span class="section-kicker">PROGRESS</span><h2>今どの段階か</h2></div><span id="progressStage" class="tag mid">土台作り</span></div>
-            <p id="progressMessage" class="muted"></p>
-            <div id="progressMetrics" class="progress-metrics"></div>
-            <div class="next-action"><span>次に変えるのはここだけ</span><strong id="progressNext"></strong></div>
+          <section class="compact-data-block">
+            <div class="compact-data-head"><strong>成長記録</strong><span id="progressStage" class="tag mid">土台作り</span></div>
+            <p id="progressMessage" class="muted"></p><div id="progressMetrics" class="progress-metrics"></div>
+            <div class="next-action"><span>次に変えること</span><strong id="progressNext"></strong></div>
           </section>
-        </div>
-      </details>
-
-      <details class="home-drawer">
-        <summary><span>このチームの基本戦術を見る</span><small>必要なときだけ</small></summary>
-        <div class="drawer-body">
-          <section id="homeFoundationPanel" class="foundation-panel compact-panel">
-            <div class="panel-head"><div><span class="section-kicker">STARTER FOUNDATION</span><h2>最初に試す戦い方</h2></div><span id="homeFoundationBadge" class="tag mid">未診断</span></div>
-            <p id="homeFoundationPlan" class="foundation-plan">構築6体を登録すると、役割から基本戦術の仮説を作ります。</p>
-            <div id="homeFoundationPicks" class="selection-picks"></div>
-            <div id="homeFoundationGaps" class="stack compact"></div>
-            <button class="secondary-btn" type="button" data-nav="team" data-team-tab="plan">チームの戦い方を確認</button>
+          <section id="homeFoundationPanel" class="compact-data-block">
+            <div class="compact-data-head"><strong>基本戦術</strong><span id="homeFoundationBadge" class="tag mid">未診断</span></div>
+            <p id="homeFoundationPlan" class="foundation-plan"></p><div id="homeFoundationPicks" class="selection-picks"></div><div id="homeFoundationGaps" class="stack compact"></div>
           </section>
-        </div>
-      </details>
-
-      <details class="home-drawer">
-        <summary><span>自分がよく当たる相手を見る</span><small>対戦後に育つ情報</small></summary>
-        <div class="drawer-body">
-          <section class="compact-panel">
-            <div class="panel-head"><div><span class="section-kicker">PERSONAL META</span><h2>自分が当たっている環境</h2></div><button class="text-btn" data-nav="environment">詳しく見る</button></div>
-            <div id="homeThreats" class="stack compact"></div>
-          </section>
+          <section class="compact-data-block"><strong>よく当たる相手</strong><div id="homeThreats" class="stack compact"></div></section>
         </div>
       </details>
     </section>
 
 
-    <section id="screen-assist" class="screen" aria-labelledby="nav-assist">
-      <section class="panel form-panel">
-        <div class="panel-head"><div><span class="section-kicker">BATTLE COACH</span><h2>相手の6匹を入れる</h2></div><span class="coach-mini-step">1</span></div>
-        <p class="muted">名前やタイプを覚えていなくても、画像から相手6匹を選ぶだけで始められます。</p>
+    <section id="screen-assist" class="screen" aria-label="対戦準備">
+      <div class="step-head"><span>対戦前</span><h1>相手の6匹を選んでください。</h1></div>
+      <section class="panel battle-input-panel">
         <form id="assistForm" novalidate>
-          <div class="two-col">
-            <label>形式<select id="assistFormat"><option value="single">シングル</option><option value="double">ダブル</option></select></label>
-            <label>自分の構築<span class="hint">構築画面から自動取得</span><input id="assistOwnTeam" readonly placeholder="構築を登録してください"></label>
-          </div>
+          <details class="format-details"><summary>対戦形式を変更</summary><label>形式<select id="assistFormat"><option value="single">シングル</option><option value="double">ダブル</option></select></label></details>
+          <input id="assistOwnTeam" class="data-shadow" readonly aria-hidden="true" tabindex="-1">
           <div class="picker-field">
-            <div class="picker-field-head"><span>相手の6体</span><span id="assistOpponentCount" class="hint">0/6</span></div>
+            <div class="picker-field-head"><span>相手の6匹</span><span id="assistOpponentCount" class="hint">0/6</span></div>
             <div id="assistOpponentBuilder" class="team-slots compact-slots"></div>
-            <div class="button-row"><button id="pickAssistOpponent" class="secondary-btn" type="button">一覧から選ぶ</button><button id="clearAssistOpponent" class="ghost-btn" type="button">クリア</button></div>
+            <div class="button-row"><button id="pickAssistOpponent" class="secondary-btn" type="button">画像から選ぶ</button><button id="clearAssistOpponent" class="ghost-btn" type="button">クリア</button></div>
             <textarea id="assistOpponentTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
           </div>
           <div id="assistErrors" class="error-box" hidden></div>
-          <button class="primary-btn" type="submit">今回の対戦を整理</button>
+          <button class="primary-btn" type="submit">この6匹を見る</button>
         </form>
       </section>
 
-      <section id="assistFocusPanel" class="panel beginner-panel" hidden>
-        <div class="panel-head"><div><span class="section-kicker">STEP 1</span><h2>① 一番注意する相手</h2></div><span id="assistGuideCoverage" class="tag mid">基本ガイド確認中</span></div>
-        <p id="assistFocusSummary" class="muted"></p>
+      <section id="assistFocusPanel" class="focus-card danger" hidden>
+        <div class="focus-card-title"><span>1</span><strong>一番注意する相手</strong><small id="assistGuideCoverage">確認中</small></div>
         <div id="assistFocusList" class="stack"></div>
-        <div id="assistPrinciples" class="guide-principles"></div>
-        <p id="assistUnknowns" class="small muted"></p>
       </section>
 
-      <section id="assistResult" class="panel analysis-panel" hidden>
-        <div class="panel-head"><div><span class="section-kicker">STEP 2</span><h2>② おすすめの選出</h2></div><span id="assistEvidence" class="tag mid">根拠集計中</span></div>
+      <section id="assistResult" class="focus-card good" hidden>
+        <div class="focus-card-title"><span>2</span><strong>おすすめの選出</strong><small id="assistEvidence">集計中</small></div>
         <div id="assistRecommended" class="selection-picks"></div>
-        <div class="opening-action"><span class="assist-label">③ 最初にすること</span><strong id="assistOpeningAction">まず警戒点とおすすめ選出を確認してから始めます。</strong></div>
-        <p id="assistSummary" class="muted"></p>
-        <div class="assist-actions">
-          <button id="copyAssistToLog" class="secondary-btn" type="button">この相手を対戦記録へコピー</button>
-        </div>
+        <div class="opening-action"><span class="assist-label">3　最初にすること</span><strong id="assistOpeningAction"></strong></div>
+        <div class="assist-actions"><button id="copyAssistToLog" class="primary-btn" type="button">この方針で対戦する</button></div>
       </section>
 
-      <details id="assistDetails" class="assist-detail-drawer" hidden>
+      <details id="assistDetails" class="details-box" hidden>
         <summary>もっと詳しく見る</summary>
-        <div class="assist-detail-body">
-      <section id="assistThreatPanel" class="panel" hidden>
-        <div class="panel-head"><div><span class="section-kicker">THREATS</span><h2>相手ごとの詳細</h2></div></div>
-        <div id="assistThreats" class="stack compact"></div>
-      </section>
-
-      <section id="assistCandidatesPanel" class="panel" hidden>
-        <div class="panel-head"><div><span class="section-kicker">EVIDENCE</span><h2>自分の6体との照合</h2></div></div>
-        <div id="assistCandidates" class="stack compact"></div>
-      </section>
-
-      <section id="assistFailuresPanel" class="panel" hidden>
-        <div class="panel-head"><div><span class="section-kicker">PAST MISTAKES</span><h2>似た相手への過去の敗戦</h2></div></div>
-        <div id="assistFailures" class="stack compact"></div>
-      </section>
-
+        <div class="detail-content">
+          <p id="assistFocusSummary" class="muted"></p><div id="assistPrinciples" class="guide-principles"></div><p id="assistUnknowns" class="small muted"></p><p id="assistSummary" class="muted"></p>
+          <section id="assistThreatPanel" class="detail-section" hidden><h3>相手ごとの詳細</h3><div id="assistThreats" class="stack compact"></div></section>
+          <section id="assistCandidatesPanel" class="detail-section" hidden><h3>自分の6匹との照合</h3><div id="assistCandidates" class="stack compact"></div></section>
+          <section id="assistFailuresPanel" class="detail-section" hidden><h3>似た相手への過去の敗戦</h3><div id="assistFailures" class="stack compact"></div></section>
         </div>
       </details>
     </section>
 
-    <section id="screen-log" class="screen" aria-labelledby="nav-log">
+    <section id="screen-log" class="screen" aria-label="対戦記録">
       <section class="panel form-panel guided-log">
-        <div class="panel-head"><div><span class="section-kicker">AFTER BATTLE</span><h2>まず結果だけ残す</h2></div><span class="coach-mini-step">1</span></div>
-        <p class="muted">毎試合すべて書く必要はありません。相手・自分の3体・勝敗だけでも保存できます。</p>
+        <div class="step-head compact-step-head"><span>対戦後</span><h1>結果を残します。</h1></div>
         <form id="matchForm" novalidate>
           <div class="picker-field">
             <div class="picker-field-head"><span>相手の6体</span><span id="logOpponentCount" class="hint">0/6</span></div>
@@ -193,15 +159,14 @@
       </details>
     </section>
 
-    <section id="screen-environment" class="screen" aria-labelledby="nav-environment">
-      <div class="screen-intro"><span class="section-kicker">LEARN FROM YOUR MATCHES</span><h2>自分が実際に当たった相手を知る</h2><p class="muted">全プレイヤーの使用率ではなく、あなた自身の対戦だけを形式別に見ます。</p></div>
+    <section id="screen-environment" class="screen" aria-label="対戦から学ぶ">
+      <div class="step-head compact-step-head"><span>対戦から学ぶ</span><h1>よく当たる相手を見る。</h1></div>
       <div class="format-switch" aria-label="環境の形式">
         <button class="active" type="button" data-environment-format="single">シングル</button>
         <button type="button" data-environment-format="double">ダブル</button>
       </div>
       <section class="panel">
         <div class="panel-head"><div><span class="section-kicker">PERSONAL META</span><h2>よく当たる・苦戦している相手</h2></div><span id="environmentFormatDescription" class="tag low">シングル</span></div>
-        <p class="muted">遭遇回数・対戦勝率・直近の遭遇から、今の自分が優先して覚える相手を整理します。</p>
         <div id="threatTable" class="threat-list"></div>
       </section>
 
@@ -222,73 +187,68 @@
       </details>
     </section>
 
-    <section id="screen-team" class="screen" aria-labelledby="nav-team">
-      <div class="screen-intro"><span class="section-kicker">MY TEAM</span><h2>チームを作る・理解する・育てる</h2><p class="muted">最初は「作る」だけで大丈夫です。必要になった情報だけタブを切り替えて見ます。</p></div>
-      <div class="team-tabs" role="tablist" aria-label="チームの内容">
-        <button class="team-tab-button active" type="button" data-team-tab="build">作る</button>
-        <button class="team-tab-button" type="button" data-team-tab="plan">戦い方</button>
-        <button class="team-tab-button" type="button" data-team-tab="training">育成</button>
-        <button class="team-tab-button" type="button" data-team-tab="stats">実績</button>
+    <section id="screen-team" class="screen" aria-label="チーム">
+      <div class="step-head compact-step-head"><span>チーム</span><h1>6匹を決めて、育てます。</h1></div>
+
+      <div class="team-primary-tabs" role="tablist" aria-label="チームの主な操作">
+        <button class="team-tab-button active" type="button" data-team-tab="build">チームを作る</button>
+        <button class="team-tab-button" type="button" data-team-tab="training">育成する</button>
       </div>
 
+      <details class="advanced-menu team-more-menu">
+        <summary>詳しい情報</summary>
+        <div class="shortcut-grid"><button type="button" data-nav="team" data-team-tab="plan">戦い方</button><button type="button" data-nav="team" data-team-tab="stats">選出実績</button></div>
+      </details>
+
       <section id="teamBuildPanel" class="panel form-panel team-pane active" data-team-pane="build">
-        <div class="panel-head"><div><span class="section-kicker">START WITH A FAVORITE</span><h2>まず好きな1体を選ぶ</h2></div><span class="coach-mini-step">1</span></div>
-        <p class="muted">名前やタイプを覚えていなくても大丈夫です。画像から1体選べば、残り5体は仮組みできます。</p>
+        <div class="panel-head simple-panel-head"><div><span class="section-kicker">STEP 1</span><h2>使いたい1匹を選ぶ</h2></div></div>
         <form id="teamForm">
-          <div class="two-col"><label>チーム名<input id="teamName" placeholder="例：はじめてのシングル"></label><label>主に使う形式<select id="teamFormat"><option value="single">シングル</option><option value="double">ダブル</option></select></label></div>
+          <details class="format-details team-settings-details"><summary>チーム名・形式</summary><div class="two-col"><label>チーム名<input id="teamName" placeholder="例：はじめてのシングル"></label><label>形式<select id="teamFormat"><option value="single">シングル</option><option value="double">ダブル</option></select></label></div></details>
           <div class="picker-field">
-            <div class="picker-field-head"><span>チームの6体</span><span id="teamMemberCount" class="hint">0/6</span></div>
+            <div class="picker-field-head"><span>チームの6匹</span><span id="teamMemberCount" class="hint">0/6</span></div>
             <div id="teamMemberBuilder" class="team-slots"></div>
-            <div class="button-row"><button id="pickTeamMember" class="secondary-btn" type="button">画像から選ぶ</button><button id="autoCompleteTeam" class="secondary-btn" type="button">残りをおまかせで仮組み</button><button id="clearTeamMembers" class="ghost-btn" type="button">全て外す</button></div>
+            <div class="button-row primary-team-actions"><button id="pickTeamMember" class="secondary-btn" type="button">画像から選ぶ</button><button id="autoCompleteTeam" class="primary-btn" type="button">残りをおまかせで仮組み</button><button id="clearTeamMembers" class="ghost-btn" type="button">全て外す</button></div>
             <textarea id="teamMembers" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
           </div>
           <div id="teamStarterAdvice" class="starter-advice" hidden></div>
-          <div id="teamPartnerSuggestions" class="partner-grid"></div>
-          <div class="inventory-box"><div class="picker-field-head"><span>持っていないポケモン</span><span id="teamInventoryCount" class="hint">0体</span></div><p class="small muted">「持っていない」を押すと候補から外し、代わりを提案します。</p><div id="teamInventory" class="inventory-chips"></div></div>
+          <details class="secondary-choice"><summary>自分で候補から選ぶ</summary><div id="teamPartnerSuggestions" class="partner-grid"></div></details>
+          <details class="secondary-choice"><summary>持っていないポケモン</summary><div class="inventory-box"><div class="picker-field-head"><span>未所持</span><span id="teamInventoryCount" class="hint">0体</span></div><div id="teamInventory" class="inventory-chips"></div></div></details>
           <div id="teamErrors" class="error-box" hidden></div>
-          <details class="review-details team-plan-input">
-            <summary>自分で戦い方をメモする（任意）</summary>
-            <div class="review-fields">
-              <label>基本の勝ち筋<textarea id="teamPlan" rows="3" placeholder="分からなければ空欄でOK"></textarea></label>
-              <label>苦手な相手<textarea id="teamWeak" rows="3" placeholder="分からなければ空欄でOK"></textarea></label>
-            </div>
-          </details>
-          <button class="primary-btn" type="submit">この6体で進む</button>
+          <details class="review-details team-plan-input"><summary>自分のメモ（任意）</summary><div class="review-fields"><label>基本の勝ち筋<textarea id="teamPlan" rows="3"></textarea></label><label>苦手な相手<textarea id="teamWeak" rows="3"></textarea></label></div></details>
+          <button class="primary-btn" type="submit">この6匹で進む</button>
         </form>
       </section>
 
       <section id="teamFoundationPanel" class="panel foundation-panel team-pane" data-team-pane="plan">
         <div class="panel-head"><div><span class="section-kicker">HOW TO PLAY</span><h2>このチームの戦い方</h2></div><span id="teamFoundationBadge" class="tag mid">未診断</span></div>
-        <p class="muted">難しい役割名を覚えるより、まず「どう勝つか」と「どの3体から試すか」を見ます。</p>
         <div class="foundation-block"><span class="assist-label">基本の勝ち筋</span><p id="teamFoundationPlan" class="foundation-plan"></p><button id="adoptFoundationPlan" class="mini-btn" type="button">この案を使う</button></div>
         <div class="foundation-block"><span class="assist-label">最初に試す3体</span><div id="teamFoundationPicks" class="selection-picks"></div></div>
-        <details class="details-box"><summary>役割や不足を詳しく見る</summary><div class="detail-content"><div id="teamFoundationRoles" class="role-grid"></div><div class="two-col foundation-columns"><div><span class="assist-label">確認できた強み</span><div id="teamFoundationStrengths" class="stack compact"></div></div><div><span class="assist-label">最初に確認する不足</span><div id="teamFoundationGaps" class="stack compact"></div></div></div></div></details>
+        <details class="details-box"><summary>役割や不足を見る</summary><div class="detail-content"><div id="teamFoundationRoles" class="role-grid"></div><div class="two-col foundation-columns"><div><span class="assist-label">強み</span><div id="teamFoundationStrengths" class="stack compact"></div></div><div><span class="assist-label">不足</span><div id="teamFoundationGaps" class="stack compact"></div></div></div></div></details>
       </section>
 
       <section id="teamTrainingPanel" class="panel training-panel team-pane" data-team-pane="training">
-        <div class="panel-head"><div><span class="section-kicker">TRAIN ONE BY ONE</span><h2>育成する</h2></div><span id="teamTrainingMeta" class="tag mid">M-C</span></div>
-        <p class="muted">シングルを主対象に、6体それぞれの持ち物・技・性格・能力ポイントを表示します。分からない項目は表示どおりを最初の基準にできます。能力ポイントは1能力最大32・合計66です。</p>
+        <div class="panel-head simple-panel-head"><div><span class="section-kicker">STEP 2</span><h2>1匹ずつ育てる</h2></div><span id="teamTrainingMeta" class="tag mid">M-C</span></div>
         <div id="teamTrainingCards" class="training-grid"></div>
       </section>
 
       <section id="teamStatsPanel" class="panel team-pane" data-team-pane="stats">
-        <div class="panel-head"><div><span class="section-kicker">SELECTION REVIEW</span><h2>この形式での選出実績</h2></div></div>
+        <div class="panel-head"><div><span class="section-kicker">RECORD</span><h2>この形式での選出実績</h2></div></div>
         <div id="selectionStats" class="threat-list"></div>
       </section>
     </section>
   </main>  </main>
 
-  <nav class="bottom-nav" aria-label="メインナビゲーション">
-    <button id="nav-home" class="active" data-nav="home"><span>⌂</span>いまここ</button>
-    <button id="nav-team" data-nav="team"><span>◇</span>チーム</button>
-    <button id="nav-assist" data-nav="assist"><span>⚔</span>対戦する</button>
-    <button id="nav-log" data-nav="log"><span>✓</span>振り返る</button>
-    <button id="nav-environment" data-nav="environment"><span>◎</span>学ぶ</button>
+  <nav class="bottom-nav" aria-label="メインナビゲーション" hidden>
+    <button id="nav-home" class="active" data-nav="home">ホーム</button>
+    <button id="nav-team" data-nav="team">チーム</button>
+    <button id="nav-assist" data-nav="assist">対戦</button>
+    <button id="nav-log" data-nav="log">記録</button>
+    <button id="nav-environment" data-nav="environment">学ぶ</button>
   </nav>
 
   <dialog id="pokemonPickerDialog" class="pokemon-picker-dialog">
     <div class="picker-dialog-card">
-      <div class="panel-head"><div><span class="section-kicker">POKÉMON SELECTOR</span><h2 id="pokemonPickerTitle">ポケモンを選ぶ</h2></div><button id="closePokemonPicker" class="icon-btn" type="button" aria-label="閉じる">×</button></div>
+      <div class="panel-head"><div><span class="section-kicker">POKÉMON SELECTOR</span><h2 id="pokemonPickerTitle">ポケモンを選ぶ</h2></div><button id="closePokemonPicker" class="icon-btn" type="button" aria-label="閉じる">閉じる</button></div>
       <p id="pokemonPickerHelp" class="small muted">画像・タイプを見ながら選べます。</p>
       <div class="picker-toolbar"><input id="pokemonSearch" type="search" placeholder="名前が分かれば検索"><select id="pokemonTypeFilter"><option value="all">すべてのタイプ</option></select></div>
       <div class="picker-category-row" aria-label="探し方">
@@ -307,7 +267,7 @@
 
   <dialog id="settingsDialog">
     <form method="dialog" class="dialog-card">
-      <div class="panel-head"><div><span class="section-kicker">SETTINGS</span><h2>データ管理</h2></div><button class="icon-btn" value="cancel" aria-label="閉じる">×</button></div>
+      <div class="panel-head"><div><span class="section-kicker">SETTINGS</span><h2>データ管理</h2></div><button class="icon-btn" value="cancel" aria-label="閉じる">閉じる</button></div>
       <label>現在ランク<input id="currentRank" placeholder="例：ハイパー2"></label>
       <button id="exportData" class="secondary-btn" type="button">JSONバックアップを書き出す</button>
       <label class="file-btn">JSONバックアップを読み込む<input id="importData" type="file" accept="application/json"></label>
