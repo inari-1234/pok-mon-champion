@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f4f7fb">
+  <title>Champion Coach UI Preview v0.7</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark">◉</span>
+      <div><strong>Champion Coach</strong><small>UI Preview v0.7</small></div>
+    </div>
+    <button class="icon-button" id="openSettings" aria-label="設定">⚙</button>
+  </header>
+
+  <main class="app-shell">
+    <section class="screen active" data-screen="home">
+      <div class="mode-card">
+        <div>
+          <span class="eyebrow">CURRENT MODE</span>
+          <h1>シングルバトル</h1>
+          <p>Regulation M-C</p>
+        </div>
+        <span class="status-chip">シーズン中</span>
+      </div>
+
+      <section class="season-summary">
+        <div class="section-title"><div><span class="eyebrow">THIS SEASON</span><h2>今シーズンの戦績</h2></div><button class="text-button">詳細を見る</button></div>
+        <div class="metric-row">
+          <article><span>対戦</span><strong>24</strong><small>試合</small></article>
+          <article><span>勝率</span><strong>66.7%</strong><small>シングル</small></article>
+          <article><span>直近10戦</span><strong>7-3</strong><small>好調</small></article>
+        </div>
+      </section>
+
+      <section class="next-actions">
+        <span class="eyebrow">NEXT ACTION</span>
+        <h2>次に何をしますか？</h2>
+        <button class="action-card primary-action" data-go="prep">
+          <span class="action-icon">⚔</span><span><strong>対戦準備をする</strong><small>相手の6体を入れて、選出の要点を見る</small></span><b>›</b>
+        </button>
+        <button class="action-card team-action" data-go="team">
+          <span class="action-icon">◇</span><span><strong>構築を作る・見る</strong><small>6体を組む、戦い方・育成を確認する</small></span><b>›</b>
+        </button>
+        <button class="action-card log-action" data-go="log">
+          <span class="action-icon">✓</span><span><strong>対戦記録をつける</strong><small>勝敗だけなら数秒で保存できる</small></span><b>›</b>
+        </button>
+      </section>
+
+      <section class="card">
+        <div class="section-title"><div><span class="eyebrow">RECENT</span><h2>最近の記録</h2></div></div>
+        <div class="recent-list">
+          <div><time>9/20</time><span class="result win">勝ち</span><strong>vs カイリュー軸</strong></div>
+          <div><time>9/20</time><span class="result loss">負け</span><strong>vs サーフゴー軸</strong></div>
+          <div><time>9/19</time><span class="result win">勝ち</span><strong>vs ハバタクカミ軸</strong></div>
+        </div>
+      </section>
+    </section>
+
+    <section class="screen" data-screen="team">
+      <div class="page-heading"><div><span class="eyebrow">MY TEAM</span><h1>構築</h1></div><button class="small-button">編集</button></div>
+      <div class="subtabs" data-tabs="team">
+        <button class="active" data-tab="build">作る</button>
+        <button data-tab="plan">戦い方</button>
+        <button data-tab="train">育成</button>
+        <button data-tab="stats">実績</button>
+      </div>
+
+      <div class="tab-panel active" data-tab-panel="build">
+        <section class="card">
+          <div class="section-title"><div><span class="eyebrow">CURRENT TEAM</span><h2>マイチーム1</h2></div><span class="status-chip soft">シングル</span></div>
+          <div class="pokemon-six">
+            <button class="poke-tile"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/445.png" alt=""><span>ガブリアス</span></button>
+            <button class="poke-tile"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/1000.png" alt=""><span>サーフゴー</span></button>
+            <button class="poke-tile"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/149.png" alt=""><span>カイリュー</span></button>
+            <button class="poke-tile"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/987.png" alt=""><span>ハバタクカミ</span></button>
+            <button class="poke-tile"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/892.png" alt=""><span>ウーラオス</span></button>
+            <button class="poke-tile"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/645.png" alt=""><span>ランドロス</span></button>
+          </div>
+          <div class="button-row"><button class="secondary-button" id="openPicker">＋ ポケモンを追加</button><button class="secondary-button">おまかせ仮組み</button></div>
+        </section>
+        <section class="card">
+          <span class="eyebrow">STARTER PATTERNS</span><h2>おすすめの構築パターン</h2>
+          <div class="pattern-grid">
+            <button><strong>バランス</strong><span>攻守の役割を分散</span></button>
+            <button><strong>積みエース</strong><span>終盤の勝ち筋を明確に</span></button>
+            <button><strong>対面重視</strong><span>1対1の強さを優先</span></button>
+          </div>
+        </section>
+      </div>
+
+      <div class="tab-panel" data-tab-panel="plan">
+        <section class="card">
+          <span class="eyebrow">HOW TO PLAY</span><h2>この構築の戦い方</h2>
+          <div class="highlight blue"><b>基本勝ち筋</b><p>序盤で相手の型を確認し、中盤に数的有利を作ってカイリューまたはサーフゴーを通す。</p></div>
+          <h3>基本選出のたたき台</h3>
+          <div class="pick-row">
+            <div><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/445.png" alt=""><span>先発候補</span></div>
+            <span>→</span>
+            <div><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/1000.png" alt=""><span>中継ぎ</span></div>
+            <span>→</span>
+            <div><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/149.png" alt=""><span>締め</span></div>
+          </div>
+          <div class="two-cards"><article><b>強み</b><p>物理・特殊の圧力を切り替えやすい</p></article><article><b>確認点</b><p>高速特殊アタッカーへの受け先</p></article></div>
+        </section>
+      </div>
+
+      <div class="tab-panel" data-tab-panel="train">
+        <section class="card">
+          <div class="section-title"><div><span class="eyebrow">TRAINING</span><h2>育成スターター</h2></div><span class="status-chip soft">Champions式</span></div>
+          <div class="training-list">
+            <article><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/445.png" alt=""><div><strong>ガブリアス</strong><span>ようき / こだわりスカーフ</span><small>AS252表記ではなく、Championsの能力ポイント表記へ移行予定</small></div><button>詳細</button></article>
+            <article><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/1000.png" alt=""><div><strong>サーフゴー</strong><span>おくびょう / こだわりメガネ</span><small>性格・持ち物・技構成をまとめて確認</small></div><button>詳細</button></article>
+            <article><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/149.png" alt=""><div><strong>カイリュー</strong><span>いじっぱり / いかさまダイス</span><small>初心者向けの採用理由も表示</small></div><button>詳細</button></article>
+          </div>
+        </section>
+      </div>
+
+      <div class="tab-panel" data-tab-panel="stats">
+        <section class="card">
+          <span class="eyebrow">SELECTION REVIEW</span><h2>選出実績（シングル）</h2>
+          <div class="bar-list">
+            <div><span>ガブリアス <small>15回</small></span><i><b style="width:72%"></b></i><strong>67%</strong></div>
+            <div><span>サーフゴー <small>12回</small></span><i><b style="width:61%"></b></i><strong>58%</strong></div>
+            <div><span>カイリュー <small>11回</small></span><i><b style="width:78%"></b></i><strong>73%</strong></div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="prep">
+      <div class="page-heading"><div><span class="eyebrow">BATTLE COACH</span><h1>対戦準備</h1></div><button class="help-button">使い方</button></div>
+      <div class="stepper"><span class="active"><b>1</b>相手6体</span><i></i><span><b>2</b>分析結果</span><i></i><span><b>3</b>詳細</span></div>
+      <section class="card">
+        <div class="section-title"><div><span class="eyebrow">OPPONENT</span><h2>相手のポケモン（6体）</h2></div><button class="text-button">すべて選び直す</button></div>
+        <div class="opponent-row">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/149.png" alt="">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/1000.png" alt="">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/445.png" alt="">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/987.png" alt="">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/645.png" alt="">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/892.png" alt="">
+        </div>
+        <button class="primary-button">分析する</button>
+      </section>
+      <section class="card">
+        <span class="eyebrow">SUMMARY</span><h2>分析結果（要点）</h2>
+        <div class="highlight danger"><b>最も警戒する相手</b><strong>カイリュー</strong><p>終盤の全抜きにつながる展開を最優先で警戒。</p></div>
+        <div class="highlight green"><b>おすすめの選出（3体）</b><div class="mini-picks">
+          <span><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/445.png" alt="">ガブリアス</span>
+          <span><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/1000.png" alt="">サーフゴー</span>
+          <span><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/149.png" alt="">カイリュー</span>
+        </div></div>
+        <details open><summary>まずこれだけ見る</summary><ul><li>初手は相手の高速展開を確認する</li><li>中盤はサーフゴーを無理に消耗させない</li><li>終盤のカイリュー圏内を意識する</li></ul></details>
+        <details><summary>相手6体の詳細を見る</summary><p class="muted">個別の役割・想定技・自分の6体との照合はここに格納します。</p></details>
+        <details><summary>過去の類似敗戦を見る</summary><p class="muted">類似した並びへの自分の過去ログを表示する領域です。</p></details>
+      </section>
+    </section>
+
+    <section class="screen" data-screen="log">
+      <div class="page-heading"><div><span class="eyebrow">MATCH LOG</span><h1>対戦記録</h1></div><button class="small-button">履歴</button></div>
+      <div class="subtabs" data-tabs="log"><button class="active" data-tab="quick">簡単に記録</button><button data-tab="detail">詳しく振り返る</button></div>
+      <div class="tab-panel active" data-tab-panel="quick">
+        <section class="card">
+          <p class="lead">まずは最低限だけ。あとから詳しい振り返りを追加できます。</p>
+          <label class="field"><span>相手の6体</span><button class="picker-button">＋ 6体を選ぶ</button></label>
+          <label class="field"><span>自分の選出（3体）</span><button class="picker-button">＋ 3体を選ぶ</button></label>
+          <fieldset class="result-select"><legend>勝敗</legend><button class="selected">勝ち</button><button>負け</button></fieldset>
+          <button class="primary-button">この内容で保存する</button>
+          <p class="form-note">保存後に「詳しく振り返る」を追加できます。</p>
+        </section>
+      </div>
+      <div class="tab-panel" data-tab-panel="detail">
+        <section class="card">
+          <p class="lead">必要な試合だけ、振り返りを深くします。</p>
+          <label class="field"><span>敗因の仮分類</span><select><option>選出</option><option>ゲームプラン</option><option>ターン判断</option><option>知識不足</option></select></label>
+          <label class="field"><span>重要だった場面</span><textarea rows="3" placeholder="例：4ターン目、交代読みで崩れた"></textarea></label>
+          <label class="field"><span>今回の学び</span><textarea rows="3" placeholder="次回ひとつだけ変えるなら？"></textarea></label>
+          <button class="secondary-button full">振り返りを追加</button>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="environment">
+      <div class="page-heading"><div><span class="eyebrow">PERSONAL META</span><h1>環境</h1></div><button class="small-button">＋ メモ</button></div>
+      <div class="format-switch"><button class="active">シングル</button><button>ダブル</button></div>
+      <section class="card">
+        <span class="eyebrow">YOUR MATCHES</span><h2>環境サマリー（シングル）</h2>
+        <div class="metric-row compact">
+          <article><span>総対戦</span><strong>24</strong></article>
+          <article><span>よく見る</span><strong>12種</strong></article>
+          <article><span>対戦勝率</span><strong>66.7%</strong></article>
+        </div>
+      </section>
+      <section class="card">
+        <div class="section-title"><div><span class="eyebrow">TOP THREATS</span><h2>よく見るポケモン TOP5</h2></div></div>
+        <div class="meta-list">
+          <div><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/149.png" alt=""><span><b>カイリュー</b><i><em style="width:78%"></em></i></span><strong>37%</strong></div>
+          <div><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/1000.png" alt=""><span><b>サーフゴー</b><i><em style="width:64%"></em></i></span><strong>29%</strong></div>
+          <div><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/645.png" alt=""><span><b>ランドロス</b><i><em style="width:55%"></em></i></span><strong>25%</strong></div>
+          <div><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/987.png" alt=""><span><b>ハバタクカミ</b><i><em style="width:48%"></em></i></span><strong>21%</strong></div>
+          <div><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/892.png" alt=""><span><b>ウーラオス</b><i><em style="width:39%"></em></i></span><strong>17%</strong></div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="section-title"><div><span class="eyebrow">NOTES</span><h2>環境メモ（シングル）</h2></div></div>
+        <article class="memo"><b>カイリュー</b><span class="risk high">警戒度 高</span><p>テラス込みの終盤展開を先に考える。初手から削りすぎない。</p></article>
+        <article class="memo"><b>サーフゴー</b><span class="risk mid">警戒度 中</span><p>こだわり系と積み型の両方を早めに切り分ける。</p></article>
+      </section>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="active" data-nav="home"><span>⌂</span><small>ホーム</small></button>
+    <button data-nav="team"><span>◇</span><small>構築</small></button>
+    <button data-nav="prep"><span>⚔</span><small>対戦準備</small></button>
+    <button data-nav="log"><span>✓</span><small>記録</small></button>
+    <button data-nav="environment"><span>◎</span><small>環境</small></button>
+  </nav>
+
+  <dialog id="pokemonPicker">
+    <div class="dialog-card">
+      <div class="page-heading"><div><span class="eyebrow">POKÉMON SELECTOR</span><h2>ポケモンを選ぶ</h2></div><button class="icon-button close-dialog">×</button></div>
+      <input class="search-box" type="search" placeholder="名前で検索">
+      <div class="filter-chips"><button class="active">おすすめ</button><button>よく見る</button><button>アタッカー</button><button>受け</button></div>
+      <div class="picker-grid">
+        <button><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/149.png" alt=""><b>カイリュー</b><small>スイーパー</small></button>
+        <button><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/1000.png" alt=""><b>サーフゴー</b><small>特殊アタッカー</small></button>
+        <button><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/445.png" alt=""><b>ガブリアス</b><small>物理アタッカー</small></button>
+        <button><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/987.png" alt=""><b>ハバタクカミ</b><small>特殊アタッカー</small></button>
+        <button><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/892.png" alt=""><b>ウーラオス</b><small>物理アタッカー</small></button>
+        <button><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/645.png" alt=""><b>ランドロス</b><small>起点作成</small></button>
+      </div>
+      <button class="primary-button close-dialog">選択を反映</button>
+    </div>
+  </dialog>
+
+  <dialog id="settingsDialog">
+    <div class="dialog-card">
+      <div class="page-heading"><div><span class="eyebrow">SETTINGS</span><h2>設定</h2></div><button class="icon-button close-settings">×</button></div>
+      <label class="field"><span>表示形式</span><select><option>シングル</option><option>ダブル</option></select></label>
+      <label class="field"><span>現在ランク</span><select><option>マスターボール級</option><option>ハイパーボール級</option></select></label>
+      <div class="settings-list"><button>バックアップを書き出す <b>›</b></button><button>バックアップを読み込む <b>›</b></button><button>このUIについて <b>›</b></button></div>
+      <p class="form-note">このページはUI試作版です。保存・分析ロジックはまだ接続していません。</p>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
