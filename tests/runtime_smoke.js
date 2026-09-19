@@ -2,7 +2,7 @@ const fs=require('fs'),vm=require('vm'),path=require('path');
 const root=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
-class FakeClassList{constructor(node){this.node=node;this.s=new Set((node.className||'').split(/\s+/).filter(Boolean));}add(...x){x.forEach(v=>this.s.add(v));this.node.className=[...this.s].join(' ')}remove(...x){x.forEach(v=>this.s.delete(v));this.node.className=[...this.s].join(' ')}}
+class FakeClassList{constructor(node){this.node=node;this.s=new Set((node.className||'').split(/\s+/).filter(Boolean));}sync(){this.node.className=[...this.s].join(' ')}add(...x){x.forEach(v=>this.s.add(v));this.sync()}remove(...x){x.forEach(v=>this.s.delete(v));this.sync()}toggle(v,force){const on=force===undefined?!this.s.has(v):!!force;if(on)this.s.add(v);else this.s.delete(v);this.sync();return on}}
 class FakeNode{
  constructor(tag='div',id=''){this.tagName=tag.toUpperCase();this.id=id;this.children=[];this.listeners={};this.dataset={};this.style={};this.className='';this.classList=new FakeClassList(this);this.value='';this.textContent='';this.hidden=false;this.disabled=false;this.files=[];this.checked=false;this.type='';this.alt='';this.src='';}
  addEventListener(type,fn){(this.listeners[type]??=[]).push(fn)}
