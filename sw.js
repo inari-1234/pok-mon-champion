@@ -1,4 +1,4 @@
-const CACHE='champion-coach-v6.2-repo1';
+const CACHE='champion-coach-v7.0-guided1';
 const CORE=['./','./index.html','./styles.css','./pokemon-data.js','./competitive-data.js','./single-competitive-data.js','./core.js','./app.js','./manifest.webmanifest','./version.json','./latest.json'];
 const NETWORK_FIRST=new Set(['./','./index.html','./manifest.webmanifest','./version.json']);
 
