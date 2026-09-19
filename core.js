@@ -43,8 +43,10 @@
     return [...(matches || [])].sort((a, b) => dateValue(b) - dateValue(a));
   }
 
-  function calculateStats(matches) {
-    const list = sortedMatches(matches);
+  function calculateStats(matches, format) {
+    const mode=format==='single'?'single':format==='double'?'double':'';
+    const source=mode?(matches||[]).filter(m=>(m.format==='single'?'single':'double')===mode):(matches||[]);
+    const list = sortedMatches(source);
     const total = list.length;
     const wins = list.filter(m => m.result === 'win').length;
     const losses = list.filter(m => m.result === 'loss').length;
@@ -80,8 +82,10 @@
     };
   }
 
-  function aggregateOpponentPokemon(matches) {
-    const sorted = sortedMatches(matches);
+  function aggregateOpponentPokemon(matches, format) {
+    const mode=format==='single'?'single':format==='double'?'double':'';
+    const source=mode?(matches||[]).filter(m=>(m.format==='single'?'single':'double')===mode):(matches||[]);
+    const sorted = sortedMatches(source);
     const totalMatches = sorted.length || 1;
     const recentIds = new Set(sorted.slice(0, 10).map(m => m.id));
     const map = new Map();
@@ -116,9 +120,11 @@
     }).sort((a, b) => b.dangerScore - a.dangerScore || b.appearances - a.appearances);
   }
 
-  function aggregateOwnSelections(matches) {
+  function aggregateOwnSelections(matches, format) {
+    const mode=format==='single'?'single':format==='double'?'double':'';
+    const source=mode?(matches||[]).filter(m=>(m.format==='single'?'single':'double')===mode):(matches||[]);
     const map = new Map();
-    for (const m of matches || []) {
+    for (const m of source) {
       for (const name of uniqNames(m.selectedTeam)) {
         if (!map.has(name)) map.set(name, { name, picks: 0, wins: 0, losses: 0 });
         const row = map.get(name);
@@ -481,7 +487,9 @@
     const mode = format === 'single' ? 'single' : 'double';
     const opponent = uniqNames(opponentTeam).slice(0, 6);
     const historyRows = aggregateOpponentPokemon((matches || []).filter(m => (m.format === 'single' ? 'single' : 'double') === mode));
-    const notes = Array.isArray(metaNotes) ? metaNotes : [];
+    const notes = Array.isArray(metaNotes)
+      ? metaNotes.filter(n=>!n?.format || (n.format==='single'?'single':'double')===mode)
+      : [];
     const riskValue = { high: .95, mid: .65, low: .35 };
 
     const rows = opponent.map((name, index) => {
