@@ -38,6 +38,7 @@ jobs:
           node --check core.js
           node --check app.js
           node --check sw.js
+          node --check ui-v0.7-preview/app.js
           node --test tests/core.test.js
           node tests/runtime_smoke.js
           python tests/static_check.py
