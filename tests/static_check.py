@@ -43,7 +43,7 @@ assert '残りをおまかせで仮組み' in html
 assert '改行・カンマ区切り' not in html, 'manual entry guidance still visible'
 assert 'buildCoachTasks' not in core
 assert len(soup.find_all('script',src='core.js'))==1, 'core.js loaded more than once'
-assert '持っていないポケモン' in html and '育成スターター' in html
+assert '持っていないポケモン' in html and 'TRAIN ONE BY ONE' in html
 assert html.count('<option value="single">シングル</option><option value="double">ダブル</option>') >= 3, 'single must be the primary UI option'
 assert "format: 'single'" in app, 'new state must default to singles'
 assert 'C.aggregateOwnSelections(state.matches, state.team.format)' in app
