@@ -219,3 +219,228 @@ main{max-width:520px;margin:0 auto}
 .training-nav{display:grid;grid-template-columns:1fr 1.2fr;gap:8px;margin-top:10px}
 .training-nav button{margin:0}
 .training-nav button:disabled{opacity:.42;box-shadow:none}
+
+
+/* v0.8 production guided cleanup */
+:root{
+  --bg:#f5f8fd;
+  --surface:#fff;
+  --ink:#17243c;
+  --muted:#6f7e95;
+  --line:#e2e9f3;
+  --blue:#176df5;
+  --blue-soft:#eaf2ff;
+  --green:#1ba770;
+  --green-soft:#eaf9f2;
+  --red:#e65c62;
+  --red-soft:#fff0f1;
+  --shadow:0 12px 32px rgba(39,72,118,.09);
+}
+html{background:var(--bg)}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:30;
+  min-height:calc(62px + env(safe-area-inset-top));
+  padding:calc(10px + env(safe-area-inset-top)) 14px 10px;
+  display:grid;grid-template-columns:64px 1fr 64px;align-items:center;gap:8px;
+  background:rgba(245,248,253,.95);
+  border-bottom:1px solid rgba(226,233,243,.86);
+  backdrop-filter:blur(18px);
+}
+.brand{text-align:center;line-height:1.15}
+.brand strong,.brand small{display:block}
+.brand strong{font-size:14px;letter-spacing:-.01em}
+.brand small{font-size:9px;color:var(--muted);margin-top:3px;font-weight:700}
+.header-text-btn{
+  min-height:38px;border:1px solid var(--line);background:#fff;border-radius:12px;
+  font-size:10px;font-weight:850;color:#607087;padding:0 10px;
+  box-shadow:0 3px 10px rgba(39,72,118,.05)
+}
+.header-text-btn[hidden]{visibility:hidden;display:block}
+main{width:min(100%,480px);margin:0 auto}
+.screen{padding:17px 15px 40px;min-height:calc(100vh - 70px)}
+.bottom-nav[hidden]{display:none!important}
+
+.progress-card,.next-card{
+  background:#fff;border:1px solid var(--line);border-radius:22px;
+  padding:17px;margin-bottom:13px;box-shadow:var(--shadow)
+}
+.progress-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.progress-top .step-label{font-size:9px;font-weight:900;color:#65748a}
+.progress-top strong{font-size:10px;color:var(--blue)}
+.progress-track{height:6px;background:#e8eef6;border-radius:999px;overflow:hidden}
+.progress-track i{display:block;height:100%;width:18%;background:var(--blue);border-radius:999px;transition:width .2s ease}
+.progress-list{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+.progress-list li{
+  display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:9px;
+  min-height:38px;padding:6px 8px;border-radius:12px;color:#7a8799
+}
+.progress-list li b{
+  display:grid;place-items:center;width:26px;height:26px;border-radius:50%;
+  background:#edf1f6;color:#7d899b;font-size:10px
+}
+.progress-list li span{font-size:11px;font-weight:800}
+.progress-list li em{font-style:normal;font-size:8px;font-weight:900;color:var(--blue)}
+.progress-list li.active{background:var(--blue-soft);color:#174f9f}
+.progress-list li.active b{background:var(--blue);color:#fff}
+.progress-list li.done{color:#458069}
+.progress-list li.done b{background:var(--green-soft);color:#16805a}
+
+.next-card .section-kicker{margin-bottom:8px}
+.next-card h1{font-size:23px;line-height:1.45;margin:0 0 15px}
+.home-next-btn{padding:15px;font-size:13px}
+
+.advanced-menu,.secondary-choice,.format-details{
+  background:#fff;border:1px solid var(--line);border-radius:15px;overflow:hidden;margin:10px 0
+}
+.advanced-menu>summary,.secondary-choice>summary,.format-details>summary{
+  list-style:none;padding:12px 13px;cursor:pointer;
+  font-size:10px;font-weight:850;color:#627188
+}
+.advanced-menu>summary::-webkit-details-marker,.secondary-choice>summary::-webkit-details-marker,.format-details>summary::-webkit-details-marker{display:none}
+.advanced-menu>summary:after,.secondary-choice>summary:after,.format-details>summary:after{content:"+";float:right;color:#8b98aa;font-size:14px}
+.advanced-menu[open]>summary:after,.secondary-choice[open]>summary:after,.format-details[open]>summary:after{content:"-"}
+.shortcut-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 12px 12px}
+.shortcut-grid button{
+  border:1px solid var(--line);background:#fafcff;border-radius:12px;
+  padding:11px 8px;font-size:9px;font-weight:800;color:#5d6d83
+}
+.advanced-data{border-top:1px solid var(--line);padding:12px}
+.home-meta-line{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.compact-data-block{padding:12px 0;border-top:1px solid var(--line)}
+.compact-data-block:first-of-type{border-top:0}
+.compact-data-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.advanced-data .stats-grid{margin:8px 0 12px}
+.advanced-data .stat{box-shadow:none;background:#f9fbfe;padding:10px;border-radius:12px}
+.advanced-data .stat strong{font-size:17px}
+.advanced-data .empty{padding:12px}
+
+.step-head{padding:5px 2px 12px}
+.step-head>span{display:block;font-size:9px;font-weight:900;color:var(--blue);letter-spacing:.08em;margin-bottom:5px}
+.step-head h1{font-size:23px;line-height:1.42;margin:0}
+.compact-step-head{padding-bottom:6px}
+.panel{border-radius:20px;box-shadow:0 8px 24px rgba(39,72,118,.06)}
+.simple-panel-head{margin-bottom:8px}
+.battle-input-panel{margin-top:0}
+
+.focus-card{
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin:12px 0;box-shadow:var(--shadow)
+}
+.focus-card.danger{background:var(--red-soft);border-color:#f1ced1}
+.focus-card.good{background:var(--green-soft);border-color:#cbe7d9}
+.focus-card-title{display:grid;grid-template-columns:27px 1fr auto;align-items:center;gap:8px;margin-bottom:10px}
+.focus-card-title>span{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#fff;font-size:10px;font-weight:900}
+.focus-card-title strong{font-size:13px}
+.focus-card-title small{font-size:8px;color:var(--muted);font-weight:800}
+.focus-card .focus-card{box-shadow:none;background:#fff;margin:7px 0;border-radius:14px}
+.opening-action{background:#fff;border:1px solid rgba(23,109,245,.18);box-shadow:none}
+.details-box{background:#fff;border:1px solid var(--line);border-radius:15px;padding:0;margin-top:10px;overflow:hidden}
+.details-box>summary{padding:12px 13px}
+.detail-content{padding:0 12px 12px}
+.detail-section{border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+.detail-section h3{font-size:11px;margin:0 0 7px}
+
+.team-primary-tabs{
+  display:grid;grid-template-columns:1fr 1fr;gap:3px;
+  padding:3px;background:#e8eef6;border-radius:13px;margin:0 0 10px
+}
+.team-primary-tabs button{
+  border:0;background:transparent;border-radius:10px;padding:10px 7px;
+  color:#75839a;font-size:10px;font-weight:850
+}
+.team-primary-tabs button.active{background:#fff;color:var(--blue);box-shadow:0 2px 8px rgba(39,72,118,.08)}
+.team-more-menu{margin-bottom:12px}
+.primary-team-actions .primary-btn,.primary-team-actions .secondary-btn,.primary-team-actions .ghost-btn{min-height:44px}
+.secondary-choice{margin:10px 0}
+.secondary-choice .partner-grid,.secondary-choice .inventory-box{margin:0;padding:0 11px 11px}
+.inventory-box{border:0;background:transparent}
+
+.team-slots,.compact-slots{gap:8px}
+.team-slot{
+  min-height:118px;
+  display:grid;grid-template-columns:56px 1fr;align-items:center;
+  padding:9px;padding-top:31px
+}
+.team-slot .slot-img,.team-slot .sprite-fallback{width:56px;height:56px}
+.slot-img,.pokemon-card-img{
+  display:block;background:#f4f7fb;border-radius:12px;object-fit:contain
+}
+.sprite-fallback{
+  display:grid!important;place-items:center;
+  background:#eef2f7!important;color:#8190a4!important;font-weight:900
+}
+.slot-actions{top:5px;right:5px;left:5px;justify-content:flex-end;gap:4px}
+.slot-action{width:auto;min-width:30px;height:24px;padding:0 6px;font-size:8px;font-weight:850}
+.slot-action-text{min-width:34px}
+.inventory-action{min-width:27px!important}
+.slot-anchor{background:var(--blue-soft);color:#1756b8}
+.slot-empty{min-height:78px}
+.starter-advice{
+  padding:8px 10px;margin:8px 0;background:#f7f9fc;border:1px solid var(--line);
+  color:#607087;font-size:9px;text-align:center
+}
+
+.partner-card{
+  min-height:96px;grid-template-columns:48px 1fr;align-items:center
+}
+.partner-card img,.partner-card .sprite-fallback{width:48px!important;height:48px!important;border-radius:10px}
+.partner-card small{min-height:24px}
+.partner-actions{grid-column:1/-1}
+.partner-actions button{min-height:33px}
+
+.training-stepbar{margin-bottom:12px}
+.training-card-focus{padding:15px;border-radius:20px}
+.training-title{min-height:76px}
+.training-title .slot-img,.training-title .sprite-fallback{
+  width:76px!important;height:76px!important;border-radius:16px
+}
+.training-title>div:last-child{min-width:0}
+.training-title strong{font-size:17px}
+.training-section{
+  background:#fafcff;border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:8px
+}
+.training-section .training-label{font-size:9px}
+.training-note{font-size:10px}
+.training-nav{grid-template-columns:1fr 1fr}
+.training-nav button{min-height:43px}
+
+.pokemon-grid{align-items:stretch}
+.pokemon-card{
+  min-height:154px;height:154px;justify-content:flex-start;overflow:hidden
+}
+.pokemon-card-img,.pokemon-card .sprite-fallback{
+  width:70px!important;height:70px!important;min-width:70px;min-height:70px;border-radius:14px
+}
+.pokemon-card-name{min-height:26px;display:grid;place-items:center}
+.pokemon-card-meta{line-height:1.3;min-height:10px}
+.pokemon-card-check{
+  width:auto;min-width:42px;height:20px;padding:0 6px;border-radius:999px;
+  font-size:7px
+}
+
+.dialog-card .icon-btn,.picker-dialog-card .icon-btn{
+  width:auto;min-width:54px;padding:0 9px;font-size:9px
+}
+.picker-dialog-card{border-radius:22px}
+.picker-category-row button{white-space:nowrap}
+
+@media(max-width:420px){
+  .screen{padding-left:13px;padding-right:13px}
+  .topbar{grid-template-columns:58px 1fr 58px}
+  .next-card h1{font-size:21px}
+  .team-slots,.compact-slots{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .team-slot{grid-template-columns:52px 1fr;min-height:112px}
+  .team-slot .slot-img,.team-slot .sprite-fallback{width:52px;height:52px}
+  .pokemon-card{height:148px;min-height:148px}
+}
+@media(min-width:700px){
+  body{padding-top:18px}
+  .topbar{width:480px;margin:0 auto;border-radius:20px 20px 0 0}
+  main{min-height:820px;box-shadow:0 24px 70px rgba(39,72,118,.13)}
+}
