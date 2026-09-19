@@ -55,6 +55,7 @@ jobs:
         run: |
           mkdir _site
           cp index.html styles.css pokemon-data.js competitive-data.js single-competitive-data.js core.js app.js manifest.webmanifest sw.js version.json latest.json .nojekyll _site/
+          cp -R ui-v0.7-preview _site/
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
