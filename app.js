@@ -21,9 +21,10 @@
   let environmentFormat = 'single';
   let activeTeamPane = 'build';
   let trainingViewIndex = 0;
+  const navigationHistory = [];
 
   function defaultState() {
-    return { version: 7, rank: '', team: { name: '', format: 'single', members: [], favorite: '', plan: '', weak: '' }, inventory: { unowned: [] }, matches: [], metaNotes: [] };
+    return { version: 8, rank: '', team: { name: '', format: 'single', members: [], favorite: '', plan: '', weak: '' }, inventory: { unowned: [] }, matches: [], metaNotes: [] };
   }
 
   function loadState() {
@@ -79,9 +80,10 @@
     return mon && mon.dex > 0 ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${mon.dex}.png` : '';
   }
   function monImage(mon, className) {
-    if (!mon) return make('div','sprite-fallback','?');
-    const img=make('img',className || 'slot-img'); img.alt=mon.name; img.loading='lazy'; img.decoding='async'; img.src=spriteUrl(mon);
-    img.addEventListener('error',()=>{const fallback=make('div','sprite-fallback',mon.name.slice(0,1));img.replaceWith(fallback);},{once:true});
+    const cls=className || 'slot-img';
+    if (!mon) return make('div',`${cls} sprite-fallback`,'?');
+    const img=make('img',cls); img.alt=mon.name; img.loading='lazy'; img.decoding='async'; img.src=spriteUrl(mon);
+    img.addEventListener('error',()=>{const fallback=make('div',`${cls} sprite-fallback`,mon.name.slice(0,1));fallback.setAttribute('aria-label',mon.name);img.replaceWith(fallback);},{once:true});
     return img;
   }
   function syncShadow(id, values) { const node=el(id); if(node) node.value=C.uniqNames(values).join(', '); }
@@ -148,12 +150,12 @@
       if(!value){slot.append(make('div','slot-empty',`${i+1}枠目`));target.append(slot);continue;}
       const mon=resolveMon(value); slot.append(monImage(mon));
       const body=make('div','slot-text'); body.append(make('div','slot-name',mon?.name || value),make('div','slot-types',formatTypes(mon)));
-      if(options.favorite===value) body.append(make('span','slot-anchor','★ 軸'));
+      if(options.favorite===value) body.append(make('span','slot-anchor','軸'));
       slot.append(body);
       const actions=make('div','slot-actions');
-      if(options.onFavorite){const fav=make('button','slot-action',options.favorite===value?'★':'☆');fav.type='button';fav.title='このポケモンを軸にする';fav.addEventListener('click',()=>options.onFavorite(value));actions.append(fav);}
+      if(options.onFavorite){const fav=make('button','slot-action slot-action-text',options.favorite===value?'軸':'軸に');fav.type='button';fav.title='このポケモンを軸にする';fav.addEventListener('click',()=>options.onFavorite(value));actions.append(fav);}
       if(options.onUnowned){const no=make('button','slot-action inventory-action','未');no.type='button';no.title='持っていない';no.addEventListener('click',()=>options.onUnowned(value));actions.append(no);}
-      if(options.onRemove){const rm=make('button','slot-action','×');rm.type='button';rm.title='外す';rm.addEventListener('click',()=>options.onRemove(value));actions.append(rm);}
+      if(options.onRemove){const rm=make('button','slot-action slot-action-text','外す');rm.type='button';rm.title='外す';rm.addEventListener('click',()=>options.onRemove(value));actions.append(rm);}
       slot.append(actions); target.append(slot);
     }
   }
@@ -166,7 +168,7 @@
     renderMemberSlots('teamMemberBuilder',teamDraft,{max:6,favorite:favoriteDraft,onFavorite:value=>{favoriteDraft=value;renderTeamDraft();},onUnowned:value=>markUnowned(value),onRemove:value=>{teamDraft=teamDraft.filter(v=>v!==value);if(favoriteDraft===value)favoriteDraft=teamDraft[0]||'';renderTeamDraft();}});
     const advice=el('teamStarterAdvice');
     if(!teamDraft.length){advice.hidden=true;advice.textContent='';}
-    else {advice.hidden=false;advice.textContent=teamDraft.length===1?`「${favoriteDraft || teamDraft[0]}」を軸にしました。残り5体は自分で選んでも、おまかせで仮組みしても構いません。`:`${favoriteDraft || teamDraft[0]}を軸に、現在${teamDraft.length}体です。候補は弱点と役割の偏りを減らす順で表示します。`;}
+    else {advice.hidden=false;advice.textContent=`軸: ${favoriteDraft || teamDraft[0]}　${teamDraft.length}/6匹`;}
     renderPartnerSuggestions();
   }
 
@@ -244,7 +246,7 @@
       const role=C.catalogRoleProfile(mon,pickerFormat).style; card.append(make('div','pokemon-card-meta',role));
       if(C.getMetaPrior(mon,pickerFormat)>=7) card.append(make('div','pokemon-card-meta','大会でよく見る'));
       if(unavailable) card.append(make('div','pokemon-card-meta unavailable-label','未所持'));
-      if(selected) card.append(make('span','pokemon-card-check','✓'));
+      if(selected) card.append(make('span','pokemon-card-check','選択中'));
       card.addEventListener('click',()=>{
         if(selected) pickerContext.selected=pickerContext.selected.filter(v=>v!==mon.name);
         else if(pickerContext.selected.length<pickerContext.max) pickerContext.selected.push(mon.name);
@@ -265,12 +267,25 @@
     pickerContext=null;el('pokemonPickerDialog').close();
   }
 
-  function navigate(name) {
+  function currentScreenName() {
+    const current=document.querySelector('.screen.active');
+    return current?.id?.replace('screen-','') || 'home';
+  }
+
+  function syncHeaderNavigation(name) {
+    const back=el('backButton');
+    if(back) back.hidden=name==='home';
+  }
+
+  function navigate(name, push=true) {
+    const current=currentScreenName();
+    if(push && current!==name) navigationHistory.push({name:current,teamPane:activeTeamPane});
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
     el(`screen-${name}`).classList.add('active');
     const nav = el(`nav-${name}`); if (nav) nav.classList.add('active');
     if(name==='team') setTeamPane(activeTeamPane);
+    syncHeaderNavigation(name);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -341,16 +356,21 @@
     renderThreats(el('homeThreats'), 3, mode);
 
     const count=(state.team.members||[]).length;
-    let step=1,title='まず、使いたいポケモンを1匹選びましょう。',body='強さや役割はまだ考えなくて大丈夫です。好きなポケモンや使ってみたいポケモンから始めます。',nav='team',teamTab='build',button='好きな1体を選んで始める';
+    let step=1,title='使いたいポケモンを1匹選びましょう。',nav='team',teamTab='build',button='次に進む';
     if(count>0 && count<6){
-      step=2;title=`残り${6-count}匹を決めて、6匹のチームにしましょう。`;body='自分で全部考える必要はありません。「残りをおまかせで仮組み」を使い、持っていないポケモンだけ交換できます。';button='チームを完成させる';
+      step=2;title='6匹のチームを完成させましょう。';button='チームを完成させる';
     } else if(count===6 && !formatMatches.length){
-      step=3;title='チームができました。次は育成を確認しましょう。';body='6匹を一度に覚える必要はありません。持ち物・性格・能力ポイント・技を1匹ずつ確認してから、最初の対戦へ進みます。';nav='team';teamTab='training';button='育成を見る';
+      step=3;title='1匹ずつ対戦用に育てましょう。';nav='team';teamTab='training';button='育成を見る';
     } else if(count===6){
-      step=4;title='次の対戦を始めましょう。';body='相手の6匹を画像から選ぶと、「一番注意する相手」「おすすめ3匹」「最初にすること」の順に表示します。';nav='assist';teamTab='';button='対戦準備を始める';
+      step=4;title='対戦を始めましょう。';nav='assist';teamTab='';button='対戦準備へ';
     }
-    text(el('homeCoachStep'),`STEP ${step} / 4`); text(el('homeCoachTitle'),title); text(el('homeCoachBody'),body);
-    document.querySelectorAll('[data-route-step]').forEach(node=>{const n=Number(node.dataset.routeStep);node.classList.toggle('done',n<step);node.classList.toggle('active',n===step);});
+    text(el('homeCoachStep'),`STEP ${step} / 4`); text(el('homeCoachTitle'),title); text(el('homeCoachBody'),'');
+    const widths={1:18,2:42,3:68,4:92}; const bar=el('homeProgressBar'); if(bar) bar.style.width=`${widths[step]}%`;
+    document.querySelectorAll('[data-route-step]').forEach(node=>{
+      const n=Number(node.dataset.routeStep); node.classList.toggle('done',n<step); node.classList.toggle('active',n===step);
+      const mark=node.querySelector('em'); if(mark) mark.remove();
+      if(n===step){const em=make('em','','今ここ');node.append(em);}
+    });
     const quick=el('quickStartButton');
     if(quick){quick.dataset.nav=nav;if(teamTab)quick.dataset.teamTab=teamTab;else delete quick.dataset.teamTab;text(quick,button);}
   }
@@ -496,8 +516,8 @@
     card.append(make('div','training-note',`${set.source}${set.usage?` ・ 使用率目安 ${set.usage.toFixed(1)}%`:''}`));box.append(card);
 
     const nav=make('div','training-nav');
-    const prev=make('button','secondary-btn','← 前のポケモン');prev.type='button';prev.disabled=trainingViewIndex===0;prev.addEventListener('click',()=>{trainingViewIndex=Math.max(0,trainingViewIndex-1);renderTeamBuilds();el('teamTrainingPanel').scrollIntoView({behavior:'smooth',block:'start'});});
-    const next=make('button','primary-btn',trainingViewIndex===sets.length-1?'1匹目に戻る':'次のポケモン →');next.type='button';next.addEventListener('click',()=>{trainingViewIndex=trainingViewIndex===sets.length-1?0:trainingViewIndex+1;renderTeamBuilds();el('teamTrainingPanel').scrollIntoView({behavior:'smooth',block:'start'});});
+    const prev=make('button','secondary-btn','前のポケモン');prev.type='button';prev.disabled=trainingViewIndex===0;prev.addEventListener('click',()=>{trainingViewIndex=Math.max(0,trainingViewIndex-1);renderTeamBuilds();el('teamTrainingPanel').scrollIntoView({behavior:'smooth',block:'start'});});
+    const next=make('button','primary-btn',trainingViewIndex===sets.length-1?'1匹目に戻る':'次のポケモン');next.type='button';next.addEventListener('click',()=>{trainingViewIndex=trainingViewIndex===sets.length-1?0:trainingViewIndex+1;renderTeamBuilds();el('teamTrainingPanel').scrollIntoView({behavior:'smooth',block:'start'});});
     nav.append(prev,next);box.append(nav);
   }
 
@@ -718,6 +738,12 @@
     if(env){environmentFormat=normalizeFormat(env.dataset.environmentFormat);syncEnvironmentControls();renderThreats(el('threatTable'),100,environmentFormat);renderMetaNotes();return;}
   });
 
+  el('backButton').addEventListener('click',()=>{
+    const prev=navigationHistory.pop() || {name:'home',teamPane:'build'};
+    if(prev.teamPane) activeTeamPane=prev.teamPane;
+    navigate(prev.name,false);
+  });
+
   el('confidence').addEventListener('input', e => text(el('confidenceValue'), e.target.value));
   el('openSettings').addEventListener('click', () => el('settingsDialog').showModal());
 
@@ -832,7 +858,7 @@
     if(members.length<6){errorBox.hidden=false;text(errorBox,`あと${6-members.length}体選んでください。「残りをおまかせで仮組み」も使えます。`);return;}
     errorBox.hidden=true;
     state.team={ name:el('teamName').value.trim(), format:el('teamFormat').value==='single'?'single':'double', members, favorite:(favoriteDraft&&members.includes(favoriteDraft)?favoriteDraft:members[0]), plan:el('teamPlan').value.trim(), weak:el('teamWeak').value.trim() };
-    saveState(); renderAll(); setTeamPane('plan');
+    saveState(); renderAll(); trainingViewIndex=0; setTeamPane('training');
   });
 
   el('adoptFoundationPlan').addEventListener('click', () => {
