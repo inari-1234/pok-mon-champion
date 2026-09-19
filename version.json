@@ -1,7 +1,7 @@
 {
   "app": "Champion Coach",
-  "version": "0.6.2",
-  "build": "2026-09-18-repo-2",
+  "version": "0.7.0",
+  "build": "2026-09-20-guided-1",
   "data": {
     "regulation": "M-C",
     "competitive_snapshot": "2026-09-18",
