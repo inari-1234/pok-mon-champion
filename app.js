@@ -17,9 +17,12 @@
   let selectedTeamDraft = [];
   let pickerContext = null;
   let replacementTarget = '';
+  let pickerCategory = 'recommended';
+  let environmentFormat = 'single';
+  let activeTeamPane = 'build';
 
   function defaultState() {
-    return { version: 6, rank: '', team: { name: '', format: 'single', members: [], favorite: '', plan: '', weak: '' }, inventory: { unowned: [] }, matches: [], metaNotes: [] };
+    return { version: 7, rank: '', team: { name: '', format: 'single', members: [], favorite: '', plan: '', weak: '' }, inventory: { unowned: [] }, matches: [], metaNotes: [] };
   }
 
   function loadState() {
@@ -45,6 +48,26 @@
   }
   function fmtPct(v) { return `${C.pct(v)}%`; }
   function causeLabel(v) { return C.CAUSE_LABELS[v] || '未分類'; }
+  function normalizeFormat(v) { return v === 'double' ? 'double' : 'single'; }
+  function matchesForFormat(format) {
+    const mode=normalizeFormat(format);
+    return state.matches.filter(m=>normalizeFormat(m.format)===mode);
+  }
+  function notesForFormat(format) {
+    const mode=normalizeFormat(format);
+    return state.metaNotes.filter(n=>normalizeFormat(n.format || state.team.format)===mode);
+  }
+  function setTeamPane(name) {
+    const allowed=['build','plan','training','stats'];
+    activeTeamPane=allowed.includes(name)?name:'build';
+    document.querySelectorAll('[data-team-pane]').forEach(p=>p.classList.toggle('active',p.dataset.teamPane===activeTeamPane));
+    document.querySelectorAll('.team-tab-button').forEach(b=>b.classList.toggle('active',b.dataset.teamTab===activeTeamPane));
+  }
+  function syncEnvironmentControls() {
+    document.querySelectorAll('[data-environment-format]').forEach(b=>b.classList.toggle('active',b.dataset.environmentFormat===environmentFormat));
+    const label=el('environmentFormatDescription');
+    if(label) text(label,environmentFormat==='single'?'シングル':'ダブル');
+  }
 
 
   function resolveMon(value) { return C.findCatalogPokemon(value, catalog); }
@@ -189,6 +212,8 @@
     };
     const c=configs[kind]; if(!c) return;
     pickerContext={kind,max:c.max,selected:normalizedMemberNames(c.selected)}; pickerVisibleLimit=48;
+    pickerCategory=kind==='team'?'recommended':'all';
+    document.querySelectorAll('[data-pokemon-category]').forEach(b=>b.classList.toggle('active',b.dataset.pokemonCategory===pickerCategory));
     text(el('pokemonPickerTitle'),c.title);text(el('pokemonPickerHelp'),c.help);el('pokemonSearch').value='';el('pokemonTypeFilter').value='all';
     renderPokemonCatalog();el('pokemonPickerDialog').showModal();
   }
@@ -197,7 +222,17 @@
     if(!pickerContext) return;
     const pickerFormat=pickerContext.kind==='team'?(el('teamFormat').value||state.team.format):pickerContext.kind==='assist'?(el('assistFormat').value||state.team.format):pickerContext.kind==='log'?(el('matchFormat').value||state.team.format):state.team.format;
     const query=el('pokemonSearch').value; const type=el('pokemonTypeFilter').value;
-    const results=C.catalogSearch(query,type,catalog).sort((a,b)=>a.dex-b.dex || a.name.localeCompare(b.name,'ja'));
+    let results=C.catalogSearch(query,type,catalog);
+    const profile=p=>C.catalogRoleProfile(p,pickerFormat);
+    if(pickerCategory==='recommended') results=results.filter(p=>C.getMetaPrior(p,pickerFormat)>=5);
+    else if(pickerCategory==='popular') results=results.filter(p=>C.getMetaPrior(p,pickerFormat)>=7);
+    else if(pickerCategory==='attacker') results=results.filter(p=>{const t=profile(p).tags;return t.includes('attacker')||t.includes('physical')||t.includes('special');});
+    else if(pickerCategory==='bulky') results=results.filter(p=>profile(p).tags.includes('bulky'));
+    else if(pickerCategory==='support') results=results.filter(p=>{const t=profile(p).tags;return t.includes('support')||t.includes('speedControl')||t.includes('hazard')||t.includes('setup');});
+    results.sort((a,b)=>{
+      if(pickerCategory!=='all'){const d=C.getMetaPrior(b,pickerFormat)-C.getMetaPrior(a,pickerFormat);if(d)return d;}
+      return a.dex-b.dex || a.name.localeCompare(b.name,'ja');
+    });
     const box=el('pokemonCatalogGrid');box.replaceChildren();
     const selectedMons=pickerContext.selected.map(resolveMon).filter(Boolean); const selectedDex=new Set(selectedMons.map(p=>p.dex));
     results.slice(0,pickerVisibleLimit).forEach(mon=>{
@@ -234,6 +269,7 @@
     document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
     el(`screen-${name}`).classList.add('active');
     const nav = el(`nav-${name}`); if (nav) nav.classList.add('active');
+    if(name==='team') setTeamPane(activeTeamPane);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -279,6 +315,7 @@
       id: n.id || `note-${i}`,
       pokemon: typeof n.pokemon === 'string' ? n.pokemon.slice(0, 120) : '',
       risk: ['high','mid','low'].includes(n.risk) ? n.risk : 'mid',
+      format: n.format === 'double' ? 'double' : n.format === 'single' ? 'single' : clean.team.format,
       role: typeof n.role === 'string' ? n.role.slice(0, 300) : '',
       watch: typeof n.watch === 'string' ? n.watch.slice(0, 3000) : '',
       answer: typeof n.answer === 'string' ? n.answer.slice(0, 3000) : ''
@@ -287,19 +324,34 @@
   }
 
   function renderDashboard() {
-    const s = C.calculateStats(state.matches);
+    const mode=normalizeFormat(state.team.format);
+    const formatMatches=matchesForFormat(mode);
+    const s = C.calculateStats(formatMatches);
     text(el('rankChip'), `RANK ${state.rank || '未設定'}`);
     text(el('statTotal'), s.total);
     text(el('statWinRate'), s.total ? fmtPct(s.winRate) : '—');
     text(el('statRecent'), s.recentCount ? fmtPct(s.recentWinRate) : '—');
     text(el('statStreak'), s.streak ? `${s.streak}${s.streakResult === 'win' ? '連勝' : '連敗'}` : '—');
+    const statsFormat=el('homeStatsFormat'); if(statsFormat) text(statsFormat,mode==='single'?'シングル':'ダブル');
 
-    const foundation = C.buildTeamFoundation(state.team.members, state.team.format, state.team.plan);
+    const foundation = C.buildTeamFoundation(state.team.members, mode, state.team.plan);
     renderHomeFoundation(foundation);
-    renderProgress(C.buildProgressSnapshot(state.matches, foundation));
-    renderThreats(el('homeThreats'), 3);
+    renderProgress(C.buildProgressSnapshot(formatMatches, foundation));
+    renderThreats(el('homeThreats'), 3, mode);
+
+    const count=(state.team.members||[]).length;
+    let step=1,title='まず、使いたいポケモンを1匹選びましょう。',body='強さや役割はまだ考えなくて大丈夫です。好きなポケモンや使ってみたいポケモンから始めます。',nav='team',teamTab='build',button='好きな1体を選んで始める';
+    if(count>0 && count<6){
+      step=2;title=`残り${6-count}匹を決めて、6匹のチームにしましょう。`;body='自分で全部考える必要はありません。「残りをおまかせで仮組み」を使い、持っていないポケモンだけ交換できます。';button='チームを完成させる';
+    } else if(count===6 && !formatMatches.length){
+      step=3;title='チームができました。次は育成を確認しましょう。';body='6匹を一度に覚える必要はありません。持ち物・性格・能力ポイント・技を1匹ずつ確認してから、最初の対戦へ進みます。';nav='team';teamTab='training';button='育成を見る';
+    } else if(count===6){
+      step=4;title='次の対戦を始めましょう。';body='相手の6匹を画像から選ぶと、「一番注意する相手」「おすすめ3匹」「最初にすること」の順に表示します。';nav='assist';teamTab='';button='対戦準備を始める';
+    }
+    text(el('homeCoachStep'),`STEP ${step} / 4`); text(el('homeCoachTitle'),title); text(el('homeCoachBody'),body);
+    document.querySelectorAll('[data-route-step]').forEach(node=>{const n=Number(node.dataset.routeStep);node.classList.toggle('done',n<step);node.classList.toggle('active',n===step);});
     const quick=el('quickStartButton');
-    if(quick){const ready=state.team.members.length>=3;quick.dataset.nav=ready?'assist':'team';text(quick,ready?'対戦準備を始める':'好きな1体を選んで始める');}
+    if(quick){quick.dataset.nav=nav;if(teamTab)quick.dataset.teamTab=teamTab;else delete quick.dataset.teamTab;text(quick,button);}
   }
 
   function foundationBadge(foundation) {
@@ -360,9 +412,10 @@
     items.forEach(([label,value,small])=>{const card=make('div','progress-metric');card.append(make('span','',label),make('strong','',value),make('small','',small));box.append(card);});
   }
 
-  function renderThreats(target, limit) {
+  function renderThreats(target, limit, format) {
     target.replaceChildren();
-    const rows = C.aggregateOpponentPokemon(state.matches).slice(0, limit || 100);
+    const mode=normalizeFormat(format || environmentFormat);
+    const rows = C.aggregateOpponentPokemon(state.matches, mode).slice(0, limit || 100);
     if (!rows.length) { target.append(make('div', 'empty', '対戦を記録すると、遭遇頻度と敗戦率から要警戒ポケモンを抽出します。')); return; }
     rows.forEach(r => {
       const row = make('div', 'threat-row');
@@ -393,8 +446,9 @@
 
   function renderMetaNotes() {
     const box = el('metaNotes'); box.replaceChildren();
-    if (!state.metaNotes.length) { box.append(make('div','empty','「分からなかったもの」から登録してください。全部の型を覚える必要はありません。')); return; }
-    [...state.metaNotes].reverse().forEach(note => {
+    const notes=notesForFormat(environmentFormat);
+    if (!notes.length) { box.append(make('div','empty',`${environmentFormat==='single'?'シングル':'ダブル'}のメモはまだありません。「分からなかったもの」だけ追加すれば十分です。`)); return; }
+    [...notes].reverse().forEach(note => {
       const card = make('article','meta-card');
       const h = make('h3'); h.append(make('span',`tag ${note.risk}`,note.risk==='high'?'高警戒':note.risk==='mid'?'中警戒':'低警戒'), document.createTextNode(` ${note.pokemon}`));
       card.append(h);
@@ -462,7 +516,7 @@
     renderSavedTeamAnalysis();
 
     const box = el('selectionStats'); box.replaceChildren();
-    const rows = C.aggregateOwnSelections(state.matches);
+    const rows = C.aggregateOwnSelections(state.matches, state.team.format);
     if(!rows.length){ box.append(make('div','empty','対戦ログが増えると、各ポケモンの選出回数と選出時勝率を表示します。初期は上の基本戦術を使ってください。')); return; }
     rows.forEach(r => {
       const row=make('div','threat-row');
@@ -481,6 +535,7 @@
     lastAssist = assist;
     const panels = ['assistFocusPanel','assistResult','assistThreatPanel','assistCandidatesPanel','assistFailuresPanel'];
     panels.forEach(id => { el(id).hidden = false; });
+    el('assistDetails').hidden = false;
 
     const guide = assist.beginnerGuide;
     const coverage = Math.round((guide?.coverage || 0) * 100);
@@ -495,7 +550,7 @@
     if (!guide?.priorities?.length) {
       focusList.append(make('div','empty','相手のポケモンを入力してください。'));
     } else {
-      guide.priorities.forEach((r, i) => {
+      guide.priorities.slice(0,1).forEach((r, i) => {
         const card = make('article',`focus-card ${r.known ? 'known' : 'unknown'}`);
         const head = make('div','focus-head');
         const left = make('div'); left.append(make('span','focus-rank',`${i+1}`), make('h3','',r.name));
@@ -538,6 +593,15 @@
     } else {
       recommended.append(make('div','empty','自分の構築との直接データがまだ少ないため、選出だけは自動確定しません。上の「今回まず見ること」を使って対戦し、ログが増えると候補が具体化します。'));
     }
+
+    const leadCandidate=assist.recommended[0] || assist.teamFoundation?.basicLead?.[0] || '';
+    const topThreat=guide?.priorities?.[0]?.name || '';
+    const opening=leadCandidate && topThreat
+      ? `最初のたたき台は「${leadCandidate}」。まず「${topThreat}」がどう動くかを確認し、分からなくなったらこの2点に戻ります。`
+      : leadCandidate
+        ? `最初のたたき台は「${leadCandidate}」。まず相手の動きを1つ確認してから次の判断をします。`
+        : 'まず一番上の警戒点だけ確認し、詳細は必要になったときだけ開きます。';
+    text(el('assistOpeningAction'),opening);
 
     const highestEvidence = assist.candidates.reduce((max,c) => Math.max(max,c.evidencePoints),0);
     const level = highestEvidence >= 6 ? 'high' : highestEvidence >= 3 ? 'mid' : highestEvidence > 0 ? 'low' : 'none';
@@ -597,6 +661,7 @@
   function hideAssistView() {
     lastAssist = null;
     ['assistFocusPanel','assistResult','assistThreatPanel','assistCandidatesPanel','assistFailuresPanel'].forEach(id => { el(id).hidden = true; });
+    el('assistDetails').hidden = true;
     el('assistFocusList').replaceChildren();
     el('assistPrinciples').replaceChildren();
     el('assistRecommended').replaceChildren();
@@ -606,11 +671,11 @@
   }
 
   function renderAll() {
-    renderDashboard(); renderHistory(); renderThreats(el('threatTable')); renderMetaNotes(); renderTeam(); renderOpponentDraft('assist'); renderOpponentDraft('log'); renderOwnSelection(); el('currentRank').value = state.rank || ''; if (lastAssist?.opponent?.length) renderAssist(C.buildSelectionAssist(lastAssist.opponent, state.team.members, state.matches, state.metaNotes, lastAssist.format, teamPlanForFormat(lastAssist.format)));
+    renderDashboard(); renderHistory(); renderThreats(el('threatTable'),100,environmentFormat); renderMetaNotes(); syncEnvironmentControls(); renderTeam(); renderOpponentDraft('assist'); renderOpponentDraft('log'); renderOwnSelection(); el('currentRank').value = state.rank || ''; if (lastAssist?.opponent?.length) renderAssist(C.buildSelectionAssist(lastAssist.opponent, state.team.members, state.matches, state.metaNotes, lastAssist.format, teamPlanForFormat(lastAssist.format)));
   }
 
   function showAnalysis(match) {
-    const analysis = C.analyzeMatch(match, state.matches.filter(m => m.id !== match.id));
+    const analysis = C.analyzeMatch(match, state.matches.filter(m => m.id !== match.id && normalizeFormat(m.format)===normalizeFormat(match.format)));
     el('latestAnalysis').hidden = false;
     text(el('analysisHeadline'), analysis.headline); text(el('analysisSummary'), analysis.summary); text(el('analysisNext'), analysis.nextAction);
     const checks = el('analysisChecks'); checks.replaceChildren();
@@ -624,7 +689,18 @@
   }
 
   document.addEventListener('click', e => {
-    const nav = e.target.closest('[data-nav]'); if (nav) navigate(nav.dataset.nav);
+    const nav = e.target.closest('[data-nav]');
+    if (nav) {
+      if(nav.dataset.teamTab) setTeamPane(nav.dataset.teamTab);
+      navigate(nav.dataset.nav);
+      return;
+    }
+    const teamTab=e.target.closest('.team-tab-button');
+    if(teamTab){setTeamPane(teamTab.dataset.teamTab);return;}
+    const category=e.target.closest('[data-pokemon-category]');
+    if(category){pickerCategory=category.dataset.pokemonCategory;pickerVisibleLimit=48;document.querySelectorAll('[data-pokemon-category]').forEach(b=>b.classList.toggle('active',b===category));renderPokemonCatalog();return;}
+    const env=e.target.closest('[data-environment-format]');
+    if(env){environmentFormat=normalizeFormat(env.dataset.environmentFormat);syncEnvironmentControls();renderThreats(el('threatTable'),100,environmentFormat);renderMetaNotes();return;}
   });
 
   el('confidence').addEventListener('input', e => text(el('confidenceValue'), e.target.value));
@@ -695,7 +771,7 @@
     if (errors.length) { errorBox.hidden=false; text(errorBox,errors.join(' / ')); return; }
     errorBox.hidden=true;
     renderAssist(C.buildSelectionAssist(opponent, state.team.members, state.matches, state.metaNotes, format, teamPlanForFormat(format)));
-    el('assistResult').scrollIntoView({behavior:'smooth',block:'start'});
+    el('assistFocusPanel').scrollIntoView({behavior:'smooth',block:'start'});
   });
 
   el('copyAssistToLog').addEventListener('click', () => {
@@ -727,7 +803,7 @@
     e.preventDefault();
     const rawPokemon=el('metaPokemon').value.trim(); if(!rawPokemon) return;
     const pokemon=resolveMon(rawPokemon)?.name || rawPokemon;
-    state.metaNotes.push({ id: Date.now(), pokemon, risk: el('metaRisk').value, role: el('metaRole').value.trim(), watch: el('metaWatch').value.trim(), answer: el('metaAnswer').value.trim() });
+    state.metaNotes.push({ id: Date.now(), pokemon, format: environmentFormat, risk: el('metaRisk').value, role: el('metaRole').value.trim(), watch: el('metaWatch').value.trim(), answer: el('metaAnswer').value.trim() });
     saveState(); e.target.reset(); renderMetaNotes(); if (lastAssist?.opponent?.length) renderAssist(C.buildSelectionAssist(lastAssist.opponent, state.team.members, state.matches, state.metaNotes, lastAssist.format, teamPlanForFormat(lastAssist.format)));
   });
 
@@ -741,7 +817,7 @@
     if(members.length<6){errorBox.hidden=false;text(errorBox,`あと${6-members.length}体選んでください。「残りをおまかせで仮組み」も使えます。`);return;}
     errorBox.hidden=true;
     state.team={ name:el('teamName').value.trim(), format:el('teamFormat').value==='single'?'single':'double', members, favorite:(favoriteDraft&&members.includes(favoriteDraft)?favoriteDraft:members[0]), plan:el('teamPlan').value.trim(), weak:el('teamWeak').value.trim() };
-    saveState(); renderAll();
+    saveState(); renderAll(); setTeamPane('plan');
   });
 
   el('adoptFoundationPlan').addEventListener('click', () => {
