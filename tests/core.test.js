@@ -77,6 +77,40 @@ test('beginner guide works with no personal notes',()=>assert.ok(C.buildBeginner
 test('selection assist keeps format',()=>assert.equal(C.buildSelectionAssist(['ボーマンダ'],['ガオガエン','サーフゴー','カイリュー','ブリムオン'],[],[],'double','').format,'double'));
 test('opponent aggregation counts appearances',()=>assert.equal(C.aggregateOpponentPokemon([{date:'2026-09-18',result:'loss',opponentTeam:['ボーマンダ']}])[0].appearances,1));
 test('own selection aggregation counts picks',()=>assert.equal(C.aggregateOwnSelections([{date:'2026-09-18',result:'win',selectedTeam:['ピカチュウ']}])[0].picks,1));
+test('stats can isolate singles from mixed-format history',()=>{
+  const mixed=[
+    {id:'s',date:'2026-09-18',format:'single',result:'win',opponentTeam:['ピカチュウ'],selectedTeam:['リザードン']},
+    {id:'d',date:'2026-09-19',format:'double',result:'loss',opponentTeam:['ボーマンダ'],selectedTeam:['ガオガエン']}
+  ];
+  const s=C.calculateStats(mixed,'single'),d=C.calculateStats(mixed,'double');
+  assert.equal(s.total,1);assert.equal(s.wins,1);assert.equal(d.total,1);assert.equal(d.losses,1);
+});
+test('opponent aggregation is format aware',()=>{
+  const mixed=[
+    {id:'s',date:'2026-09-18',format:'single',result:'win',opponentTeam:['ピカチュウ']},
+    {id:'d',date:'2026-09-19',format:'double',result:'loss',opponentTeam:['ボーマンダ']}
+  ];
+  assert.deepEqual(C.aggregateOpponentPokemon(mixed,'single').map(x=>x.name),['ピカチュウ']);
+  assert.deepEqual(C.aggregateOpponentPokemon(mixed,'double').map(x=>x.name),['ボーマンダ']);
+});
+test('own selection aggregation is format aware',()=>{
+  const mixed=[
+    {format:'single',result:'win',selectedTeam:['ピカチュウ']},
+    {format:'double',result:'loss',selectedTeam:['ガオガエン']}
+  ];
+  assert.deepEqual(C.aggregateOwnSelections(mixed,'single').map(x=>x.name),['ピカチュウ']);
+  assert.deepEqual(C.aggregateOwnSelections(mixed,'double').map(x=>x.name),['ガオガエン']);
+});
+test('selection assist ignores notes explicitly saved for another format',()=>{
+  const assist=C.buildSelectionAssist(
+    ['ボーマンダ'],
+    ['ガブリアス','サーフゴー','カイリュー'],
+    [],
+    [{pokemon:'ボーマンダ',risk:'high',answer:'ガブリアス',format:'double'}],
+    'single',''
+  );
+  assert.equal(assist.threats[0].hasNote,false);
+});
 test('luck analysis remains classified',()=>assert.ok(C.analyzeMatch({result:'loss',cause:'luck',confidence:3,keyTurn:'急所',learning:'',selectionReason:''},[]).headline));
 
 test('meta prior is format aware',()=>{assert.ok(C.getMetaPrior(by('rillaboom'),'double')>0);assert.ok(C.getMetaPrior(by('salamence'),'single')>0)});
