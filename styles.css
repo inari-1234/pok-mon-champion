@@ -209,3 +209,13 @@ main{max-width:520px;margin:0 auto}
   main{max-width:520px}
   .topbar{padding-left:max(24px,calc((100vw - 520px)/2));padding-right:max(24px,calc((100vw - 520px)/2))}
 }
+
+.training-stepbar{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:2px 0 10px;padding:0 2px}
+.training-steptext strong{display:block;font-size:12px}
+.training-dots{display:flex;gap:4px;align-items:center}
+.training-dots span{display:block;width:6px;height:6px;border-radius:999px;background:#dce4ef}
+.training-dots span.active{width:17px;background:#176df5}
+.training-card-focus{margin:0}
+.training-nav{display:grid;grid-template-columns:1fr 1.2fr;gap:8px;margin-top:10px}
+.training-nav button{margin:0}
+.training-nav button:disabled{opacity:.42;box-shadow:none}
