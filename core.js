@@ -561,7 +561,9 @@
     const opponent = uniqNames(opponentTeam).slice(0, 6);
     const own = uniqNames(ownTeam).slice(0, 6);
     const list = sortedMatches(matches || []).filter(m => (m.format === 'single' ? 'single' : 'double') === mode);
-    const notes = Array.isArray(metaNotes) ? metaNotes : [];
+    const notes = Array.isArray(metaNotes)
+      ? metaNotes.filter(n=>!n?.format || (n.format==='single'?'single':'double')===mode)
+      : [];
     const pickCount = mode === 'single' ? 3 : 4;
     const threatRows = aggregateOpponentPokemon(list);
     const ownRows = aggregateOwnSelections(list);
