@@ -20,6 +20,7 @@
   let pickerCategory = 'recommended';
   let environmentFormat = 'single';
   let activeTeamPane = 'build';
+  let trainingViewIndex = 0;
 
   function defaultState() {
     return { version: 7, rank: '', team: { name: '', format: 'single', members: [], favorite: '', plan: '', weak: '' }, inventory: { unowned: [] }, matches: [], metaNotes: [] };
@@ -469,21 +470,35 @@
   function renderTeamBuilds() {
     const box=el('teamTrainingCards'); if(!box) return; box.replaceChildren();
     text(el('teamTrainingMeta'),state.team.format==='single'?(singleCompetitiveMetaUpdatedAt?`M-C シングル ${singleCompetitiveMetaUpdatedAt}`:'M-C シングル 内蔵'):(competitiveMetaUpdatedAt?`M-C ダブル ${competitiveMetaUpdatedAt}`:'M-C ダブル 内蔵'));
-    if(!(state.team.members||[]).length){box.append(make('div','empty','構築を保存すると、6体それぞれのスターター型を表示します。'));return;}
+    if(!(state.team.members||[]).length){box.append(make('div','empty','構築を保存すると、1匹ずつ育成内容を確認できます。'));return;}
     const metaMap=state.team.format==='single'?singleCompetitiveMeta:competitiveMeta;
     const sets=C.buildTeamStarterSets(state.team.members,state.team.format,metaMap,catalog);
-    sets.forEach(set=>{
-      const mon=resolveMon(set.pokemon); const card=make('article','training-card');
-      const head=make('div','training-head'),title=make('div','training-title');title.append(monImage(mon,'slot-img'));const titleText=make('div');titleText.append(make('strong','',set.pokemon),make('div','small muted',`${formatTypes(mon)} ・ ${set.dataStrength}`));title.append(titleText);head.append(title);
-      const no=make('button','ghost-btn','未所持');no.type='button';no.addEventListener('click',()=>markUnowned(mon));head.append(no);card.append(head);
-      const item=make('div','training-section');item.append(make('span','training-label','持ち物'));item.append(make('div','item-main',set.item||'候補を確認中'));
-      if(set.itemAdjustedForClause)item.append(make('div','training-note','構築内の持ち物重複を避けるため、次候補へ変更しました。'));
-      if(set.itemAlternatives.length)item.append(make('div','item-alt',`代替: ${set.itemAlternatives.join(' / ')}`));card.append(item);
-      const nature=make('div','training-section');nature.append(make('span','training-label','性格'),make('strong','',set.nature));card.append(nature);
-      const stat=make('div','training-section');stat.append(make('span','training-label',`能力ポイント（合計 ${set.statPointTotal}）`));const chips=make('div','stat-point-list');Object.entries(set.statPoints).filter(([,v])=>v>0).forEach(([k,v])=>chips.append(make('span','stat-point-chip',`${k} ${v}`)));stat.append(chips,make('div','training-note',set.statExplanation));card.append(stat);
-      const moves=make('div','training-section');moves.append(make('span','training-label','技候補'));if(set.moves.length){const ul=make('ul','move-list');set.moves.forEach(m=>ul.append(make('li','',m.name)));moves.append(ul);}else moves.append(make('div','training-note','現行M-Cの実戦サンプルが不足しているため、技は断定していません。ゲーム内の習得技を確認してください。'));card.append(moves);
-      card.append(make('div','training-note',`${set.source}${set.usage?` ・ 使用率目安 ${set.usage.toFixed(1)}%`:''}`));box.append(card);
-    });
+    if(!sets.length){box.append(make('div','empty','育成案を作れるポケモンがありません。'));return;}
+    trainingViewIndex=Math.max(0,Math.min(trainingViewIndex,sets.length-1));
+    const set=sets[trainingViewIndex];
+
+    const step=make('div','training-stepbar');
+    const stepText=make('div','training-steptext');
+    stepText.append(make('span','section-kicker','NOW TRAINING'),make('strong','',`${trainingViewIndex+1} / ${sets.length}匹目`));
+    const dots=make('div','training-dots');
+    sets.forEach((_,i)=>dots.append(make('span',i===trainingViewIndex?'active':'')));
+    step.append(stepText,dots); box.append(step);
+
+    const mon=resolveMon(set.pokemon); const card=make('article','training-card training-card-focus');
+    const head=make('div','training-head'),title=make('div','training-title');title.append(monImage(mon,'slot-img'));const titleText=make('div');titleText.append(make('strong','',set.pokemon),make('div','small muted',`${formatTypes(mon)} ・ ${set.dataStrength}`));title.append(titleText);head.append(title);
+    const no=make('button','ghost-btn','持っていない');no.type='button';no.addEventListener('click',()=>{markUnowned(mon);trainingViewIndex=Math.max(0,Math.min(trainingViewIndex,(state.team.members||[]).length-1));renderTeamBuilds();});head.append(no);card.append(head);
+    const item=make('div','training-section');item.append(make('span','training-label','持ち物'));item.append(make('div','item-main',set.item||'候補を確認中'));
+    if(set.itemAdjustedForClause)item.append(make('div','training-note','構築内の持ち物重複を避けるため、次候補へ変更しました。'));
+    if(set.itemAlternatives.length)item.append(make('div','item-alt',`代替: ${set.itemAlternatives.join(' / ')}`));card.append(item);
+    const nature=make('div','training-section');nature.append(make('span','training-label','性格'),make('strong','',set.nature));card.append(nature);
+    const stat=make('div','training-section');stat.append(make('span','training-label',`能力ポイント（合計 ${set.statPointTotal}）`));const chips=make('div','stat-point-list');Object.entries(set.statPoints).filter(([,v])=>v>0).forEach(([k,v])=>chips.append(make('span','stat-point-chip',`${k} ${v}`)));stat.append(chips,make('div','training-note',set.statExplanation));card.append(stat);
+    const moves=make('div','training-section');moves.append(make('span','training-label','技候補'));if(set.moves.length){const ul=make('ul','move-list');set.moves.forEach(m=>ul.append(make('li','',m.name)));moves.append(ul);}else moves.append(make('div','training-note','現行M-Cの実戦サンプルが不足しているため、技は断定していません。ゲーム内の習得技を確認してください。'));card.append(moves);
+    card.append(make('div','training-note',`${set.source}${set.usage?` ・ 使用率目安 ${set.usage.toFixed(1)}%`:''}`));box.append(card);
+
+    const nav=make('div','training-nav');
+    const prev=make('button','secondary-btn','← 前のポケモン');prev.type='button';prev.disabled=trainingViewIndex===0;prev.addEventListener('click',()=>{trainingViewIndex=Math.max(0,trainingViewIndex-1);renderTeamBuilds();el('teamTrainingPanel').scrollIntoView({behavior:'smooth',block:'start'});});
+    const next=make('button','primary-btn',trainingViewIndex===sets.length-1?'1匹目に戻る':'次のポケモン →');next.type='button';next.addEventListener('click',()=>{trainingViewIndex=trainingViewIndex===sets.length-1?0:trainingViewIndex+1;renderTeamBuilds();el('teamTrainingPanel').scrollIntoView({behavior:'smooth',block:'start'});});
+    nav.append(prev,next);box.append(nav);
   }
 
   function renderSavedTeamAnalysis() {
