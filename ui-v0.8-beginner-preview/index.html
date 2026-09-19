@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f8fd">
+<title>Champion Coach Beginner Preview v0.8</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <button id="backButton" class="icon-btn" aria-label="前に戻る" hidden>‹</button>
+  <div class="brand"><span class="brand-ball">◉</span><span><strong>Champion Coach</strong><small>Beginner Preview v0.8</small></span></div>
+  <button id="helpButton" class="icon-btn" aria-label="使い方">?</button>
+</header>
+
+<main class="shell">
+<section class="screen active" data-screen="welcome">
+  <div class="welcome-hero">
+    <span class="hero-badge">はじめてのポケモン対戦</span>
+    <div class="hero-illustration">◉</div>
+    <h1>何をすればいいか分からなくても、<br>順番に進めれば大丈夫。</h1>
+    <p>使いたいポケモンを1匹選ぶところから、チーム作り・育成・初めての対戦まで案内します。</p>
+  </div>
+  <div class="journey-preview">
+    <div><b>1</b><span>好きな1匹</span></div><i></i>
+    <div><b>2</b><span>6匹を決める</span></div><i></i>
+    <div><b>3</b><span>育てる</span></div><i></i>
+    <div><b>4</b><span>対戦する</span></div>
+  </div>
+  <button class="primary huge" data-next="starter">はじめる</button>
+  <button class="quiet-link" data-next="coach-home">途中から使う</button>
+  <p class="footnote">UI確認用の試作です。保存・本番分析はまだ行いません。</p>
+</section>
+
+<section class="screen" data-screen="coach-home">
+  <div class="progress-card">
+    <div class="progress-top"><span class="step-label">あなたは今ここ</span><strong id="homeProgressText">STEP 1 / 4</strong></div>
+    <div class="progress-track"><i id="homeProgressBar"></i></div>
+    <ol class="progress-list">
+      <li class="active"><b>1</b><span>使いたいポケモンを決める</span><em>今ここ</em></li>
+      <li><b>2</b><span>6匹のチームを決める</span></li>
+      <li><b>3</b><span>対戦用に育てる</span></li>
+      <li><b>4</b><span>対戦を始める</span></li>
+    </ol>
+  </div>
+  <section class="next-card">
+    <span class="eyebrow">NEXT</span>
+    <h1 id="homeNextTitle">まず、使いたいポケモンを1匹選びましょう。</h1>
+    <p id="homeNextBody">強さや役割はまだ考えなくて大丈夫です。好きなポケモンや、使ってみたいポケモンでOKです。</p>
+    <button id="homeNextButton" class="primary">次に進む</button>
+  </section>
+  <details class="advanced-menu">
+    <summary>慣れている人向けのメニュー</summary>
+    <div class="shortcut-grid">
+      <button data-next="team-proposal">チームを見る</button>
+      <button data-next="training">育成を見る</button>
+      <button data-next="battle-ready">対戦準備へ</button>
+      <button data-next="review">対戦記録へ</button>
+    </div>
+  </details>
+</section>
+
+<section class="screen" data-screen="starter">
+  <div class="step-head"><span>STEP 1 / 4</span><h1>まず、使いたいポケモンを1匹選びましょう。</h1><p>強いポケモンを知っている必要はありません。選びやすい方法から探せます。</p></div>
+  <div class="choice-stack">
+    <button class="choice-card recommended" data-open-picker="recommended"><span class="choice-icon">★</span><span><strong>おすすめから選ぶ</strong><small>迷ったらここ。使いやすい候補を見ます。</small></span><b>›</b></button>
+    <button class="choice-card" data-open-picker="popular"><span class="choice-icon">◎</span><span><strong>よく見るポケモンから選ぶ</strong><small>対戦で見かけやすい候補を表示します。</small></span><b>›</b></button>
+    <button class="choice-card" data-open-picker="visual"><span class="choice-icon">▦</span><span><strong>見た目から全部見る</strong><small>名前やタイプが分からなくても画像から探せます。</small></span><b>›</b></button>
+    <button class="choice-card" data-open-picker="search"><span class="choice-icon">⌕</span><span><strong>名前が分かるので検索する</strong><small>使いたいポケモンが決まっている人向けです。</small></span><b>›</b></button>
+  </div>
+  <section id="starterSelected" class="selected-card" hidden>
+    <span class="eyebrow">SELECTED</span>
+    <div class="selected-main"><img id="starterImage" alt=""><div><strong id="starterName"></strong><small>この1匹を中心にチームを考えます。</small></div></div>
+    <button class="primary" data-next="team-proposal">このポケモンで進む</button>
+  </section>
+</section>
+
+<section class="screen" data-screen="team-proposal">
+  <div class="step-head"><span>STEP 2 / 4</span><h1>残りの5匹は、まずこちらで仮に組みます。</h1><p>役割や相性を自分で考えなくて大丈夫です。まず6匹の形を作り、持っていないポケモンだけ交換します。</p></div>
+  <section class="team-card">
+    <div class="team-card-head"><span class="eyebrow">YOUR FIRST TEAM</span><span class="simple-chip">シングル向け</span></div>
+    <div id="teamGrid" class="team-grid"></div>
+    <div class="plain-explain"><strong>この6匹で何をするの？</strong><p>相手に合わせて、この中から3匹を選んで対戦します。誰を選ぶかは対戦前にアプリが一緒に考えます。</p></div>
+  </section>
+  <section class="question-card">
+    <span class="eyebrow">CHECK</span><h2>この中に、持っていないポケモンはいますか？</h2>
+    <p>分からなければ、そのまま先へ進んで構いません。</p>
+    <button class="secondary" data-next="missing">持っていないポケモンがいる</button>
+    <button class="primary" data-next="training">いない・分からないので進む</button>
+  </section>
+</section>
+
+<section class="screen" data-screen="missing">
+  <div class="step-head"><span>STEP 2 / 4</span><h1>持っていないポケモンを教えてください。</h1><p>選ぶと、そのポケモンの代わりをすぐ下に出します。</p></div>
+  <div id="missingGrid" class="missing-grid"></div>
+  <section id="replacementBox" class="replacement-card" hidden>
+    <span class="eyebrow">REPLACEMENT</span>
+    <h2><span id="missingName"></span>の代わりなら、まずこの候補がおすすめです。</h2>
+    <div class="replacement-pick"><img id="replacementImage" alt=""><div><strong id="replacementName"></strong><p id="replacementReason"></p><span class="beginner-chip">初心者向け</span></div></div>
+    <button id="replaceButton" class="primary">このポケモンに交換する</button>
+    <button class="quiet-link">ほかの候補を見る</button>
+  </section>
+  <button id="missingDone" class="primary" data-next="training">チームをこれで決定する</button>
+</section>
+
+<section class="screen" data-screen="training">
+  <div class="step-head"><span>STEP 3 / 4</span><h1>次は、対戦で使える状態に育てます。</h1><p>6匹を一度に覚える必要はありません。1匹ずつ「この通りに設定する」だけで進めます。</p></div>
+  <div class="training-progress"><div><span>育成するポケモン</span><strong><b id="trainIndex">1</b> / 6</strong></div><div class="progress-track"><i id="trainBar"></i></div></div>
+  <section class="training-card">
+    <div class="training-pokemon"><img id="trainImage" alt=""><div><span class="eyebrow">NOW TRAINING</span><h2 id="trainName"></h2><small>まずはこの設定を基準にすればOKです。</small></div></div>
+    <div class="setting-list">
+      <article><span class="setting-label">性格</span><strong id="trainNature"></strong><button class="why-button" data-explain="性格は、伸ばしたい能力の方向を決める設定です。最初は表示どおりに選べば大丈夫です。">なぜ？</button></article>
+      <article><span class="setting-label">持ち物</span><strong id="trainItem"></strong><button class="why-button" data-explain="持ち物は1匹に1つ持たせる補助アイテムです。最初は役割が分かりやすいものを優先します。">なぜ？</button></article>
+      <article><span class="setting-label">能力ポイント</span><strong id="trainPoints"></strong><button class="why-button" data-explain="Pokémon Championsの能力ポイント表記です。表示された配分をそのまま設定すればOKです。">なぜ？</button></article>
+      <article class="moves"><span class="setting-label">技</span><strong id="trainMoves"></strong><button class="why-button" data-explain="技は対戦中に使う4つの行動です。最初は扱いやすく役割が分かりやすい組み合わせを表示します。">なぜ？</button></article>
+    </div>
+    <div id="whyBox" class="why-box" hidden></div>
+    <button id="trainingDoneButton" class="primary">この設定でOK</button>
+    <button class="quiet-link">今は育成を飛ばす</button>
+  </section>
+</section>
+
+<section class="screen" data-screen="battle-ready">
+  <div class="celebrate">✓</div>
+  <div class="step-head centered"><span>STEP 4 / 4</span><h1>準備できました。次は実際に対戦してみましょう。</h1><p>最初から全部考える必要はありません。対戦前にやることは3つだけです。</p></div>
+  <div class="three-steps">
+    <article><b>1</b><div><strong>相手の6匹を見る</strong><p>対戦画面に出た6匹を確認します。</p></div></article>
+    <article><b>2</b><div><strong>このアプリに入れる</strong><p>画像から選ぶだけでOKです。</p></div></article>
+    <article><b>3</b><div><strong>おすすめ3匹を見る</strong><p>まずは提案された3匹を基準に戦います。</p></div></article>
+  </div>
+  <button class="primary huge" data-next="battle-input">対戦を始める</button>
+</section>
+
+<section class="screen" data-screen="battle-input">
+  <div class="step-head"><span>対戦前</span><h1>相手の6匹を選んでください。</h1><p>名前が分からなくても、対戦画面と同じ見た目のポケモンを選べば大丈夫です。</p></div>
+  <div id="opponentGrid" class="opponent-slots">
+    <button data-slot="0"><span>＋</span><small>1匹目</small></button><button data-slot="1"><span>＋</span><small>2匹目</small></button>
+    <button data-slot="2"><span>＋</span><small>3匹目</small></button><button data-slot="3"><span>＋</span><small>4匹目</small></button>
+    <button data-slot="4"><span>＋</span><small>5匹目</small></button><button data-slot="5"><span>＋</span><small>6匹目</small></button>
+  </div>
+  <button id="demoOpponentButton" class="secondary">試作用の相手6匹を自動入力</button>
+  <button id="analyzeButton" class="primary" disabled>この6匹を見てもらう</button>
+</section>
+
+<section class="screen" data-screen="battle-coach">
+  <div class="coach-banner"><span>今回の対戦</span><h1>まず、これだけ見ればOKです。</h1></div>
+  <section class="focus-card danger"><span class="focus-label">① 一番注意</span><div class="focus-pokemon"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/149.png" alt="カイリュー"><div><strong>カイリュー</strong><p>終盤に一気に倒される展開に注意します。</p></div></div></section>
+  <section class="focus-card good"><span class="focus-label">② あなたのおすすめ3匹</span><div id="battlePicks" class="battle-picks"></div><p>まずはこの3匹を基準に選んでみましょう。</p></section>
+  <section class="focus-card blue"><span class="focus-label">③ 最初にすること</span><strong id="leadAdvice"></strong><p>分からなくなったら、まずこの方針に戻ればOKです。</p></section>
+  <button class="primary huge" data-next="review">この方針で対戦する</button>
+  <details class="details-box"><summary>もっと詳しく知りたい</summary><div class="detail-content"><h3>相手6匹の詳しい説明</h3><p>個別の役割・警戒する技・自分の6匹との相性は、必要になったときだけここで見ます。</p><h3>過去の似た対戦</h3><p>本番版では自分の過去ログがある場合だけ表示します。</p></div></details>
+</section>
+
+<section class="screen" data-screen="review">
+  <div class="review-intro"><div class="celebrate small">✓</div><h1>対戦お疲れさまでした。</h1><p>まずは結果だけ残しましょう。詳しい分析は必要なときだけで大丈夫です。</p></div>
+  <section class="question-card"><h2>勝ちましたか？</h2><div class="result-buttons"><button data-result="win">勝った</button><button data-result="loss">負けた</button></div></section>
+  <section id="lossQuestions" class="question-card" hidden>
+    <h2>どれに近かったですか？</h2><p>専門用語は使わなくて大丈夫です。</p>
+    <div class="plain-options"><button>最初に出すポケモンで困った</button><button>相手の技や動きが分からなかった</button><button>途中で何をすればいいか分からなくなった</button><button>最後に一気に倒されてしまった</button><button>よく分からない</button></div>
+  </section>
+  <section id="reviewDone" class="saved-card" hidden><span>✓</span><div><strong>記録できました。</strong><p>次の対戦では、今回の結果を少しずつコーチに反映していきます。</p></div></section>
+  <button id="finishReview" class="primary" hidden data-next="coach-home">ホームに戻る</button>
+</section>
+</main>
+
+<div class="mini-home" id="miniHome" hidden><button data-next="coach-home"><span>⌂</span>いまここ</button></div>
+
+<dialog id="pokemonPicker">
+  <div class="dialog-card">
+    <div class="dialog-head"><div><span class="eyebrow">POKÉMON SELECTOR</span><h2 id="pickerTitle">ポケモンを選ぶ</h2></div><button class="icon-btn" id="closePicker" aria-label="閉じる">×</button></div>
+    <input id="pokemonSearch" class="search" type="search" placeholder="名前が分かれば検索">
+    <div class="filter-row"><button class="active">おすすめ</button><button>よく見る</button><button>すべて</button></div>
+    <div id="pickerGrid" class="picker-grid"></div>
+    <p class="dialog-note">試作版では候補を絞っています。本番版では現在のポケモンデータに接続します。</p>
+  </div>
+</dialog>
+
+<dialog id="helpDialog">
+  <div class="dialog-card help-card">
+    <div class="dialog-head"><h2>この試作の考え方</h2><button class="icon-btn" id="closeHelp">×</button></div>
+    <p>初心者が機能一覧から自分で選ぶのではなく、今の状態に合わせて「次にすることを1つだけ」出す設計です。</p>
+    <ul><li>1画面で求める判断は原則1つ</li><li>専門用語は必要になるまで隠す</li><li>最初から完璧な分析を求めない</li><li>詳細情報は「もっと詳しく」に退避</li></ul>
+  </div>
+</dialog>
+<script src="app.js"></script>
+</body>
+</html>
