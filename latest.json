@@ -16,7 +16,7 @@
     "version.json"
   ],
   "sha256": {
-    "index.html": "28a5d63636e6371430234e48db572c83d104287106ea2de046bce5c4985bbaf0",
+    "index.html": "128d599272be188ac6579027d3bb8d94f43115e38876e28015e99cf41cafdb90",
     "styles.css": "9985c63d4f8d1de67d313bb80fced69380737561d61b147133ac73dad6c7b40c",
     "pokemon-data.js": "ae0a5521b06bacf41aa58a97ab82bd58f5d82a10439507ed99778204ffc92e8f",
     "competitive-data.js": "78530427719d12ccc61809461423179fcff47bf00682551d670da0c1890bec86",
