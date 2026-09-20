@@ -27,9 +27,16 @@
     const h=Math.round(width/target);return {left:0,top:Math.round((height-h)/2),width,height:h};
   }
 
+  function centeredAspectGeometry(width,height,aspect){
+    const target=aspect||TARGET_ASPECT,ratio=width/height;
+    if(Math.abs(ratio-target)<0.001)return {left:0,top:0,width,height};
+    if(ratio>target){const w=height*target;return {left:(width-w)/2,top:0,width:w,height};}
+    const h=width/target;return {left:0,top:(height-h)/2,width,height:h};
+  }
+
   function mapBaseRect(rect,width,height){
-    const source=centeredAspectViewport(BASE_IMAGE.width,BASE_IMAGE.height,TARGET_ASPECT);
-    const target=centeredAspectViewport(width,height,TARGET_ASPECT);
+    const source=centeredAspectGeometry(BASE_IMAGE.width,BASE_IMAGE.height,TARGET_ASPECT);
+    const target=centeredAspectGeometry(width,height,TARGET_ASPECT);
     const x0=(rect.left-source.left)/source.width,y0=(rect.top-source.top)/source.height;
     const x1=(rect.right-source.left)/source.width,y1=(rect.bottom-source.top)/source.height;
     const left=Math.round(target.left+x0*target.width),top=Math.round(target.top+y0*target.height);
