@@ -1,4 +1,4 @@
-const CACHE='champion-coach-v8.0-guided1';
+const CACHE='champion-coach-v8.1-onboarding1';
 const CORE=['./','./index.html','./styles.css','./pokemon-data.js','./competitive-data.js','./single-competitive-data.js','./core.js','./app.js','./manifest.webmanifest','./version.json','./latest.json'];
 const NETWORK_FIRST=new Set(['./','./index.html','./manifest.webmanifest','./version.json']);
 
