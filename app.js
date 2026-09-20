@@ -64,6 +64,13 @@
     activeTeamPane=allowed.includes(name)?name:'build';
     document.querySelectorAll('[data-team-pane]').forEach(p=>p.classList.toggle('active',p.dataset.teamPane===activeTeamPane));
     document.querySelectorAll('.team-tab-button').forEach(b=>b.classList.toggle('active',b.dataset.teamTab===activeTeamPane));
+    const title=el('teamScreenTitle');
+    if(title){
+      if(activeTeamPane==='training') text(title,'1匹ずつ対戦用に育てる。');
+      else if(activeTeamPane==='plan') text(title,'このチームの戦い方を見る。');
+      else if(activeTeamPane==='stats') text(title,'対戦から振り返る。');
+      else text(title,teamDraft.length?'6匹のチームを作る。':'使いたいポケモンを1匹選ぶ。');
+    }
   }
   function syncEnvironmentControls() {
     document.querySelectorAll('[data-environment-format]').forEach(b=>b.classList.toggle('active',b.dataset.environmentFormat===environmentFormat));
@@ -788,9 +795,9 @@
     const errorBox=el('teamErrors');
     if(!teamDraft.length){errorBox.hidden=false;text(errorBox,'まず1匹選んでください。');openPokemonPicker('starter','recommended');return;}
     const built=C.completeStarterTeam(teamDraft,el('teamFormat').value,catalog,[...unownedIds()]);
-    if(built.members.length){teamDraft=built.members;if(!favoriteDraft)favoriteDraft=teamDraft[0];renderTeamDraft();errorBox.hidden=true;
-      const added=built.steps.map(x=>`${x.name}（${x.reasons.join('・') || '役割補完'}）`).join(' / ');
-      const advice=el('teamStarterAdvice');advice.hidden=false;advice.textContent=`仮組みしました。${added ? '追加理由: '+added : '現在の6体を維持しました。'} 正解の断定ではなく、最初に試す土台です。`;
+    if(built.members.length){
+      teamDraft=built.members;if(!favoriteDraft)favoriteDraft=teamDraft[0];renderTeamDraft();errorBox.hidden=true;
+      const advice=el('teamStarterAdvice');advice.hidden=false;advice.textContent='6匹を仮組みしました。持っていないポケモンだけ確認してください。';
     }
   });
   el('teamFormat').addEventListener('change',renderTeamDraft);
