@@ -662,7 +662,8 @@
       guide.priorities.slice(0,1).forEach((r, i) => {
         const card = make('article',`focus-card ${r.known ? 'known' : 'unknown'}`);
         const head = make('div','focus-head');
-        const left = make('div'); left.append(make('span','focus-rank',`${i+1}`), make('h3','',r.name));
+        const left = make('div','focus-identity');
+        left.append(monImage(resolveMon(r.name),'focus-pokemon-img'),make('span','focus-rank',`${i+1}`), make('h3','',r.name));
         head.append(left, make('span',`tag ${r.known ? 'low' : 'mid'}`,r.known ? '基本ガイドあり' : '基本ガイド外'));
         card.append(head, make('p','focus-role',r.role), make('p','',r.focus));
         if (r.watch.length) {
@@ -690,13 +691,16 @@
 
     const recommended = el('assistRecommended'); recommended.replaceChildren();
     if (assist.recommended.length) {
-      const label = assist.recommendationSource === 'starter' ? `${assist.format === 'single' ? '3体' : '4体'}の基本選出（初期モデル）` : `${assist.format === 'single' ? '3体' : '4体'}の仮候補`;
+      const label = assist.recommendationSource === 'starter' ? `${assist.format === 'single' ? '3匹' : '4匹'}の基本選出` : `${assist.format === 'single' ? '3匹' : '4匹'}の候補`;
       recommended.append(make('div','assist-label',label));
-      const picks = make('div','pick-chips');
+      const picks = make('div','recommended-pokemon-grid');
       assist.recommended.forEach(name => {
         const candidate = assist.candidates.find(c => c.name === name);
         const direct = assist.recommendationSource === 'starter' || (candidate && (candidate.explicitFor.length || candidate.relevantMatches));
-        picks.append(make('span',`pick-chip ${direct ? 'supported' : 'provisional'}`,direct ? name : `${name} ※`));
+        const card=make('div',`recommended-pokemon-card ${direct ? 'supported' : 'provisional'}`);
+        card.append(monImage(resolveMon(name),'recommended-pokemon-img'),make('strong','',name));
+        if(!direct)card.append(make('small','','仮候補'));
+        picks.append(card);
       });
       recommended.append(picks);
     } else {
@@ -870,6 +874,9 @@
       createdAt: new Date().toISOString()
     };
     const errors = C.validateMatch(match);
+    const requiredSelected=match.format==='single'?3:4;
+    if(match.opponentTeam.length!==6) errors.push('相手の6匹を選んでください');
+    if(match.selectedTeam.length!==requiredSelected) errors.push(`自分が出した${requiredSelected}匹を選んでください`);
     const errorBox = el('formErrors');
     if (errors.length) { errorBox.hidden=false; errorBox.textContent=errors.join(' / '); return; }
     errorBox.hidden=true; state.matches.push(match); saveState(); showAnalysis(match);
@@ -885,8 +892,7 @@
     const format = el('assistFormat').value;
     const errorBox = el('assistErrors');
     const errors = [];
-    if (!rawOpponent.length) errors.push('相手のポケモンを1匹以上入力してください');
-    if (rawOpponent.length > 6) errors.push('相手は6体まで入力してください');
+    if (rawOpponent.length !== 6) errors.push('相手の6匹を選んでください');
     if (errors.length) { errorBox.hidden=false; text(errorBox,errors.join(' / ')); return; }
     errorBox.hidden=true;
     renderAssist(C.buildSelectionAssist(opponent, state.team.members, state.matches, state.metaNotes, format, teamPlanForFormat(format)));
@@ -898,7 +904,9 @@
     el('matchForm').reset();
     setToday();
     el('confidence').value='3'; text(el('confidenceValue'),'3'); el('planOutcome').value='unknown';
-    el('matchFormat').value = lastAssist.format; selectedTeamDraft=[];
+    el('matchFormat').value = lastAssist.format;
+    const required=lastAssist.format==='single'?3:4;
+    selectedTeamDraft=lastAssist.recommended.filter(v=>state.team.members.includes(v)).slice(0,required);
     logOpponentDraft=[...lastAssist.opponent]; renderOpponentDraft('log'); renderOwnSelection();
     const focusNames = lastAssist.beginnerGuide?.priorities?.map(r=>r.name).slice(0,2) || [];
     const parts = [];
@@ -907,7 +915,7 @@
     if (lastAssist.teamFoundation?.plan) parts.push(`勝ち筋: ${lastAssist.teamFoundation.plan}`);
     if (parts.length) el('selectionReason').value = `${parts.join('。')}。実際の判断に合わせて書き換える。`;
     navigate('log');
-    el('pickLogOpponent').focus();
+    document.querySelector('input[name="result"]')?.focus();
   });
 
   document.addEventListener('click', e => {
