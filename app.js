@@ -83,8 +83,18 @@
   function normalizedMemberNames(values) {
     return C.uniqNames(values).map(v => resolveMon(v)?.name || v).slice(0, 6);
   }
+  const FORM_SPRITE_IDS = {
+    raichualola:10100,ninetalesalola:10104,persianalola:10108,arcaninehisui:10230,slowbrogalar:10165,
+    taurospaldeacombat:10250,taurospaldeablaze:10251,taurospaldeaaqua:10252,typhlosionhisui:10233,
+    slowkinggalar:10172,rotomheat:10008,rotomwash:10009,rotomfrost:10010,rotomfan:10011,rotommow:10012,
+    samurotthisui:10236,zoroarkhisui:10239,stunfiskgalar:10180,goodrahisui:10242,gourgeistsmall:10030,
+    gourgeistlarge:10031,gourgeistsuper:10032,avalugghisui:10243,decidueyehisui:10244,lycanrocmidnight:10126,
+    lycanrocdusk:10152,indeedeef:10186,basculegionf:10248
+  };
   function spriteUrl(mon) {
-    return mon && mon.dex > 0 ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${mon.dex}.png` : '';
+    if(!mon || mon.dex<=0) return '';
+    const spriteId=FORM_SPRITE_IDS[mon.id] || mon.dex;
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${spriteId}.png`;
   }
   function monImage(mon, className) {
     const cls=className || 'slot-img';
@@ -182,13 +192,14 @@
     const hasDraft=teamDraft.length>0;
     el('starterChoicePanel').hidden=hasDraft;
     el('teamComposeArea').hidden=!hasDraft;
+    el('autoCompleteTeam').hidden=teamDraft.length>=6;
     const savedMembers=normalizedMemberNames(state.team.members||[]);
     const draftMatchesSaved=teamDraft.length===6 && savedMembers.length===6 && teamDraft.every((v,i)=>v===savedMembers[i]);
     el('teamPrimaryTabs').hidden=!draftMatchesSaved;
     el('teamMoreMenu').hidden=!draftMatchesSaved;
     text(el('teamScreenTitle'),hasDraft?'6匹のチームを作る。':'使いたいポケモンを1匹選ぶ。');
     text(el('teamBuildKicker'),hasDraft?'STEP 2':'STEP 1');
-    text(el('teamBuildTitle'),hasDraft?'残りのポケモンを決める':'どうやって1匹目を探しますか？');
+    text(el('teamBuildTitle'),!hasDraft?'どうやって1匹目を探しますか？':teamDraft.length>=6?'この6匹を確認する':'残りのポケモンを決める');
     const advice=el('teamStarterAdvice');
     if(!teamDraft.length){advice.hidden=true;advice.textContent='';}
     else {advice.hidden=false;advice.textContent=`軸: ${favoriteDraft || teamDraft[0]}　${teamDraft.length}/6匹`;}
@@ -285,7 +296,14 @@
 
   function commitPokemonPicker() {
     if(!pickerContext) return; const picked=normalizedMemberNames(pickerContext.selected);
-    if(pickerContext.kind==='starter'){teamDraft=picked;favoriteDraft=picked[0]||'';renderTeamDraft();}
+    if(pickerContext.kind==='starter'){
+      favoriteDraft=picked[0]||'';
+      const built=C.completeStarterTeam(picked,el('teamFormat').value||state.team.format,catalog,[...unownedIds()]);
+      teamDraft=built.members.length?built.members:picked;
+      renderTeamDraft();
+      const advice=el('teamStarterAdvice');
+      if(advice){advice.hidden=false;advice.textContent=teamDraft.length===6?'6匹を仮組みしました。持っていないポケモンだけ確認してください。':`${teamDraft.length}/6匹まで仮組みしました。残りは候補から追加してください。`;}
+    }
     else if(pickerContext.kind==='team'){teamDraft=picked;if(!favoriteDraft||!teamDraft.includes(favoriteDraft))favoriteDraft=teamDraft[0]||'';renderTeamDraft();}
     else if(pickerContext.kind==='assist'){assistOpponentDraft=picked;renderOpponentDraft('assist');}
     else if(pickerContext.kind==='log'){logOpponentDraft=picked;renderOpponentDraft('log');}
@@ -388,6 +406,7 @@
     renderThreats(el('homeThreats'), 3, mode);
 
     const count=(state.team.members||[]).length;
+    const advanced=el('homeAdvancedMenu'); if(advanced) advanced.hidden=count<6;
     let step=1,title='使いたいポケモンを1匹選びましょう。',nav='team',teamTab='build',button='次に進む';
     if(count>0 && count<6){
       step=2;title='6匹のチームを完成させましょう。';button='チームを完成させる';
