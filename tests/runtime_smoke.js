@@ -69,7 +69,17 @@ elements.teamForm.emit('submit');
 saved=JSON.parse(store['championCoach.v1']);
 if(saved.team.format!=='single'||saved.team.members.length!==6)throw new Error('cold-start team save failed');
 if(elements.teamPrimaryTabs.hidden||elements.teamMoreMenu.hidden)throw new Error('advanced team controls did not unlock after saved six');
+if(elements.homeCoachStep.textContent!=='STEP 3 / 4')throw new Error('home did not enter training step after team save');
 if(!elements.teamTrainingCards.children.some(x=>String(x.className).includes('training-card-focus')))throw new Error('cold-start training did not render');
+for(let i=0;i<6;i++){
+  const nav=elements.teamTrainingCards.children.find(x=>String(x.className).includes('training-nav'));
+  const next=nav?.children?.[1];
+  if(!next)throw new Error('training next button missing');
+  next.emit('click');
+}
+saved=JSON.parse(store['championCoach.v1']);
+if(!saved.onboarding?.trainingComplete)throw new Error('training completion state not saved');
+if(elements.homeCoachStep.textContent!=='STEP 4 / 4')throw new Error('home did not advance to battle step after training');
 
 // Select six opponent Pokémon through the same visual picker and run assist.
 elements.pickAssistOpponent.emit('click');
