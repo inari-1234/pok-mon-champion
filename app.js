@@ -853,7 +853,9 @@
     }
   });
   el('teamFormat').addEventListener('change',renderTeamDraft);
+  el('assistFormat').addEventListener('change',()=>{hideAssistView();renderOpponentDraft('assist');});
   el('matchFormat').addEventListener('change',()=>{selectedTeamDraft=[];renderOwnSelection();});
+  document.querySelectorAll('input[name="result"]').forEach(node=>node.addEventListener('change',updateMatchSaveState));
 
   el('matchForm').addEventListener('submit', e => {
     e.preventDefault();
@@ -881,7 +883,7 @@
     if (errors.length) { errorBox.hidden=false; errorBox.textContent=errors.join(' / '); return; }
     errorBox.hidden=true; state.matches.push(match); saveState(); showAnalysis(match);
     e.target.reset(); logOpponentDraft=[]; selectedTeamDraft=[]; setToday(); el('confidence').value='3'; text(el('confidenceValue'),'3'); el('planOutcome').value='unknown';
-    renderAll(); el('latestAnalysis').scrollIntoView({behavior:'smooth',block:'start'});
+    renderAll(); updateMatchSaveState(); el('latestAnalysis').scrollIntoView({behavior:'smooth',block:'start'});
   });
 
 
@@ -963,14 +965,20 @@
 
   el('importData').addEventListener('change', async e => {
     const file=e.target.files?.[0]; if(!file) return;
-    try { const data=sanitizeImported(JSON.parse(await file.text())); Object.assign(state, data); assistOpponentDraft=[];logOpponentDraft=[];selectedTeamDraft=[];saveState(); hideAssistView(); renderAll(); alert('バックアップを読み込みました。'); }
+    try {
+      const data=sanitizeImported(JSON.parse(await file.text())); Object.assign(state, data);
+      assistOpponentDraft=[];logOpponentDraft=[];selectedTeamDraft=[];replacementTarget='';trainingViewIndex=0;activeTeamPane='build';
+      environmentFormat=state.team.format||'single';navigationHistory.length=0;
+      saveState(); hideAssistView(); renderAll(); el('settingsDialog').close(); navigate('home',false); alert('バックアップを読み込みました。');
+    }
     catch(_){ alert('読み込めないJSONです。Champion Coachのバックアップを選んでください。'); }
     e.target.value='';
   });
 
   el('clearData').addEventListener('click', () => {
     if(!confirm('対戦ログ・環境メモ・構築をすべて削除します。よろしいですか？')) return;
-    Object.assign(state, defaultState());assistOpponentDraft=[];logOpponentDraft=[];selectedTeamDraft=[];teamDraft=[];favoriteDraft='';replacementTarget=''; saveState(); hideAssistView(); renderAll(); el('settingsDialog').close();
+    Object.assign(state, defaultState());assistOpponentDraft=[];logOpponentDraft=[];selectedTeamDraft=[];teamDraft=[];favoriteDraft='';replacementTarget='';trainingViewIndex=0;activeTeamPane='build';environmentFormat='single';navigationHistory.length=0;
+    saveState(); hideAssistView(); renderAll(); el('settingsDialog').close(); navigate('home',false);
   });
 
   el('loadDemo').addEventListener('click', () => {
