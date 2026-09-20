@@ -29,9 +29,11 @@ const store={'championCoach.v1':JSON.stringify({version:5,rank:'',team:{name:'�
 const context={console,document,localStorage,location:{protocol:'file:'},navigator:{},crypto:{randomUUID:()=>`id-${Date.now()}`},Blob:function(){},URL:{createObjectURL:()=>'',revokeObjectURL(){}},alert(){},confirm:()=>true,setTimeout,clearTimeout};
 context.window=context; context.globalThis=context; context.window.scrollTo=()=>{};
 vm.createContext(context);
-for(const f of ['pokemon-data.js','competitive-data.js','single-competitive-data.js','core.js','app.js']) vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),context,{filename:f});
+for(const f of ['pokemon-data.js','competitive-data.js','single-competitive-data.js','core.js','screenshot-recognition.js','app.js']) vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),context,{filename:f});
 if(!context.PC_POKEMON_CATALOG||context.PC_POKEMON_CATALOG.length!==258)throw new Error('catalog init failed');
 if(!context.PC_SINGLE_COMPETITIVE_FALLBACK)throw new Error('singles fallback init failed');
+if(!context.PCScreenshotRecognition)throw new Error('screenshot recognition module init failed');
+if(!elements.assistScreenshotTrigger.disabled)throw new Error('screenshot trigger should wait for reference preparation on cold cache');
 if(elements.teamMemberBuilder.children.length!==6)throw new Error('team slots not rendered');
 if(!elements.teamMembers.value.includes('ボーマンダ')||elements.teamMembers.value.includes('メガボーマンダ'))throw new Error('v0.5 mega-label migration failed');
 // Open selector, choose first Pokémon, commit, auto-complete and save the team.
@@ -95,6 +97,7 @@ elements.pickAssistOpponent.emit('click');
 let sixth=elements.pokemonCatalogGrid.children.find(x=>String(x.className).includes('pokemon-card')&&!String(x.className).includes('selected')&&!x.disabled);
 if(!sixth)throw new Error('sixth opponent missing');sixth.emit('click');elements.pokemonPickerDone.emit('click');
 if(elements.assistOpponentTeam.value.split(',').filter(Boolean).length!==6)throw new Error('opponent picker failed');
+if(!store['championCoach.liveAssist.v1'])throw new Error('live assist draft was not persisted');
 if(elements.analyzeAssistButton.disabled)throw new Error('assist analyze stayed disabled after six opponents');
 elements.assistForm.emit('submit');
 if(elements.assistResult.hidden)throw new Error('assist result did not render');
