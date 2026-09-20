@@ -1,5 +1,5 @@
-const VERSION='0.8.3';
-const CACHE='champion-coach-v8.3-coherent1';
+const VERSION='0.8.4-poc.1';
+const CACHE='champion-coach-v8.4-screenshot-poc1';
 const CORE=[
   './',
   './index.html',
@@ -8,6 +8,7 @@ const CORE=[
   `./competitive-data.js?v=${VERSION}`,
   `./single-competitive-data.js?v=${VERSION}`,
   `./core.js?v=${VERSION}`,
+  `./screenshot-recognition.js?v=${VERSION}`,
   `./app.js?v=${VERSION}`,
   `./manifest.webmanifest?v=${VERSION}`,
   './version.json',
