@@ -27,3 +27,13 @@ test('red panel removal preserves central non-red foreground',()=>{
   const kept=R.keepLargestComponent(R.removeEnemyPanelBackground(data,w,h),w,h),n=R._test.alphaCount(kept);
   assert.ok(n>=120&&n<=190,'foreground count '+n);
 });
+
+test('red-orange foreground is not erased with red panel background',()=>{
+  const w=30,h=24,data=new Uint8ClampedArray(w*h*4);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    const i=(y*w+x)*4,inside=x>=9&&x<=20&&y>=5&&y<=18;
+    data[i]=inside?205:105;data[i+1]=inside?70:16;data[i+2]=inside?35:48;data[i+3]=255;
+  }
+  const kept=R.keepLargestComponent(R.removeEnemyPanelBackground(data,w,h),w,h);
+  assert.ok(R._test.alphaCount(kept)>=100,'red foreground was over-erased');
+});
