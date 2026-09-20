@@ -61,6 +61,7 @@ assert "inventory-action','未所持'" in app
 assert '/sprites/pokemon/other/home/${mon.dex}.png' in app
 assert 'trainingComplete' in app
 assert '育成を確認して対戦へ' in app
+assert '対戦が終わったら結果を記録' in html and 'この方針で対戦する' not in html
 assert 'sprite-fallback' in app and '${cls} sprite-fallback' in app
 assert all(ch not in html for ch in ['⚙','⌂','◇','⚔','◎','⇄','★','☆','✓']), 'decorative glyph leaked into primary HTML UI'
 assert "format: 'single'" in app, 'new state must default to singles'
