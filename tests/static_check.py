@@ -80,6 +80,7 @@ assert 'id="analyzeAssistButton"' in html and 'disabled' in str(soup.find(id='an
 assert soup.find(id='assistScreenshotInput') and soup.find(id='assistScreenshotInput').get('accept')=='image/*'
 assert all(soup.find(id=x) for x in ['assistRecognitionPrepare','assistScreenshotTrigger','assistScreenshotStatus','assistScreenshotReview'])
 assert 'PCScreenshotRecognition' in app and 'SCREENSHOT_REF_CACHE_KEY' in app and 'persistLiveAssistDraft' in app
+assert '実スクショで信頼度を校正するまでは' in app, 'screenshot PoC must require user confirmation before diagnosis'
 assert (root/'screenshot-recognition.js').exists(), 'screenshot recognition module missing'
 assert 'id="saveMatchButton"' in html and 'disabled' in str(soup.find(id='saveMatchButton'))
 assert 'recommended-pokemon-grid' in app and 'own-pick-img' in app
