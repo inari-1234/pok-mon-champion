@@ -38,7 +38,7 @@
         <button id="quickStartButton" class="primary-btn home-next-btn" type="button" data-nav="team">次に進む</button>
       </section>
 
-      <details class="advanced-menu">
+      <details id="homeAdvancedMenu" class="advanced-menu" hidden>
         <summary>その他の機能</summary>
         <div class="shortcut-grid">
           <button type="button" data-nav="team" data-team-tab="plan">戦い方を見る</button>
@@ -82,7 +82,7 @@
             <textarea id="assistOpponentTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
           </div>
           <div id="assistErrors" class="error-box" hidden></div>
-          <button class="primary-btn" type="submit">この6匹を見る</button>
+          <button id="analyzeAssistButton" class="primary-btn" type="submit" disabled>この6匹を見る</button>
         </form>
       </section>
 
@@ -114,7 +114,7 @@
         <div class="step-head compact-step-head"><span>対戦後</span><h1>結果を残します。</h1></div>
         <form id="matchForm" novalidate>
           <div class="picker-field">
-            <div class="picker-field-head"><span>相手の6体</span><span id="logOpponentCount" class="hint">0/6</span></div>
+            <div class="picker-field-head"><span>相手の6匹</span><span id="logOpponentCount" class="hint">0/6</span></div>
             <div id="logOpponentBuilder" class="team-slots compact-slots"></div>
             <div class="button-row"><button id="pickLogOpponent" class="secondary-btn" type="button">画像から選ぶ</button><button id="clearLogOpponent" class="ghost-btn" type="button">クリア</button></div>
             <textarea id="opponentTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
@@ -142,7 +142,7 @@
             </div>
           </details>
           <div id="formErrors" class="error-box" hidden></div>
-          <button class="primary-btn" type="submit">この内容で記録する</button>
+          <button id="saveMatchButton" class="primary-btn" type="submit" disabled>この内容で記録する</button>
         </form>
       </section>
 
