@@ -1,6 +1,6 @@
 from pathlib import Path
 from bs4 import BeautifulSoup
-import re, json, sys
+import re, json, sys, hashlib
 root=Path(__file__).resolve().parents[1]
 html=(root/'index.html').read_text()
 app=(root/'app.js').read_text()
@@ -13,29 +13,31 @@ refs=set(re.findall(r"\bel\('([^']+)'\)",app))
 missing=sorted(refs-set(ids))
 assert not missing, f'missing DOM ids: {missing}'
 assert 'innerHTML' not in app, 'unsafe innerHTML use found'
-for src in ['pokemon-data.js','competitive-data.js','single-competitive-data.js','core.js','app.js']:
+for src in ['pokemon-data.js','competitive-data.js','single-competitive-data.js','core.js','screenshot-recognition.js','app.js']:
     assert (root/src).exists(), f'missing {src}'
     node=next((x for x in soup.find_all('script',src=True) if x.get('src','').split('?')[0]==src),None)
     assert node, f'index does not load {src}'
-    assert node.get('src')==f'{src}?v=0.8.3', f'{src} is not cache-busted to v0.8.3'
+    assert node.get('src')==f'{src}?v=0.8.3', f'{src} is not cache-busted to v0.8.4-poc.1'
 assert soup.find('link',rel='manifest'), 'manifest link missing'
 json.loads((root/'manifest.webmanifest').read_text())
 sw=(root/'sw.js').read_text()
-assert 'champion-coach-v8.3-coherent1' in sw
+assert 'champion-coach-v8.4-screenshot-poc1' in sw
 assert 'competitive-data.js' in sw
 assert 'single-competitive-data.js' in sw
+assert 'screenshot-recognition.js' in sw
 assert 'version.json' in sw
 assert 'latest.json' in sw
 assert (root/'version.json').exists(), 'version.json missing'
 assert (root/'latest.json').exists(), 'latest.json missing'
 latest=json.loads((root/'latest.json').read_text())
-assert latest.get('version')=='0.8.3' and latest.get('sw_cache')=='champion-coach-v8.3-coherent1', 'latest metadata mismatch'
+assert latest.get('version')=='0.8.3' and latest.get('sw_cache')=='champion-coach-v8.4-screenshot-poc1', 'latest metadata mismatch'
 version=json.loads((root/'version.json').read_text())
 assert version.get('version')=='0.8.3', 'wrong repository build version'
 assert (root/'.github/workflows/validate.yml').exists(), 'validation workflow missing'
 assert (root/'.github/workflows/pages.yml').exists(), 'pages workflow missing'
 assert 'data-shadow' in style and 'pokemon-grid' in style
-assert 'v0.8.3' in html and 'header-text-btn' in style
+assert 'screenshot-import-card' in style and 'screenshot-candidate' in style
+assert 'v0.8.4-poc.1' in html and 'header-text-btn' in style
 assert 'あなたは今ここ' in html and 'homeCoachTitle' in html and 'homeProgressBar' in html
 assert 'data-team-pane="training"' in html and 'assistDetails' in html
 assert 'data-pokemon-category="recommended"' in html
@@ -75,6 +77,10 @@ assert 'trainingComplete' in app
 assert '育成を確認して対戦へ' in app
 assert '対戦が終わったら結果を記録' in html and 'この方針で対戦する' not in html
 assert 'id="analyzeAssistButton"' in html and 'disabled' in str(soup.find(id='analyzeAssistButton'))
+assert soup.find(id='assistScreenshotInput') and soup.find(id='assistScreenshotInput').get('accept')=='image/*'
+assert all(soup.find(id=x) for x in ['assistRecognitionPrepare','assistScreenshotTrigger','assistScreenshotStatus','assistScreenshotReview'])
+assert 'PCScreenshotRecognition' in app and 'SCREENSHOT_REF_CACHE_KEY' in app and 'persistLiveAssistDraft' in app
+assert (root/'screenshot-recognition.js').exists(), 'screenshot recognition module missing'
 assert 'id="saveMatchButton"' in html and 'disabled' in str(soup.find(id='saveMatchButton'))
 assert 'recommended-pokemon-grid' in app and 'own-pick-img' in app
 assert "selectedTeamDraft=lastAssist.recommended.filter" in app
@@ -93,4 +99,11 @@ assert '能力ポイント' in app and 'statPointTotal' in app
 for text in [html,app,core]:
     assert '努力値' not in text, 'legacy effort-value wording exposed in app'
     assert not re.search(r'(?<!\d)252(?!\d)',text), 'legacy 252 notation exposed in app'
+for runtime in latest.get('runtime_files',[]):
+    path=root/runtime
+    assert path.exists(), f'missing runtime file in latest.json: {runtime}'
+    expected=latest.get('sha256',{}).get(runtime)
+    assert expected, f'missing sha256 in latest.json: {runtime}'
+    actual=hashlib.sha256(path.read_bytes()).hexdigest()
+    assert actual==expected, f'sha256 mismatch: {runtime}'
 print('STATIC_CHECK PASS',len(ids),'ids',len(refs),'app refs')
