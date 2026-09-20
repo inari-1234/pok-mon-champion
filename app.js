@@ -185,7 +185,10 @@
     const names=screenshotRecognition.slots.map(slot=>slot.confirmed||'');
     const confirmed=names.filter(Boolean).length;
     if(confirmed<6){
-      text(el('assistScreenshotStatus'),'認識結果 '+confirmed+'/6。候補が不確かな枠だけタップして確定してください。');
+      assistOpponentDraft=normalizedMemberNames(names.filter(Boolean));
+      persistLiveAssistDraft();
+      renderOpponentDraft('assist');
+      text(el('assistScreenshotStatus'),'認識結果 '+confirmed+'/6。候補が不確かな枠だけタップしてください。候補にない場合は「手動で6匹を選ぶ」から残りだけ追加できます。');
       return;
     }
     const normalized=normalizedMemberNames(names);
@@ -473,7 +476,7 @@
       if(advice){advice.hidden=false;advice.textContent=teamDraft.length===6?'6匹を仮組みしました。持っていないポケモンだけ確認してください。':`${teamDraft.length}/6匹まで仮組みしました。残りは候補から追加してください。`;}
     }
     else if(pickerContext.kind==='team'){teamDraft=picked;if(!favoriteDraft||!teamDraft.includes(favoriteDraft))favoriteDraft=teamDraft[0]||'';renderTeamDraft();}
-    else if(pickerContext.kind==='assist'){assistOpponentDraft=picked;persistLiveAssistDraft();renderOpponentDraft('assist');}
+    else if(pickerContext.kind==='assist'){assistOpponentDraft=picked;screenshotRecognition=null;const review=el('assistScreenshotReview');review.hidden=true;review.replaceChildren();persistLiveAssistDraft();renderOpponentDraft('assist');}
     else if(pickerContext.kind==='log'){logOpponentDraft=picked;renderOpponentDraft('log');}
     else if(pickerContext.kind==='meta'){el('metaPokemon').value=picked[0]||'';}
     pickerContext=null;el('pokemonPickerDialog').close();
@@ -1063,6 +1066,7 @@
 
   el('copyAssistToLog').addEventListener('click', () => {
     if (!lastAssist) return;
+    localStorage.removeItem(LIVE_ASSIST_KEY);
     el('matchForm').reset();
     setToday();
     el('confidence').value='3'; text(el('confidenceValue'),'3'); el('planOutcome').value='unknown';
@@ -1154,5 +1158,7 @@
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js?v=0.8.4-poc.1').catch(()=>{});
   restoreLiveAssistDraft();
   initializeScreenshotRecognition();
-  loadFallbackCompetitiveMeta(); setToday(); renderAll(); refreshCompetitiveMeta();
+  loadFallbackCompetitiveMeta(); setToday(); renderAll();
+  if(assistOpponentDraft.length) navigate('assist',false);
+  refreshCompetitiveMeta();
 })();
