@@ -31,10 +31,13 @@ jobs:
           node --check competitive-data.js
           node --check single-competitive-data.js
           node --check core.js
+          node --check screenshot-recognition.js
           node --check app.js
           node --check sw.js
       - name: Core and regression tests
         run: node --test tests/core.test.js
+      - name: Screenshot recognition unit tests
+        run: node --test tests/screenshot-recognition.test.js
       - name: Runtime smoke test
         run: node tests/runtime_smoke.js
       - name: Static consistency check
