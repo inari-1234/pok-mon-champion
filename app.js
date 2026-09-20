@@ -199,8 +199,7 @@
     assistOpponentDraft=normalized;
     persistLiveAssistDraft();
     renderOpponentDraft('assist');
-    text(el('assistScreenshotStatus'),'6匹を確定しました。選出診断を表示します。');
-    runAssistAnalysis();
+    text(el('assistScreenshotStatus'),'6匹の候補を反映しました。実スクショで信頼度を校正するまでは、内容を確認して「この6匹を見る」で診断してください。');
   }
 
   function renderScreenshotReview(result) {
