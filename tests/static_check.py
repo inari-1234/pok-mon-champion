@@ -46,6 +46,13 @@ assert '持っていないポケモン' in html and '1匹ずつ育てる' in htm
 assert html.count('<option value="single">シングル</option><option value="double">ダブル</option>') >= 3, 'single must be the primary UI option'
 assert 'bottom-nav' in html and 'hidden' in str(soup.find('nav',class_='bottom-nav')), 'legacy bottom nav must stay hidden'
 assert 'v0.8 production guided cleanup' in style
+assert 'starterChoicePanel' in html and 'teamComposeArea' in html
+assert all(x in html for x in ['starterRecommended','starterPopular','starterAll','starterSearch'])
+assert "openPokemonPicker('starter','recommended')" in app
+assert "el('starterChoicePanel').hidden=hasDraft" in app
+assert "el('teamComposeArea').hidden=!hasDraft" in app
+assert 'sprite-placeholder' in style and "slot-img sprite-placeholder" in app
+assert "inventory-action','未所持'" in app
 assert 'sprite-fallback' in app and '${cls} sprite-fallback' in app
 assert all(ch not in html for ch in ['⚙','⌂','◇','⚔','◎','⇄','★','☆','✓']), 'decorative glyph leaked into primary HTML UI'
 assert "format: 'single'" in app, 'new state must default to singles'
