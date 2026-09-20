@@ -7,14 +7,14 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Champion Coach">
-  <title>Champion Coach v0.8.3</title>
-  <link rel="manifest" href="manifest.webmanifest?v=0.8.3">
-  <link rel="stylesheet" href="styles.css?v=0.8.3">
+  <title>Champion Coach v0.8.4-poc.1</title>
+  <link rel="manifest" href="manifest.webmanifest?v=0.8.4-poc.1">
+  <link rel="stylesheet" href="styles.css?v=0.8.4-poc.1">
 </head>
 <body>
   <header class="topbar">
     <button id="backButton" class="header-text-btn" type="button" hidden>戻る</button>
-    <div class="brand"><strong>Champion Coach</strong> <small id="appVersionBadge">v0.8.3</small></div>
+    <div class="brand"><strong>Champion Coach</strong> <small id="appVersionBadge">v0.8.4-poc.1</small></div>
     <button id="openSettings" class="header-text-btn" type="button">設定</button>
   </header>
 
@@ -27,7 +27,7 @@
           <div data-route-step="1" role="listitem"><b>1</b><span>使いたいポケモンを決める</span><em>今ここ</em></div>
           <div data-route-step="2" role="listitem"><b>2</b><span>6匹のチームを決める</span></div>
           <div data-route-step="3" role="listitem"><b>3</b><span>対戦用に育てる</span></div>
-          <div data-route-step="4" role="listitem"><b>4</b><span>対戦を始める</span></div>
+          <div data-route-step="4" role="listitem"><b>4</b><span>相手を見て選出を決める</span></div>
         </div>
       </section>
 
@@ -70,15 +70,22 @@
 
 
     <section id="screen-assist" class="screen" aria-label="対戦準備">
-      <div class="step-head"><span>対戦前</span><h1>相手の6匹を選んでください。</h1></div>
+      <div class="step-head"><span>対戦直前</span><h1>相手の6匹を読み取って、出すポケモンを決めます。</h1></div>
       <section class="panel battle-input-panel">
         <form id="assistForm" novalidate>
           <details class="format-details"><summary>対戦形式を変更</summary><label>形式<select id="assistFormat"><option value="single">シングル</option><option value="double">ダブル</option></select></label></details>
           <input id="assistOwnTeam" class="data-shadow" readonly aria-hidden="true" tabindex="-1">
+          <section class="screenshot-import-card" aria-label="スクリーンショット認識">
+            <div class="screenshot-import-head"><div><strong>スクショから6匹を読み取る</strong><small>画像は端末内で解析します。初回だけ認識用データを準備します。</small></div><span id="assistScreenshotBadge" class="tag mid">未準備</span></div>
+            <div class="button-row screenshot-actions"><button id="assistRecognitionPrepare" class="secondary-btn" type="button">認識データを準備</button><button id="assistScreenshotTrigger" class="primary-btn" type="button" disabled>スクショから読み取る</button></div>
+            <input id="assistScreenshotInput" type="file" accept="image/*" hidden>
+            <p id="assistScreenshotStatus" class="small muted">対戦前に一度「認識データを準備」を押しておくと、実戦時の待ち時間を減らせます。</p>
+            <div id="assistScreenshotReview" class="screenshot-review" hidden></div>
+          </section>
           <div class="picker-field">
             <div class="picker-field-head"><span>相手の6匹</span><span id="assistOpponentCount" class="hint">0/6</span></div>
             <div id="assistOpponentBuilder" class="team-slots compact-slots"></div>
-            <div class="button-row"><button id="pickAssistOpponent" class="secondary-btn" type="button">画像から選ぶ</button><button id="clearAssistOpponent" class="ghost-btn" type="button">クリア</button></div>
+            <div class="button-row"><button id="pickAssistOpponent" class="secondary-btn" type="button">手動で6匹を選ぶ</button><button id="clearAssistOpponent" class="ghost-btn" type="button">クリア</button></div>
             <textarea id="assistOpponentTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
           </div>
           <div id="assistErrors" class="error-box" hidden></div>
@@ -284,14 +291,15 @@
       <label class="file-btn">JSONバックアップを読み込む<input id="importData" type="file" accept="application/json"></label>
       <button id="loadDemo" class="ghost-btn" type="button">サンプルデータを入れる</button>
       <button id="clearData" class="danger-btn" type="button">全データを削除</button>
-      <p class="small muted">対戦ログや構築などの個人データはこの端末のブラウザ内に保存されます。公開されているM-C環境データの取得だけ外部サイトへ通信します。</p>
+      <p class="small muted">対戦ログ・構築・読み込んだスクショは外部へ送信せず、この端末内で処理します。M-C環境データと初回の認識用参照画像の取得だけ外部サイトへ通信します。</p>
     </form>
   </dialog>
 
-  <script src="pokemon-data.js?v=0.8.3"></script>
-  <script src="competitive-data.js?v=0.8.3"></script>
-  <script src="single-competitive-data.js?v=0.8.3"></script>
-  <script src="core.js?v=0.8.3"></script>
-  <script src="app.js?v=0.8.3"></script>
+  <script src="pokemon-data.js?v=0.8.4-poc.1"></script>
+  <script src="competitive-data.js?v=0.8.4-poc.1"></script>
+  <script src="single-competitive-data.js?v=0.8.4-poc.1"></script>
+  <script src="core.js?v=0.8.4-poc.1"></script>
+  <script src="screenshot-recognition.js?v=0.8.4-poc.1"></script>
+  <script src="app.js?v=0.8.4-poc.1"></script>
 </body>
 </html>
