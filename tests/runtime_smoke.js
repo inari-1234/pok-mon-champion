@@ -16,11 +16,13 @@ class FakeNode{
 const elements=Object.fromEntries(ids.map(id=>[id,new FakeNode('div',id)]));
 for(const id of ['teamFormat','assistFormat','matchFormat']) elements[id].value='single';
 elements.pokemonTypeFilter.value='all'; elements.confidence.value='3'; elements.planOutcome.value='unknown';
+const resultInputs=[new FakeNode('input'),new FakeNode('input')];resultInputs[0].value='win';resultInputs[1].value='loss';
 const document={
  getElementById:id=>elements[id]||null,
  createElement:tag=>new FakeNode(tag),
  createTextNode:text=>({nodeType:3,textContent:String(text)}),
- querySelectorAll:()=>[], querySelector:()=>null,
+ querySelectorAll:selector=>selector==='input[name="result"]'?resultInputs:[],
+ querySelector:selector=>selector==='input[name="result"]:checked'?(resultInputs.find(x=>x.checked)||null):selector==='input[name="result"]'?resultInputs[0]:null,
  addEventListener(){},
 };
 const store={'championCoach.v1':JSON.stringify({version:5,rank:'',team:{name:'旧データ',format:'double',members:['メガボーマンダ','ガオガエン'],favorite:'メガボーマンダ',plan:'',weak:''},matches:[],metaNotes:[]})}; const localStorage={getItem:k=>store[k]??null,setItem:(k,v)=>store[k]=String(v),removeItem:k=>delete store[k]};
@@ -37,7 +39,7 @@ elements.pickTeamMember.emit('click');
 let card=elements.pokemonCatalogGrid.children.find(x=>String(x.className).includes('pokemon-card')&&!x.disabled);
 if(!card)throw new Error('picker card missing'); card.emit('click'); elements.pokemonPickerDone.emit('click');
 if(!elements.teamMembers.value)throw new Error('favorite pick not reflected');
-elements.autoCompleteTeam.emit('click');
+if(elements.teamMembers.value.split(',').map(x=>x.trim()).filter(Boolean).length<6)elements.autoCompleteTeam.emit('click');
 const draft=elements.teamMembers.value.split(',').map(x=>x.trim()).filter(Boolean);if(draft.length!==6)throw new Error('auto complete did not reach six');
 elements.teamForm.emit('submit');
 let saved=JSON.parse(store['championCoach.v1']);if(saved.team.members.length!==6||!saved.team.favorite)throw new Error('team persistence failed');
@@ -61,10 +63,9 @@ card=elements.pokemonCatalogGrid.children.find(x=>String(x.className).includes('
 if(!card)throw new Error('starter picker card missing');
 card.emit('click'); elements.pokemonPickerDone.emit('click');
 if(!elements.starterChoicePanel.hidden||elements.teamComposeArea.hidden)throw new Error('starter choice did not advance to team composition');
-if(elements.teamMembers.value.split(',').filter(Boolean).length!==1)throw new Error('starter selection must choose exactly one Pokemon');
-elements.autoCompleteTeam.emit('click');
 const coldDraft=elements.teamMembers.value.split(',').map(x=>x.trim()).filter(Boolean);
-if(coldDraft.length!==6)throw new Error('cold-start auto complete did not reach six');
+if(coldDraft.length!==6)throw new Error('starter selection did not auto-build six');
+if(!elements.autoCompleteTeam.hidden)throw new Error('auto-complete button remained visible after six were built');
 elements.teamForm.emit('submit');
 saved=JSON.parse(store['championCoach.v1']);
 if(saved.team.format!=='single'||saved.team.members.length!==6)throw new Error('cold-start team save failed');
@@ -81,14 +82,33 @@ saved=JSON.parse(store['championCoach.v1']);
 if(!saved.onboarding?.trainingComplete)throw new Error('training completion state not saved');
 if(elements.homeCoachStep.textContent!=='STEP 4 / 4')throw new Error('home did not advance to battle step after training');
 
-// Select six opponent Pokémon through the same visual picker and run assist.
+// Select opponent Pokémon visually. Analysis must stay disabled until all six are set.
+if(!elements.analyzeAssistButton.disabled)throw new Error('assist analyze should start disabled');
 elements.pickAssistOpponent.emit('click');
-for(let i=0;i<6;i++){
+for(let i=0;i<5;i++){
   const c=elements.pokemonCatalogGrid.children.find(x=>String(x.className).includes('pokemon-card')&&!String(x.className).includes('selected')&&!x.disabled);
   if(!c)throw new Error('not enough opponent cards'); c.emit('click');
 }
 elements.pokemonPickerDone.emit('click');
+if(!elements.analyzeAssistButton.disabled)throw new Error('assist analyze enabled before six opponents');
+elements.pickAssistOpponent.emit('click');
+let sixth=elements.pokemonCatalogGrid.children.find(x=>String(x.className).includes('pokemon-card')&&!String(x.className).includes('selected')&&!x.disabled);
+if(!sixth)throw new Error('sixth opponent missing');sixth.emit('click');elements.pokemonPickerDone.emit('click');
 if(elements.assistOpponentTeam.value.split(',').filter(Boolean).length!==6)throw new Error('opponent picker failed');
+if(elements.analyzeAssistButton.disabled)throw new Error('assist analyze stayed disabled after six opponents');
 elements.assistForm.emit('submit');
 if(elements.assistResult.hidden)throw new Error('assist result did not render');
-console.log('RUNTIME_SMOKE PASS',saved.team.favorite,saved.team.members.join(' / '));
+if(!elements.assistRecommended.children.length)throw new Error('visual recommendation did not render');
+elements.copyAssistToLog.emit('click');
+const carried=elements.selectedTeam.value.split(',').map(x=>x.trim()).filter(Boolean);
+if(carried.length!==3)throw new Error('recommended singles picks were not carried into match log');
+if(!elements.saveMatchButton.disabled)throw new Error('match save should wait for result');
+resultInputs[0].checked=true;resultInputs[0].emit('change');
+if(elements.saveMatchButton.disabled)throw new Error('match save stayed disabled after complete required fields');
+elements.matchForm.emit('submit');
+saved=JSON.parse(store['championCoach.v1']);
+if(saved.matches.length!==1)throw new Error('complete battle result was not saved');
+elements.clearData.emit('click');
+if(!elements.backButton.hidden)throw new Error('clear data did not return navigation to home');
+if(!elements.homeAdvancedMenu.hidden)throw new Error('advanced home menu visible after reset');
+console.log('RUNTIME_SMOKE PASS',saved.team.favorite||'reset',saved.matches.length);
