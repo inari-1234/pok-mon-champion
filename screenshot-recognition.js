@@ -61,19 +61,24 @@
     return [...map.values()];
   }
 
+  function floodMask(w,h,accept){
+    const seen=new Uint8Array(w*h),stack=[];
+    const seed=k=>{if(k>=0&&k<w*h&&!seen[k]&&accept(k)){seen[k]=1;stack.push(k);}};
+    for(let x=0;x<w;x++){seed(x);seed((h-1)*w+x);}for(let y=0;y<h;y++){seed(y*w);seed(y*w+w-1);}
+    while(stack.length){const k=stack.pop(),x=k%w,y=(k/w)|0;if(x>0)seed(k-1);if(x<w-1)seed(k+1);if(y>0)seed(k-w);if(y<h-1)seed(k+w);}
+    return seen;
+  }
+
   function removeEnemyPanelBackground(rgba,w,h){
     const out=new Uint8ClampedArray(rgba),palette=borderPalette(out,w,h),tol2=52*52;
-    const bg=k=>{
+    const paletteLike=k=>{
       const i=k*4,r=out[i],g=out[i+1],b=out[i+2];
-      if(r>45&&r>g*1.25&&r>b*1.06)return true;
       for(const p of palette){const dr=r-p[0],dg=g-p[1],db=b-p[2];if(dr*dr+dg*dg+db*db<tol2)return true;}
       return false;
     };
-    const seen=new Uint8Array(w*h),stack=[];
-    const seed=k=>{if(k>=0&&k<w*h&&!seen[k]&&bg(k)){seen[k]=1;stack.push(k);}};
-    for(let x=0;x<w;x++){seed(x);seed((h-1)*w+x);}for(let y=0;y<h;y++){seed(y*w);seed(y*w+w-1);}
-    while(stack.length){const k=stack.pop(),x=k%w,y=(k/w)|0;if(x>0)seed(k-1);if(x<w-1)seed(k+1);if(y>0)seed(k-w);if(y<h-1)seed(k+w);}
-    for(let k=0;k<w*h;k++)if(seen[k])out[k*4+3]=0;
+    const redLike=k=>{const i=k*4,r=out[i],g=out[i+1],b=out[i+2];return r>45&&r>g*1.25&&r>b*1.06;};
+    const paletteMask=floodMask(w,h,paletteLike),redMask=floodMask(w,h,redLike);
+    for(let k=0;k<w*h;k++)if(paletteMask[k]&&redMask[k])out[k*4+3]=0;
     return out;
   }
 
