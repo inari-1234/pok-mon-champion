@@ -1,6 +1,18 @@
-const CACHE='champion-coach-v8.2-flow1';
-const CORE=['./','./index.html','./styles.css','./pokemon-data.js','./competitive-data.js','./single-competitive-data.js','./core.js','./app.js','./manifest.webmanifest','./version.json','./latest.json'];
-const NETWORK_FIRST=new Set(['./','./index.html','./manifest.webmanifest','./version.json']);
+const VERSION='0.8.3';
+const CACHE='champion-coach-v8.3-coherent1';
+const CORE=[
+  './',
+  './index.html',
+  `./styles.css?v=${VERSION}`,
+  `./pokemon-data.js?v=${VERSION}`,
+  `./competitive-data.js?v=${VERSION}`,
+  `./single-competitive-data.js?v=${VERSION}`,
+  `./core.js?v=${VERSION}`,
+  `./app.js?v=${VERSION}`,
+  `./manifest.webmanifest?v=${VERSION}`,
+  './version.json',
+  './latest.json'
+];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
@@ -14,44 +26,25 @@ self.addEventListener('activate',event=>{
   );
 });
 
-function relativeKey(request){
-  const url=new URL(request.url);
-  const scope=new URL(self.registration.scope);
-  if(url.origin!==scope.origin || !url.pathname.startsWith(scope.pathname)) return null;
-  const path=url.pathname.slice(scope.pathname.length);
-  return './'+path;
-}
-
 async function networkFirst(request){
   try{
     const response=await fetch(request);
     if(response && response.ok){
       const cache=await caches.open(CACHE);
-      cache.put(request,response.clone());
-    }
-    return response;
-  }catch(_){
-    return (await caches.match(request)) || (await caches.match('./index.html'));
-  }
-}
-
-async function cacheFirstWithRefresh(request){
-  const cached=await caches.match(request);
-  const refresh=fetch(request).then(async response=>{
-    if(response && response.ok){
-      const cache=await caches.open(CACHE);
       await cache.put(request,response.clone());
     }
     return response;
-  }).catch(()=>null);
-  return cached || (await refresh) || (await caches.match('./index.html'));
+  }catch(_){
+    const cached=await caches.match(request);
+    if(cached) return cached;
+    if(request.mode==='navigate') return (await caches.match('./index.html')) || Response.error();
+    return Response.error();
+  }
 }
 
 self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET') return;
   const url=new URL(event.request.url);
   if(url.origin!==self.location.origin) return;
-  const key=relativeKey(event.request);
-  const isNavigation=event.request.mode==='navigate';
-  event.respondWith((isNavigation || (key && NETWORK_FIRST.has(key))) ? networkFirst(event.request) : cacheFirstWithRefresh(event.request));
+  event.respondWith(networkFirst(event.request));
 });
