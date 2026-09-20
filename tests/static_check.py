@@ -19,7 +19,7 @@ for src in ['pokemon-data.js','competitive-data.js','single-competitive-data.js'
 assert soup.find('link',rel='manifest'), 'manifest link missing'
 json.loads((root/'manifest.webmanifest').read_text())
 sw=(root/'sw.js').read_text()
-assert 'champion-coach-v8.0-guided1' in sw
+assert 'champion-coach-v8.1-onboarding1' in sw
 assert 'competitive-data.js' in sw
 assert 'single-competitive-data.js' in sw
 assert 'version.json' in sw
@@ -27,13 +27,13 @@ assert 'latest.json' in sw
 assert (root/'version.json').exists(), 'version.json missing'
 assert (root/'latest.json').exists(), 'latest.json missing'
 latest=json.loads((root/'latest.json').read_text())
-assert latest.get('version')=='0.8.0' and latest.get('sw_cache')=='champion-coach-v8.0-guided1', 'latest metadata mismatch'
+assert latest.get('version')=='0.8.1' and latest.get('sw_cache')=='champion-coach-v8.1-onboarding1', 'latest metadata mismatch'
 version=json.loads((root/'version.json').read_text())
-assert version.get('version')=='0.8.0', 'wrong repository build version'
+assert version.get('version')=='0.8.1', 'wrong repository build version'
 assert (root/'.github/workflows/validate.yml').exists(), 'validation workflow missing'
 assert (root/'.github/workflows/pages.yml').exists(), 'pages workflow missing'
 assert 'data-shadow' in style and 'pokemon-grid' in style
-assert 'v0.8.0' in html and 'header-text-btn' in style
+assert 'v0.8.1' in html and 'header-text-btn' in style
 assert 'あなたは今ここ' in html and 'homeCoachTitle' in html and 'homeProgressBar' in html
 assert 'data-team-pane="training"' in html and 'assistDetails' in html
 assert 'data-pokemon-category="recommended"' in html
@@ -52,6 +52,11 @@ assert "openPokemonPicker('starter','recommended')" in app
 assert "el('starterChoicePanel').hidden=hasDraft" in app
 assert "el('teamComposeArea').hidden=!hasDraft" in app
 assert 'sprite-placeholder' in style and "slot-img sprite-placeholder" in app
+assert '<meta name="theme-color" content="#f5f8fd">' in html
+assert '<meta name="apple-mobile-web-app-status-bar-style" content="default">' in html
+manifest=json.loads((root/'manifest.webmanifest').read_text())
+assert manifest.get('theme_color')=='#f5f8fd' and manifest.get('background_color')=='#f5f8fd'
+assert 'draftMatchesSaved' in app
 assert "inventory-action','未所持'" in app
 assert 'sprite-fallback' in app and '${cls} sprite-fallback' in app
 assert all(ch not in html for ch in ['⚙','⌂','◇','⚔','◎','⇄','★','☆','✓']), 'decorative glyph leaked into primary HTML UI'
