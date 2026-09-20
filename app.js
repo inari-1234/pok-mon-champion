@@ -24,7 +24,7 @@
   const navigationHistory = [];
 
   function defaultState() {
-    return { version: 8, rank: '', team: { name: '', format: 'single', members: [], favorite: '', plan: '', weak: '' }, inventory: { unowned: [] }, matches: [], metaNotes: [] };
+    return { version: 9, rank: '', team: { name: '', format: 'single', members: [], favorite: '', plan: '', weak: '' }, inventory: { unowned: [] }, matches: [], metaNotes: [], onboarding: { trainingComplete: false } };
   }
 
   function loadState() {
@@ -84,7 +84,7 @@
     return C.uniqNames(values).map(v => resolveMon(v)?.name || v).slice(0, 6);
   }
   function spriteUrl(mon) {
-    return mon && mon.dex > 0 ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${mon.dex}.png` : '';
+    return mon && mon.dex > 0 ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${mon.dex}.png` : '';
   }
   function monImage(mon, className) {
     const cls=className || 'slot-img';
@@ -105,11 +105,12 @@
     replacementTarget=mon.name;
     teamDraft=teamDraft.filter(v=>resolveMon(v)?.id!==mon.id);
     state.team.members=(state.team.members||[]).filter(v=>resolveMon(v)?.id!==mon.id);
+    state.onboarding ||= {trainingComplete:false}; state.onboarding.trainingComplete=false;
     if(state.team.favorite && resolveMon(state.team.favorite)?.id===mon.id) state.team.favorite=state.team.members[0]||'';
     if(favoriteDraft && resolveMon(favoriteDraft)?.id===mon.id) favoriteDraft=teamDraft[0]||'';
     saveState(); renderTeamDraft(); renderSavedTeamAnalysis(); renderOwnSelection();
     if(currentScreenName()==='team') setTeamPane('build');
-    const advice=el('teamStarterAdvice'); if(advice){advice.hidden=false;advice.textContent=`${mon.name}を未所持として除外しました。下の候補は未所持を除いて更新されています。`;}
+    const advice=el('teamStarterAdvice'); if(advice){advice.hidden=false;advice.textContent=`${mon.name}を外しました。代わりの候補を表示します。`;}
   }
   function restoreOwned(id) {
     state.inventory ||= {unowned:[]}; state.inventory.unowned=state.inventory.unowned.filter(v=>v!==id); if(resolveMon(replacementTarget)?.id===id) replacementTarget=''; saveState(); renderTeamDraft(); renderSavedTeamAnalysis();
@@ -352,6 +353,12 @@
       learning: typeof m.learning === 'string' ? m.learning.slice(0, 3000) : '',
       createdAt: typeof m.createdAt === 'string' ? m.createdAt : ''
     })).filter(m => !C.validateMatch(m).length);
+    const onboarding = data.onboarding && typeof data.onboarding === 'object' ? data.onboarding : {};
+    clean.onboarding = {
+      trainingComplete: typeof onboarding.trainingComplete === 'boolean'
+        ? onboarding.trainingComplete
+        : clean.matches.some(m=>m.format===clean.team.format)
+    };
     clean.metaNotes = Array.isArray(data.metaNotes) ? data.metaNotes.slice(0, 1000).map((n,i) => ({
       id: n.id || `note-${i}`,
       pokemon: typeof n.pokemon === 'string' ? n.pokemon.slice(0, 120) : '',
@@ -384,7 +391,7 @@
     let step=1,title='使いたいポケモンを1匹選びましょう。',nav='team',teamTab='build',button='次に進む';
     if(count>0 && count<6){
       step=2;title='6匹のチームを完成させましょう。';button='チームを完成させる';
-    } else if(count===6 && !formatMatches.length){
+    } else if(count===6 && !(state.onboarding?.trainingComplete || formatMatches.length)){
       step=3;title='1匹ずつ対戦用に育てましょう。';nav='team';teamTab='training';button='育成を見る';
     } else if(count===6){
       step=4;title='対戦を始めましょう。';nav='assist';teamTab='';button='対戦準備へ';
@@ -542,7 +549,13 @@
 
     const nav=make('div','training-nav');
     const prev=make('button','secondary-btn','前のポケモン');prev.type='button';prev.disabled=trainingViewIndex===0;prev.addEventListener('click',()=>{trainingViewIndex=Math.max(0,trainingViewIndex-1);renderTeamBuilds();el('teamTrainingPanel').scrollIntoView({behavior:'smooth',block:'start'});});
-    const next=make('button','primary-btn',trainingViewIndex===sets.length-1?'1匹目に戻る':'次のポケモン');next.type='button';next.addEventListener('click',()=>{trainingViewIndex=trainingViewIndex===sets.length-1?0:trainingViewIndex+1;renderTeamBuilds();el('teamTrainingPanel').scrollIntoView({behavior:'smooth',block:'start'});});
+    const isLast=trainingViewIndex===sets.length-1;
+    const next=make('button','primary-btn',isLast?'育成を確認して対戦へ':'次のポケモン');next.type='button';next.addEventListener('click',()=>{
+      if(isLast){
+        state.onboarding ||= {trainingComplete:false}; state.onboarding.trainingComplete=true; saveState(); renderDashboard(); navigate('assist'); return;
+      }
+      trainingViewIndex+=1;renderTeamBuilds();el('teamTrainingPanel').scrollIntoView({behavior:'smooth',block:'start'});
+    });
     nav.append(prev,next);box.append(nav);
   }
 
@@ -887,6 +900,7 @@
     if(members.length<6){errorBox.hidden=false;text(errorBox,`あと${6-members.length}体選んでください。「残りをおまかせで仮組み」も使えます。`);return;}
     errorBox.hidden=true;
     state.team={ name:el('teamName').value.trim(), format:el('teamFormat').value==='single'?'single':'double', members, favorite:(favoriteDraft&&members.includes(favoriteDraft)?favoriteDraft:members[0]), plan:el('teamPlan').value.trim(), weak:el('teamWeak').value.trim() };
+    state.onboarding ||= {trainingComplete:false}; state.onboarding.trainingComplete=false;
     saveState(); renderAll(); trainingViewIndex=0; setTeamPane('training');
   });
 
