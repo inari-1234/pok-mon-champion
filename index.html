@@ -188,34 +188,53 @@
     </section>
 
     <section id="screen-team" class="screen" aria-label="チーム">
-      <div class="step-head compact-step-head"><span>チーム</span><h1>6匹を決めて、育てます。</h1></div>
+      <div class="step-head compact-step-head"><span>チーム</span><h1 id="teamScreenTitle">使いたいポケモンを1匹選ぶ。</h1></div>
 
-      <div class="team-primary-tabs" role="tablist" aria-label="チームの主な操作">
+      <div id="teamPrimaryTabs" class="team-primary-tabs" role="tablist" aria-label="チームの主な操作" hidden>
         <button class="team-tab-button active" type="button" data-team-tab="build">チームを作る</button>
         <button class="team-tab-button" type="button" data-team-tab="training">育成する</button>
       </div>
 
-      <details class="advanced-menu team-more-menu">
+      <details id="teamMoreMenu" class="advanced-menu team-more-menu" hidden>
         <summary>詳しい情報</summary>
         <div class="shortcut-grid"><button type="button" data-nav="team" data-team-tab="plan">戦い方</button><button type="button" data-nav="team" data-team-tab="stats">選出実績</button></div>
       </details>
 
       <section id="teamBuildPanel" class="panel form-panel team-pane active" data-team-pane="build">
-        <div class="panel-head simple-panel-head"><div><span class="section-kicker">STEP 1</span><h2>使いたい1匹を選ぶ</h2></div></div>
+        <div class="panel-head simple-panel-head"><div><span id="teamBuildKicker" class="section-kicker">STEP 1</span><h2 id="teamBuildTitle">どうやって1匹目を探しますか？</h2></div></div>
         <form id="teamForm">
-          <details class="format-details team-settings-details"><summary>チーム名・形式</summary><div class="two-col"><label>チーム名<input id="teamName" placeholder="例：はじめてのシングル"></label><label>形式<select id="teamFormat"><option value="single">シングル</option><option value="double">ダブル</option></select></label></div></details>
-          <div class="picker-field">
-            <div class="picker-field-head"><span>チームの6匹</span><span id="teamMemberCount" class="hint">0/6</span></div>
-            <div id="teamMemberBuilder" class="team-slots"></div>
-            <div class="button-row primary-team-actions"><button id="pickTeamMember" class="secondary-btn" type="button">画像から選ぶ</button><button id="autoCompleteTeam" class="primary-btn" type="button">残りをおまかせで仮組み</button><button id="clearTeamMembers" class="ghost-btn" type="button">全て外す</button></div>
-            <textarea id="teamMembers" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
+          <section id="starterChoicePanel" class="starter-choice-panel">
+            <div class="starter-choice-stack">
+              <button class="starter-choice-card recommended" type="button" data-starter-mode="recommended">
+                <span><strong>おすすめから選ぶ</strong><small>迷ったらここから。</small></span><b>選ぶ</b>
+              </button>
+              <button class="starter-choice-card" type="button" data-starter-mode="popular">
+                <span><strong>よく見るポケモンから選ぶ</strong><small>対戦で見かけやすい候補。</small></span><b>選ぶ</b>
+              </button>
+              <button class="starter-choice-card" type="button" data-starter-mode="all">
+                <span><strong>画像から全部見る</strong><small>名前が分からなくても探せます。</small></span><b>選ぶ</b>
+              </button>
+              <button class="starter-choice-card" type="button" data-starter-mode="search">
+                <span><strong>名前で検索する</strong><small>使いたい1匹が決まっている人向け。</small></span><b>検索</b>
+              </button>
+            </div>
+          </section>
+
+          <div id="teamComposeArea" hidden>
+            <details class="format-details team-settings-details"><summary>チーム名・形式</summary><div class="two-col"><label>チーム名<input id="teamName" placeholder="例：はじめてのシングル"></label><label>形式<select id="teamFormat"><option value="single">シングル</option><option value="double">ダブル</option></select></label></div></details>
+            <div class="picker-field">
+              <div class="picker-field-head"><span>チームの6匹</span><span id="teamMemberCount" class="hint">0/6</span></div>
+              <div id="teamMemberBuilder" class="team-slots"></div>
+              <div class="button-row primary-team-actions"><button id="pickTeamMember" class="secondary-btn" type="button">追加・変更する</button><button id="autoCompleteTeam" class="primary-btn" type="button">残りをおまかせで仮組み</button><button id="clearTeamMembers" class="ghost-btn" type="button">最初からやり直す</button></div>
+              <textarea id="teamMembers" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
+            </div>
+            <div id="teamStarterAdvice" class="starter-advice" hidden></div>
+            <details class="secondary-choice"><summary>自分で候補から選ぶ</summary><div id="teamPartnerSuggestions" class="partner-grid"></div></details>
+            <details class="secondary-choice"><summary>持っていないポケモン</summary><div class="inventory-box"><div class="picker-field-head"><span>未所持</span><span id="teamInventoryCount" class="hint">0体</span></div><div id="teamInventory" class="inventory-chips"></div></div></details>
+            <div id="teamErrors" class="error-box" hidden></div>
+            <details class="review-details team-plan-input"><summary>自分のメモ（任意）</summary><div class="review-fields"><label>基本の勝ち筋<textarea id="teamPlan" rows="3"></textarea></label><label>苦手な相手<textarea id="teamWeak" rows="3"></textarea></label></div></details>
+            <button class="primary-btn" type="submit">この6匹で進む</button>
           </div>
-          <div id="teamStarterAdvice" class="starter-advice" hidden></div>
-          <details class="secondary-choice"><summary>自分で候補から選ぶ</summary><div id="teamPartnerSuggestions" class="partner-grid"></div></details>
-          <details class="secondary-choice"><summary>持っていないポケモン</summary><div class="inventory-box"><div class="picker-field-head"><span>未所持</span><span id="teamInventoryCount" class="hint">0体</span></div><div id="teamInventory" class="inventory-chips"></div></div></details>
-          <div id="teamErrors" class="error-box" hidden></div>
-          <details class="review-details team-plan-input"><summary>自分のメモ（任意）</summary><div class="review-fields"><label>基本の勝ち筋<textarea id="teamPlan" rows="3"></textarea></label><label>苦手な相手<textarea id="teamWeak" rows="3"></textarea></label></div></details>
-          <button class="primary-btn" type="submit">この6匹で進む</button>
         </form>
       </section>
 
@@ -227,7 +246,7 @@
       </section>
 
       <section id="teamTrainingPanel" class="panel training-panel team-pane" data-team-pane="training">
-        <div class="panel-head simple-panel-head"><div><span class="section-kicker">STEP 2</span><h2>1匹ずつ育てる</h2></div><span id="teamTrainingMeta" class="tag mid">M-C</span></div>
+        <div class="panel-head simple-panel-head"><div><span class="section-kicker">STEP 3</span><h2>1匹ずつ育てる</h2></div><span id="teamTrainingMeta" class="tag mid">M-C</span></div>
         <div id="teamTrainingCards" class="training-grid"></div>
       </section>
 
