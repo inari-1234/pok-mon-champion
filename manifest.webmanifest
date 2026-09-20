@@ -3,8 +3,8 @@
   "short_name": "Champion Coach",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f3f5f8",
-  "theme_color": "#111827",
+  "background_color": "#f5f8fd",
+  "theme_color": "#f5f8fd",
   "lang": "ja",
-  "description": "Pokémon Champions復帰者向けの構築・選出・対戦振り返り補助"
+  "description": "Pokémon Championsを始める人向けのチーム作成・育成・対戦サポート"
 }
