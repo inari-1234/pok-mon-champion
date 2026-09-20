@@ -444,3 +444,39 @@ main{width:min(100%,480px);margin:0 auto}
   .topbar{width:480px;margin:0 auto;border-radius:20px 20px 0 0}
   main{min-height:820px;box-shadow:0 24px 70px rgba(39,72,118,.13)}
 }
+
+
+/* v0.8.1 starter onboarding refinement */
+#teamPrimaryTabs[hidden],
+#teamMoreMenu[hidden],
+#starterChoicePanel[hidden],
+#teamComposeArea[hidden]{display:none!important}
+
+.starter-choice-panel{margin-top:2px}
+.starter-choice-stack{display:grid;gap:9px}
+.starter-choice-card{
+  width:100%;min-height:76px;border:1px solid var(--line);border-radius:16px;background:#fff;
+  padding:13px 14px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  text-align:left;box-shadow:0 4px 14px rgba(39,72,118,.04)
+}
+.starter-choice-card.recommended{border-color:#cbdcf8;background:#f8fbff}
+.starter-choice-card strong{display:block;font-size:13px;line-height:1.4}
+.starter-choice-card small{display:block;margin-top:4px;color:var(--muted);font-size:9px;line-height:1.45}
+.starter-choice-card>b{
+  min-width:44px;text-align:center;padding:7px 8px;border-radius:999px;background:var(--blue-soft);
+  color:var(--blue);font-size:8px
+}
+.starter-choice-card:active{transform:translateY(1px)}
+.team-slot.empty-slot{background:#fbfcfe}
+.sprite-placeholder{
+  display:block;width:56px;height:56px;border-radius:12px;
+  background:linear-gradient(145deg,#eef3f8,#e4eaf2);position:relative;overflow:hidden
+}
+.sprite-placeholder:after{
+  content:"";position:absolute;inset:17px;border:2px solid #c8d2df;border-radius:50%;
+  box-shadow:inset 0 -8px 0 #d7dfe9
+}
+.team-slot.empty-slot .slot-name{color:#738197}
+.team-slot.empty-slot .slot-types{color:#a0aaba}
+.inventory-action{min-width:48px!important}
+#teamBuildPanel .panel-head.simple-panel-head{margin-bottom:12px}
