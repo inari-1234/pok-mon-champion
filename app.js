@@ -108,6 +108,7 @@
     if(state.team.favorite && resolveMon(state.team.favorite)?.id===mon.id) state.team.favorite=state.team.members[0]||'';
     if(favoriteDraft && resolveMon(favoriteDraft)?.id===mon.id) favoriteDraft=teamDraft[0]||'';
     saveState(); renderTeamDraft(); renderSavedTeamAnalysis(); renderOwnSelection();
+    if(currentScreenName()==='team') setTeamPane('build');
     const advice=el('teamStarterAdvice'); if(advice){advice.hidden=false;advice.textContent=`${mon.name}を未所持として除外しました。下の候補は未所持を除いて更新されています。`;}
   }
   function restoreOwned(id) {
@@ -180,9 +181,10 @@
     const hasDraft=teamDraft.length>0;
     el('starterChoicePanel').hidden=hasDraft;
     el('teamComposeArea').hidden=!hasDraft;
-    const hasSavedTeam=(state.team.members||[]).length===6;
-    el('teamPrimaryTabs').hidden=!hasSavedTeam;
-    el('teamMoreMenu').hidden=!hasSavedTeam;
+    const savedMembers=normalizedMemberNames(state.team.members||[]);
+    const draftMatchesSaved=teamDraft.length===6 && savedMembers.length===6 && teamDraft.every((v,i)=>v===savedMembers[i]);
+    el('teamPrimaryTabs').hidden=!draftMatchesSaved;
+    el('teamMoreMenu').hidden=!draftMatchesSaved;
     text(el('teamScreenTitle'),hasDraft?'6匹のチームを作る。':'使いたいポケモンを1匹選ぶ。');
     text(el('teamBuildKicker'),hasDraft?'STEP 2':'STEP 1');
     text(el('teamBuildTitle'),hasDraft?'残りのポケモンを決める':'どうやって1匹目を探しますか？');
