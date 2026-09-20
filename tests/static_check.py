@@ -58,10 +58,19 @@ manifest=json.loads((root/'manifest.webmanifest').read_text())
 assert manifest.get('theme_color')=='#f5f8fd' and manifest.get('background_color')=='#f5f8fd'
 assert 'draftMatchesSaved' in app
 assert "inventory-action','未所持'" in app
-assert '/sprites/pokemon/other/home/${mon.dex}.png' in app
+assert 'FORM_SPRITE_IDS' in app and 'raichualola:10100' in app and 'rotomwash:10009' in app
+assert '/sprites/pokemon/other/home/${spriteId}.png' in app
 assert 'trainingComplete' in app
 assert '育成を確認して対戦へ' in app
 assert '対戦が終わったら結果を記録' in html and 'この方針で対戦する' not in html
+assert 'id="analyzeAssistButton"' in html and 'disabled' in str(soup.find(id='analyzeAssistButton'))
+assert 'id="saveMatchButton"' in html and 'disabled' in str(soup.find(id='saveMatchButton'))
+assert 'recommended-pokemon-grid' in app and 'own-pick-img' in app
+assert "selectedTeamDraft=lastAssist.recommended.filter" in app
+assert "rawOpponent.length !== 6" in app
+assert "match.opponentTeam.length!==6" in app and "match.selectedTeam.length!==requiredSelected" in app
+assert "navigationHistory.length=0" in app and "navigate('home',false)" in app
+assert "advanced.hidden=count<6" in app
 assert 'sprite-fallback' in app and '${cls} sprite-fallback' in app
 assert all(ch not in html for ch in ['⚙','⌂','◇','⚔','◎','⇄','★','☆','✓']), 'decorative glyph leaked into primary HTML UI'
 assert "format: 'single'" in app, 'new state must default to singles'
