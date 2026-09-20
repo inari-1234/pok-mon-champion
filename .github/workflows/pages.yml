@@ -36,11 +36,13 @@ jobs:
           node --check competitive-data.js
           node --check single-competitive-data.js
           node --check core.js
+          node --check screenshot-recognition.js
           node --check app.js
           node --check sw.js
           node --check ui-v0.7-preview/app.js
           node --check ui-v0.8-beginner-preview/app.js
           node --test tests/core.test.js
+          node --test tests/screenshot-recognition.test.js
           node tests/runtime_smoke.js
           python tests/static_check.py
           python tests/ui_v08_static_check.py
@@ -57,7 +59,7 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir _site
-          cp index.html styles.css pokemon-data.js competitive-data.js single-competitive-data.js core.js app.js manifest.webmanifest sw.js version.json latest.json .nojekyll _site/
+          cp index.html styles.css pokemon-data.js competitive-data.js single-competitive-data.js core.js screenshot-recognition.js app.js manifest.webmanifest sw.js version.json latest.json .nojekyll _site/
           cp -R ui-v0.7-preview _site/
           cp -R ui-v0.8-beginner-preview _site/
       - name: Configure GitHub Pages
