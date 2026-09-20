@@ -15,11 +15,13 @@ assert not missing, f'missing DOM ids: {missing}'
 assert 'innerHTML' not in app, 'unsafe innerHTML use found'
 for src in ['pokemon-data.js','competitive-data.js','single-competitive-data.js','core.js','app.js']:
     assert (root/src).exists(), f'missing {src}'
-    assert soup.find('script',src=src), f'index does not load {src}'
+    node=next((x for x in soup.find_all('script',src=True) if x.get('src','').split('?')[0]==src),None)
+    assert node, f'index does not load {src}'
+    assert node.get('src')==f'{src}?v=0.8.3', f'{src} is not cache-busted to v0.8.3'
 assert soup.find('link',rel='manifest'), 'manifest link missing'
 json.loads((root/'manifest.webmanifest').read_text())
 sw=(root/'sw.js').read_text()
-assert 'champion-coach-v8.2-flow1' in sw
+assert 'champion-coach-v8.3-coherent1' in sw
 assert 'competitive-data.js' in sw
 assert 'single-competitive-data.js' in sw
 assert 'version.json' in sw
@@ -27,13 +29,13 @@ assert 'latest.json' in sw
 assert (root/'version.json').exists(), 'version.json missing'
 assert (root/'latest.json').exists(), 'latest.json missing'
 latest=json.loads((root/'latest.json').read_text())
-assert latest.get('version')=='0.8.2' and latest.get('sw_cache')=='champion-coach-v8.2-flow1', 'latest metadata mismatch'
+assert latest.get('version')=='0.8.3' and latest.get('sw_cache')=='champion-coach-v8.3-coherent1', 'latest metadata mismatch'
 version=json.loads((root/'version.json').read_text())
-assert version.get('version')=='0.8.2', 'wrong repository build version'
+assert version.get('version')=='0.8.3', 'wrong repository build version'
 assert (root/'.github/workflows/validate.yml').exists(), 'validation workflow missing'
 assert (root/'.github/workflows/pages.yml').exists(), 'pages workflow missing'
 assert 'data-shadow' in style and 'pokemon-grid' in style
-assert 'v0.8.2' in html and 'header-text-btn' in style
+assert 'v0.8.3' in html and 'header-text-btn' in style
 assert 'あなたは今ここ' in html and 'homeCoachTitle' in html and 'homeProgressBar' in html
 assert 'data-team-pane="training"' in html and 'assistDetails' in html
 assert 'data-pokemon-category="recommended"' in html
@@ -41,10 +43,10 @@ assert 'data-environment-format="single"' in html
 assert '残りをおまかせで仮組み' in html
 assert '改行・カンマ区切り' not in html, 'manual entry guidance still visible'
 assert 'buildCoachTasks' not in core
-assert len(soup.find_all('script',src='core.js'))==1, 'core.js loaded more than once'
+assert len([x for x in soup.find_all('script',src=True) if x.get('src','').split('?')[0]=='core.js'])==1, 'core.js loaded more than once'
 assert '持っていないポケモン' in html and '1匹ずつ育てる' in html
 assert html.count('<option value="single">シングル</option><option value="double">ダブル</option>') >= 3, 'single must be the primary UI option'
-assert 'bottom-nav' in html and 'hidden' in str(soup.find('nav',class_='bottom-nav')), 'legacy bottom nav must stay hidden'
+assert 'bottom-nav' not in html, 'legacy bottom nav must be removed from production HTML'
 assert 'v0.8 production guided cleanup' in style
 assert 'starterChoicePanel' in html and 'teamComposeArea' in html
 assert all(x in html for x in ['starterRecommended','starterPopular','starterAll','starterSearch'])
@@ -54,6 +56,15 @@ assert "el('teamComposeArea').hidden=!hasDraft" in app
 assert 'sprite-placeholder' in style and "slot-img sprite-placeholder" in app
 assert '<meta name="theme-color" content="#f5f8fd">' in html
 assert '<meta name="apple-mobile-web-app-status-bar-style" content="default">' in html
+assert html.count('</main>')==1, 'main must close exactly once'
+assert soup.find('link',rel='stylesheet').get('href')=='styles.css?v=0.8.3'
+assert soup.find('link',rel='manifest').get('href')=='manifest.webmanifest?v=0.8.3'
+assert '<ol class="progress-list">' not in html and 'role="list"' in html, 'progress must not rely on native numbering'
+assert '[hidden]{display:none!important}' in style
+assert "register('./sw.js?v=0.8.3')" in app
+assert "const VERSION='0.8.3';" in sw
+assert 'cacheFirstWithRefresh' not in sw, 'cache-first runtime assets can mix releases'
+assert 'event.respondWith(networkFirst(event.request))' in sw
 manifest=json.loads((root/'manifest.webmanifest').read_text())
 assert manifest.get('theme_color')=='#f5f8fd' and manifest.get('background_color')=='#f5f8fd'
 assert 'draftMatchesSaved' in app
