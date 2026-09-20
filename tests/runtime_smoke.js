@@ -49,6 +49,26 @@ if(!saved.inventory?.unowned?.length||saved.team.members.includes(removedName))t
 if(elements.assistOwnTeam.value.includes(removedName))throw new Error('saved analysis stayed stale after unowned removal');
 const restoreButton=elements.teamInventory.children.flatMap(x=>x.children||[]).find(x=>x.textContent==='所持に戻す');if(!restoreButton)throw new Error('restore-owned action missing');restoreButton.emit('click');
 saved=JSON.parse(store['championCoach.v1']);if(saved.inventory.unowned.length)throw new Error('restore-owned failed');
+
+// Cold-start beginner flow: only the first-Pokémon choices should be visible initially.
+elements.clearData.emit('click');
+if(elements.starterChoicePanel.hidden)throw new Error('starter choices hidden on cold start');
+if(!elements.teamComposeArea.hidden)throw new Error('team compose area visible before starter choice');
+if(!elements.teamPrimaryTabs.hidden||!elements.teamMoreMenu.hidden)throw new Error('advanced team controls visible too early');
+elements.starterRecommended.emit('click');
+card=elements.pokemonCatalogGrid.children.find(x=>String(x.className).includes('pokemon-card')&&!x.disabled);
+if(!card)throw new Error('starter picker card missing');
+card.emit('click'); elements.pokemonPickerDone.emit('click');
+if(!elements.starterChoicePanel.hidden||elements.teamComposeArea.hidden)throw new Error('starter choice did not advance to team composition');
+if(elements.teamMembers.value.split(',').filter(Boolean).length!==1)throw new Error('starter selection must choose exactly one Pokemon');
+elements.autoCompleteTeam.emit('click');
+const coldDraft=elements.teamMembers.value.split(',').map(x=>x.trim()).filter(Boolean);
+if(coldDraft.length!==6)throw new Error('cold-start auto complete did not reach six');
+elements.teamForm.emit('submit');
+saved=JSON.parse(store['championCoach.v1']);
+if(saved.team.format!=='single'||saved.team.members.length!==6)throw new Error('cold-start team save failed');
+if(!elements.teamTrainingCards.children.some(x=>String(x.className).includes('training-card-focus')))throw new Error('cold-start training did not render');
+
 // Select six opponent Pokémon through the same visual picker and run assist.
 elements.pickAssistOpponent.emit('click');
 for(let i=0;i<6;i++){
