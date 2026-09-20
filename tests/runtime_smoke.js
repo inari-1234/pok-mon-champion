@@ -42,7 +42,7 @@ const draft=elements.teamMembers.value.split(',').map(x=>x.trim()).filter(Boolea
 elements.teamForm.emit('submit');
 let saved=JSON.parse(store['championCoach.v1']);if(saved.team.members.length!==6||!saved.team.favorite)throw new Error('team persistence failed');
 if(!elements.teamTrainingCards.children.some(x=>String(x.className).includes('training-card-focus')))throw new Error('focused training card not rendered');
-const firstUnavailable=elements.teamMemberBuilder.children[0]?.children?.find?.(x=>String(x.className).includes('slot-actions'))?.children?.find?.(x=>x.textContent==='未');
+const firstUnavailable=elements.teamMemberBuilder.children[0]?.children?.find?.(x=>String(x.className).includes('slot-actions'))?.children?.find?.(x=>x.textContent==='未所持');
 if(!firstUnavailable)throw new Error('unowned action missing');
 const removedName=saved.team.members[0];firstUnavailable.emit('click');saved=JSON.parse(store['championCoach.v1']);
 if(!saved.inventory?.unowned?.length||saved.team.members.includes(removedName))throw new Error('unowned persistence/removal failed');
