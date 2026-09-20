@@ -19,7 +19,7 @@ for src in ['pokemon-data.js','competitive-data.js','single-competitive-data.js'
 assert soup.find('link',rel='manifest'), 'manifest link missing'
 json.loads((root/'manifest.webmanifest').read_text())
 sw=(root/'sw.js').read_text()
-assert 'champion-coach-v8.1-onboarding1' in sw
+assert 'champion-coach-v8.2-flow1' in sw
 assert 'competitive-data.js' in sw
 assert 'single-competitive-data.js' in sw
 assert 'version.json' in sw
@@ -27,13 +27,13 @@ assert 'latest.json' in sw
 assert (root/'version.json').exists(), 'version.json missing'
 assert (root/'latest.json').exists(), 'latest.json missing'
 latest=json.loads((root/'latest.json').read_text())
-assert latest.get('version')=='0.8.1' and latest.get('sw_cache')=='champion-coach-v8.1-onboarding1', 'latest metadata mismatch'
+assert latest.get('version')=='0.8.2' and latest.get('sw_cache')=='champion-coach-v8.2-flow1', 'latest metadata mismatch'
 version=json.loads((root/'version.json').read_text())
-assert version.get('version')=='0.8.1', 'wrong repository build version'
+assert version.get('version')=='0.8.2', 'wrong repository build version'
 assert (root/'.github/workflows/validate.yml').exists(), 'validation workflow missing'
 assert (root/'.github/workflows/pages.yml').exists(), 'pages workflow missing'
 assert 'data-shadow' in style and 'pokemon-grid' in style
-assert 'v0.8.1' in html and 'header-text-btn' in style
+assert 'v0.8.2' in html and 'header-text-btn' in style
 assert 'あなたは今ここ' in html and 'homeCoachTitle' in html and 'homeProgressBar' in html
 assert 'data-team-pane="training"' in html and 'assistDetails' in html
 assert 'data-pokemon-category="recommended"' in html
