@@ -480,3 +480,46 @@ main{width:min(100%,480px);margin:0 auto}
 .team-slot.empty-slot .slot-types{color:#a0aaba}
 .inventory-action{min-width:48px!important}
 #teamBuildPanel .panel-head.simple-panel-head{margin-bottom:12px}
+
+
+/* v0.8.2 battle flow hardening */
+.focus-identity{display:grid!important;grid-template-columns:54px 24px minmax(0,1fr);align-items:center;gap:8px}
+.focus-pokemon-img,.focus-identity .sprite-fallback{
+  width:54px!important;height:54px!important;border-radius:13px;background:#fff;object-fit:contain
+}
+.recommended-pokemon-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px
+}
+.recommended-pokemon-card{
+  min-height:112px;border:1px solid #cde4d8;border-radius:14px;background:#fff;
+  padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center
+}
+.recommended-pokemon-card.provisional{border-style:dashed}
+.recommended-pokemon-img,.recommended-pokemon-card .sprite-fallback{
+  width:64px!important;height:64px!important;border-radius:14px;background:#f6f9fc;object-fit:contain
+}
+.recommended-pokemon-card strong{font-size:10px;line-height:1.3;margin-top:4px;overflow-wrap:anywhere}
+.recommended-pokemon-card small{font-size:8px;color:var(--muted);margin-top:3px}
+.own-pick-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.own-pick-btn{
+  position:relative;min-height:116px;padding:8px 5px;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;background:#fff
+}
+.own-pick-img,.own-pick-btn .sprite-fallback{
+  width:60px!important;height:60px!important;border-radius:13px;background:#f5f8fc;object-fit:contain
+}
+.own-pick-name{font-size:9px;line-height:1.3;text-align:center;margin-top:5px;overflow-wrap:anywhere}
+.own-pick-state{
+  position:absolute;right:5px;top:5px;border-radius:999px;padding:3px 5px;background:var(--blue);
+  color:#fff;font-size:7px;font-weight:900
+}
+button:disabled{opacity:.42;box-shadow:none!important;cursor:not-allowed}
+#homeAdvancedMenu[hidden]{display:none!important}
+@media(max-width:420px){
+  .recommended-pokemon-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .recommended-pokemon-img,.recommended-pokemon-card .sprite-fallback{width:56px!important;height:56px!important}
+  .recommended-pokemon-card{min-height:104px;padding:7px 4px}
+  .own-pick-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .own-pick-img,.own-pick-btn .sprite-fallback{width:52px!important;height:52px!important}
+  .own-pick-btn{min-height:105px}
+}
