@@ -46,6 +46,7 @@ const firstUnavailable=elements.teamMemberBuilder.children[0]?.children?.find?.(
 if(!firstUnavailable)throw new Error('unowned action missing');
 const removedName=saved.team.members[0];firstUnavailable.emit('click');saved=JSON.parse(store['championCoach.v1']);
 if(!saved.inventory?.unowned?.length||saved.team.members.includes(removedName))throw new Error('unowned persistence/removal failed');
+if(!elements.teamPrimaryTabs.hidden||!elements.teamMoreMenu.hidden)throw new Error('advanced team controls remained visible for incomplete team');
 if(elements.assistOwnTeam.value.includes(removedName))throw new Error('saved analysis stayed stale after unowned removal');
 const restoreButton=elements.teamInventory.children.flatMap(x=>x.children||[]).find(x=>x.textContent==='所持に戻す');if(!restoreButton)throw new Error('restore-owned action missing');restoreButton.emit('click');
 saved=JSON.parse(store['championCoach.v1']);if(saved.inventory.unowned.length)throw new Error('restore-owned failed');
@@ -67,6 +68,7 @@ if(coldDraft.length!==6)throw new Error('cold-start auto complete did not reach 
 elements.teamForm.emit('submit');
 saved=JSON.parse(store['championCoach.v1']);
 if(saved.team.format!=='single'||saved.team.members.length!==6)throw new Error('cold-start team save failed');
+if(elements.teamPrimaryTabs.hidden||elements.teamMoreMenu.hidden)throw new Error('advanced team controls did not unlock after saved six');
 if(!elements.teamTrainingCards.children.some(x=>String(x.className).includes('training-card-focus')))throw new Error('cold-start training did not render');
 
 // Select six opponent Pokémon through the same visual picker and run assist.
