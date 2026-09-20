@@ -1,8 +1,8 @@
 {
   "app": "Champion Coach",
-  "version": "0.8.0",
-  "build": "2026-09-20-guided-clean-1",
-  "sw_cache": "champion-coach-v8.0-guided1",
+  "version": "0.8.1",
+  "build": "2026-09-20-onboarding-refine-1",
+  "sw_cache": "champion-coach-v8.1-onboarding1",
   "runtime_files": [
     "index.html",
     "styles.css",
@@ -16,15 +16,15 @@
     "version.json"
   ],
   "sha256": {
-    "index.html": "f165098325fd725e57cc101d3a97dc8bf56701d09765c58d22fd0f5edeeebd3c",
-    "styles.css": "94acbdf8fcd4fc81dc50f3e943d0e820000e47bd6f02a4a4851d017c945b44cd",
+    "index.html": "dbb40989a5800077871841351a68e8e9c87bfc1a8ac8789d7df4ab7d6471b9e6",
+    "styles.css": "1fc0e16c4b0ac5669cd4182cd9de4c07ae5adbea393043dde0d17ebe219c5dd3",
     "pokemon-data.js": "ae0a5521b06bacf41aa58a97ab82bd58f5d82a10439507ed99778204ffc92e8f",
     "competitive-data.js": "78530427719d12ccc61809461423179fcff47bf00682551d670da0c1890bec86",
     "single-competitive-data.js": "cd87b15df6ddb0ccee7f61d5dec09427a5312ef34e02a725403440ab41adb292",
     "core.js": "bda0d74538974b1c3131f741c02d7ccabdb2d792d28d780930b46d4366515b6b",
-    "app.js": "f40845c7824cd7fb037447522a0eeb5e1e7b652589dada311136aefbe4de47c5",
-    "manifest.webmanifest": "baf0b90b56dee8463c995ab2c644bd25ad2b3d4ace6fec2b837863ef6304097b",
-    "sw.js": "f870435606bf3bc284a90af43222dc08fe3e7e8885249f202b37c7de10383fa2",
-    "version.json": "79672dfe96cdaaba19e73663d11ca283f3da8088fabcdd4305785e12f745a793"
+    "app.js": "019c8f2c2c21d29285037d8d748bbac58dc6211f644d66b0bb379ad1649624b1",
+    "manifest.webmanifest": "000ddefc19b3f5b7979797cc5d432a61bb1d0b2486ea8f9ab011308bb7ffffc4",
+    "sw.js": "4cf206392a48bd58eeab9ac6b67e020d04d17435614c99e3cb12b559b7fac097",
+    "version.json": "a25702d5b84ecec98be02daeb021d95f67a8eef9db5d8e1890c897e7f688b87d"
   }
 }
