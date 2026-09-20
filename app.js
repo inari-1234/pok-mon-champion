@@ -223,11 +223,20 @@
     });
   }
 
+  function updateMatchSaveState() {
+    const button=el('saveMatchButton'); if(!button) return;
+    const max=el('matchFormat')?.value==='single'?3:4;
+    const result=!!document.querySelector('input[name="result"]:checked');
+    button.disabled=logOpponentDraft.length!==6 || selectedTeamDraft.length!==max || !result;
+  }
+
   function renderOpponentDraft(kind) {
     const isAssist=kind==='assist'; const draft=isAssist?assistOpponentDraft:logOpponentDraft;
     syncShadow(isAssist?'assistOpponentTeam':'opponentTeam',draft);
     text(el(isAssist?'assistOpponentCount':'logOpponentCount'),`${draft.length}/6`);
     renderMemberSlots(isAssist?'assistOpponentBuilder':'logOpponentBuilder',draft,{max:6,onRemove:value=>{if(isAssist)assistOpponentDraft=assistOpponentDraft.filter(v=>v!==value);else logOpponentDraft=logOpponentDraft.filter(v=>v!==value);renderOpponentDraft(kind);}});
+    if(isAssist){const b=el('analyzeAssistButton');if(b)b.disabled=draft.length!==6;}
+    else updateMatchSaveState();
   }
 
   function renderOwnSelection() {
@@ -235,8 +244,16 @@
     const max=el('matchFormat')?.value==='single'?3:4;
     selectedTeamDraft=C.uniqNames(selectedTeamDraft).filter(v=>state.team.members.includes(v)).slice(0,max);
     syncShadow('selectedTeam',selectedTeamDraft); text(el('selectedTeamCount'),`${selectedTeamDraft.length}/${max}体選出`);
-    if(!state.team.members.length){box.append(make('div','empty','先に構築を登録すると、ここはタップ選択になります。'));return;}
-    state.team.members.forEach(value=>{const b=make('button',`own-pick-btn${selectedTeamDraft.includes(value)?' selected':''}`,value);b.type='button';b.addEventListener('click',()=>{if(selectedTeamDraft.includes(value))selectedTeamDraft=selectedTeamDraft.filter(v=>v!==value);else if(selectedTeamDraft.length<max)selectedTeamDraft.push(value);renderOwnSelection();});box.append(b);});
+    if(!state.team.members.length){box.append(make('div','empty','先にチームを作ってください。'));updateMatchSaveState();return;}
+    state.team.members.forEach(value=>{
+      const selected=selectedTeamDraft.includes(value), mon=resolveMon(value);
+      const b=make('button',`own-pick-btn${selected?' selected':''}`);b.type='button';
+      b.append(monImage(mon,'own-pick-img'),make('span','own-pick-name',value));
+      if(selected)b.append(make('span','own-pick-state','選出'));
+      b.addEventListener('click',()=>{if(selectedTeamDraft.includes(value))selectedTeamDraft=selectedTeamDraft.filter(v=>v!==value);else if(selectedTeamDraft.length<max)selectedTeamDraft.push(value);renderOwnSelection();});
+      box.append(b);
+    });
+    updateMatchSaveState();
   }
 
   let pickerVisibleLimit=48;
