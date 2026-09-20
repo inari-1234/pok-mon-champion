@@ -16,13 +16,13 @@
     "version.json"
   ],
   "sha256": {
-    "index.html": "dbb40989a5800077871841351a68e8e9c87bfc1a8ac8789d7df4ab7d6471b9e6",
+    "index.html": "cbacfb152ac6ba8598bcfd7e54984c3a8b3cc82d6e3d3b73ac30ce600b5db51c",
     "styles.css": "1fc0e16c4b0ac5669cd4182cd9de4c07ae5adbea393043dde0d17ebe219c5dd3",
     "pokemon-data.js": "ae0a5521b06bacf41aa58a97ab82bd58f5d82a10439507ed99778204ffc92e8f",
     "competitive-data.js": "78530427719d12ccc61809461423179fcff47bf00682551d670da0c1890bec86",
     "single-competitive-data.js": "cd87b15df6ddb0ccee7f61d5dec09427a5312ef34e02a725403440ab41adb292",
     "core.js": "bda0d74538974b1c3131f741c02d7ccabdb2d792d28d780930b46d4366515b6b",
-    "app.js": "019c8f2c2c21d29285037d8d748bbac58dc6211f644d66b0bb379ad1649624b1",
+    "app.js": "d826d2de205e51e9e7a88b09c3973c6b67b8933ad48b9d1438f6822f040f4cd5",
     "manifest.webmanifest": "000ddefc19b3f5b7979797cc5d432a61bb1d0b2486ea8f9ab011308bb7ffffc4",
     "sw.js": "4cf206392a48bd58eeab9ac6b67e020d04d17435614c99e3cb12b559b7fac097",
     "version.json": "a25702d5b84ecec98be02daeb021d95f67a8eef9db5d8e1890c897e7f688b87d"
