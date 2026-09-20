@@ -757,13 +757,6 @@
     if(teamTab){setTeamPane(teamTab.dataset.teamTab);return;}
     const category=e.target.closest('[data-pokemon-category]');
     if(category){pickerCategory=category.dataset.pokemonCategory;pickerVisibleLimit=48;document.querySelectorAll('[data-pokemon-category]').forEach(b=>b.classList.toggle('active',b===category));renderPokemonCatalog();return;}
-    const starter=e.target.closest('[data-starter-mode]');
-    if(starter){
-      const mode=starter.dataset.starterMode;
-      const category=mode==='search'?'all':mode;
-      openPokemonPicker('starter',category,mode==='search');
-      return;
-    }
     const env=e.target.closest('[data-environment-format]');
     if(env){environmentFormat=normalizeFormat(env.dataset.environmentFormat);syncEnvironmentControls();renderThreats(el('threatTable'),100,environmentFormat);renderMetaNotes();return;}
   });
@@ -780,6 +773,10 @@
 
   // v0.6 visual selector controls
   C.TYPE_NAMES.forEach(type=>{const o=document.createElement('option');o.value=type;o.textContent=type;el('pokemonTypeFilter').append(o);});
+  el('starterRecommended').addEventListener('click',()=>openPokemonPicker('starter','recommended'));
+  el('starterPopular').addEventListener('click',()=>openPokemonPicker('starter','popular'));
+  el('starterAll').addEventListener('click',()=>openPokemonPicker('starter','all'));
+  el('starterSearch').addEventListener('click',()=>openPokemonPicker('starter','all',true));
   el('pickTeamMember').addEventListener('click',()=>openPokemonPicker('team'));
   el('pickAssistOpponent').addEventListener('click',()=>openPokemonPicker('assist'));
   el('pickLogOpponent').addEventListener('click',()=>openPokemonPicker('log'));
