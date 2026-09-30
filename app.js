@@ -140,9 +140,11 @@
     const ready=stateName==='ready',busy=stateName==='busy',error=stateName==='error';
     badge.className='tag '+(ready?'low':error?'high':'mid');
     text(badge,ready?'準備済み':busy?'準備中':error?'要確認':'未準備');
+    trigger.hidden=!ready;
     trigger.disabled=!ready;
-    prepare.disabled=busy||ready;
-    text(prepare,ready?'準備済み':'初回準備');
+    prepare.hidden=ready;
+    prepare.disabled=busy;
+    text(prepare,busy?'準備中…':error?'もう一度準備する':'初回準備をする');
     text(el('assistScreenshotStatus'),message||'');
   }
 
