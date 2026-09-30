@@ -20,22 +20,24 @@
 
   <main>
     <section id="screen-home" class="screen active" aria-label="ホーム">
-      <section class="progress-card">
-        <div class="progress-top"><span class="step-label">あなたは今ここ</span><strong id="homeCoachStep">STEP 1 / 4</strong></div>
+      <section class="progress-card home-focus-card">
+        <div class="progress-top"><span class="step-label">今のステップ</span><strong id="homeCoachStep">STEP 1 / 4</strong></div>
         <div class="progress-track"><i id="homeProgressBar"></i></div>
-        <div class="progress-list" role="list">
-          <div data-route-step="1" role="listitem"><b>1</b><span>使いたいポケモンを決める</span><em>今ここ</em></div>
-          <div data-route-step="2" role="listitem"><b>2</b><span>6匹のチームを決める</span></div>
-          <div data-route-step="3" role="listitem"><b>3</b><span>対戦用に育てる</span></div>
-          <div data-route-step="4" role="listitem"><b>4</b><span>相手を見て選出を決める</span></div>
+        <div class="home-decision">
+          <span class="section-kicker">今やること</span>
+          <h1 id="homeCoachTitle">まず、使いたいポケモンを1匹選びましょう。</h1>
+          <p id="homeCoachBody" hidden></p>
+          <button id="quickStartButton" class="primary-btn home-next-btn" type="button" data-nav="team">次に進む</button>
         </div>
-      </section>
-
-      <section class="next-card">
-        <span class="section-kicker">NEXT</span>
-        <h1 id="homeCoachTitle">まず、使いたいポケモンを1匹選びましょう。</h1>
-        <p id="homeCoachBody" hidden></p>
-        <button id="quickStartButton" class="primary-btn home-next-btn" type="button" data-nav="team">次に進む</button>
+        <details class="route-details">
+          <summary>4ステップ全体を見る</summary>
+          <div class="progress-list" role="list">
+            <div data-route-step="1" role="listitem"><b>1</b><span>使いたいポケモンを決める</span><em>今ここ</em></div>
+            <div data-route-step="2" role="listitem"><b>2</b><span>6匹のチームを決める</span></div>
+            <div data-route-step="3" role="listitem"><b>3</b><span>対戦用に育てる</span></div>
+            <div data-route-step="4" role="listitem"><b>4</b><span>相手を見て選出を決める</span></div>
+          </div>
+        </details>
       </section>
 
       <details id="homeAdvancedMenu" class="advanced-menu" hidden>
@@ -70,39 +72,41 @@
 
 
     <section id="screen-assist" class="screen" aria-label="対戦準備">
-      <div class="step-head"><span>対戦直前</span><h1>相手の6匹を読み取って、出すポケモンを決めます。</h1></div>
-      <section class="panel battle-input-panel">
+      <div class="step-head decision-step-head"><span>対戦直前</span><h1>出すポケモンを決める</h1><p>相手6匹が見えている画面をスクショすると、選出候補をすぐ出します。</p></div>
+      <section class="panel battle-input-panel realtime-input-panel">
         <form id="assistForm" novalidate>
-          <details class="format-details"><summary>対戦形式を変更</summary><label>形式<select id="assistFormat"><option value="single">シングル</option><option value="double">ダブル</option></select></label></details>
+          <details class="format-details compact-control"><summary>対戦形式：<span id="assistFormatSummary">シングル</span></summary><label>形式<select id="assistFormat"><option value="single">シングル</option><option value="double">ダブル</option></select></label></details>
           <input id="assistOwnTeam" class="data-shadow" readonly aria-hidden="true" tabindex="-1">
           <section class="screenshot-import-card" aria-label="スクリーンショット認識">
-            <div class="screenshot-import-head"><div><strong>スクショから6匹を読み取る</strong><small>画像は端末内で解析します。初回だけ認識用データを準備します。</small></div><span id="assistScreenshotBadge" class="tag mid">未準備</span></div>
-            <div class="button-row screenshot-actions"><button id="assistRecognitionPrepare" class="secondary-btn" type="button">認識データを準備</button><button id="assistScreenshotTrigger" class="primary-btn" type="button" disabled>スクショから読み取る</button></div>
+            <div class="screenshot-import-head"><div><span class="section-kicker">最短入力</span><strong>スクショから相手6匹を読み取る</strong><small>画像は端末内だけで解析します。</small></div><span id="assistScreenshotBadge" class="tag mid">未準備</span></div>
+            <div class="button-row screenshot-actions"><button id="assistScreenshotTrigger" class="primary-btn battle-primary-btn" type="button" disabled>スクショを選ぶ</button><button id="assistRecognitionPrepare" class="secondary-btn setup-btn" type="button">初回準備</button></div>
             <input id="assistScreenshotInput" type="file" accept="image/*" hidden>
-            <p id="assistScreenshotStatus" class="small muted">対戦前に一度「認識データを準備」を押しておくと、実戦時の待ち時間を減らせます。</p>
+            <p id="assistScreenshotStatus" class="small muted">初回だけ認識データを準備します。</p>
             <div id="assistScreenshotReview" class="screenshot-review" hidden></div>
           </section>
-          <div class="picker-field">
-            <div class="picker-field-head"><span>相手の6匹</span><span id="assistOpponentCount" class="hint">0/6</span></div>
-            <div id="assistOpponentBuilder" class="team-slots compact-slots"></div>
-            <div class="button-row"><button id="pickAssistOpponent" class="secondary-btn" type="button">手動で6匹を選ぶ</button><button id="clearAssistOpponent" class="ghost-btn" type="button">クリア</button></div>
-            <textarea id="assistOpponentTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
-          </div>
-          <div id="assistErrors" class="error-box" hidden></div>
-          <button id="analyzeAssistButton" class="primary-btn" type="submit" disabled>この6匹を見る</button>
+          <details id="assistManualEntry" class="manual-entry-details">
+            <summary><span>読み取りに失敗したときだけ手動で直す</span><small id="assistOpponentCount" class="hint">0/6</small></summary>
+            <div class="manual-entry-body">
+              <div id="assistOpponentBuilder" class="team-slots compact-slots"></div>
+              <div class="button-row"><button id="pickAssistOpponent" class="secondary-btn" type="button">6匹を選ぶ・修正する</button><button id="clearAssistOpponent" class="ghost-btn" type="button">クリア</button></div>
+              <textarea id="assistOpponentTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
+              <div id="assistErrors" class="error-box" hidden></div>
+              <button id="analyzeAssistButton" class="primary-btn" type="submit" disabled>この6匹で選出を出す</button>
+            </div>
+          </details>
         </form>
       </section>
 
-      <section id="assistFocusPanel" class="focus-card danger" hidden>
-        <div class="focus-card-title"><span>1</span><strong>一番注意する相手</strong><small id="assistGuideCoverage">確認中</small></div>
-        <div id="assistFocusList" class="stack"></div>
+      <section id="assistResult" class="focus-card good decision-result-card" hidden>
+        <div class="focus-card-title"><span>1</span><strong>出すポケモン</strong><small id="assistEvidence">集計中</small></div>
+        <div id="assistRecommended" class="selection-picks"></div>
+        <div class="opening-action"><span class="assist-label">先発・最初の動き</span><strong id="assistOpeningAction"></strong></div>
+        <div class="assist-actions secondary-assist-action"><span>対戦後</span><button id="copyAssistToLog" class="ghost-btn" type="button">結果を記録する</button></div>
       </section>
 
-      <section id="assistResult" class="focus-card good" hidden>
-        <div class="focus-card-title"><span>2</span><strong>おすすめの選出</strong><small id="assistEvidence">集計中</small></div>
-        <div id="assistRecommended" class="selection-picks"></div>
-        <div class="opening-action"><span class="assist-label">3　最初にすること</span><strong id="assistOpeningAction"></strong></div>
-        <div class="assist-actions"><button id="copyAssistToLog" class="primary-btn" type="button">対戦が終わったら結果を記録</button></div>
+      <section id="assistFocusPanel" class="focus-card danger caution-card" hidden>
+        <div class="focus-card-title"><span>2</span><strong>一番注意する相手</strong><small id="assistGuideCoverage">確認中</small></div>
+        <div id="assistFocusList" class="stack"></div>
       </section>
 
       <details id="assistDetails" class="details-box" hidden>
@@ -118,20 +122,25 @@
 
     <section id="screen-log" class="screen" aria-label="対戦記録">
       <section class="panel form-panel guided-log">
-        <div class="step-head compact-step-head"><span>対戦後</span><h1>結果を残します。</h1></div>
+        <div class="step-head compact-step-head"><span>対戦後</span><h1>まず勝敗だけ残す</h1><p>相手や選出は引き継がれています。必要なところだけ直せます。</p></div>
         <form id="matchForm" novalidate>
-          <div class="picker-field">
-            <div class="picker-field-head"><span>相手の6匹</span><span id="logOpponentCount" class="hint">0/6</span></div>
-            <div id="logOpponentBuilder" class="team-slots compact-slots"></div>
-            <div class="button-row"><button id="pickLogOpponent" class="secondary-btn" type="button">画像から選ぶ</button><button id="clearLogOpponent" class="ghost-btn" type="button">クリア</button></div>
-            <textarea id="opponentTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
-          </div>
-          <div class="picker-field">
-            <div class="picker-field-head"><span>自分が出したポケモン</span><span id="selectedTeamCount" class="hint">3体</span></div>
-            <div id="selectedTeamPicker" class="own-pick-grid"></div>
-            <textarea id="selectedTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
-          </div>
-          <fieldset><legend>勝ちましたか？</legend><div class="segmented result-large"><label><input type="radio" name="result" value="win"><span>勝った</span></label><label><input type="radio" name="result" value="loss"><span>負けた</span></label></div></fieldset>
+          <fieldset class="result-first"><legend>結果</legend><div class="segmented result-large"><label><input type="radio" name="result" value="win"><span>勝った</span></label><label><input type="radio" name="result" value="loss"><span>負けた</span></label></div></fieldset>
+          <details id="matchBattleDetails" class="review-details battle-details">
+            <summary><span>対戦内容を確認・修正</span><small id="matchBattleSummary">相手6匹・自分の選出</small></summary>
+            <div class="review-fields">
+              <div class="picker-field">
+                <div class="picker-field-head"><span>相手の6匹</span><span id="logOpponentCount" class="hint">0/6</span></div>
+                <div id="logOpponentBuilder" class="team-slots compact-slots"></div>
+                <div class="button-row"><button id="pickLogOpponent" class="secondary-btn" type="button">6匹を修正</button><button id="clearLogOpponent" class="ghost-btn" type="button">クリア</button></div>
+                <textarea id="opponentTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
+              </div>
+              <div class="picker-field">
+                <div class="picker-field-head"><span>自分が出したポケモン</span><span id="selectedTeamCount" class="hint">3体</span></div>
+                <div id="selectedTeamPicker" class="own-pick-grid"></div>
+                <textarea id="selectedTeam" class="data-shadow" aria-hidden="true" tabindex="-1"></textarea>
+              </div>
+            </div>
+          </details>
 
           <details id="matchReviewDetails" class="review-details">
             <summary>詳しく振り返る（任意）</summary>
@@ -213,17 +222,22 @@
           <section id="starterChoicePanel" class="starter-choice-panel">
             <div class="starter-choice-stack">
               <button id="starterRecommended" class="starter-choice-card recommended" type="button" data-starter-mode="recommended">
-                <span><strong>おすすめから選ぶ</strong><small>迷ったらここから。</small></span><b>選ぶ</b>
+                <span><strong>おすすめから1匹選ぶ</strong><small>迷ったらここから始めます。</small></span><b>選ぶ</b>
               </button>
-              <button id="starterPopular" class="starter-choice-card" type="button" data-starter-mode="popular">
-                <span><strong>よく見るポケモンから選ぶ</strong><small>対戦で見かけやすい候補。</small></span><b>選ぶ</b>
-              </button>
-              <button id="starterAll" class="starter-choice-card" type="button" data-starter-mode="all">
-                <span><strong>画像から全部見る</strong><small>名前が分からなくても探せます。</small></span><b>選ぶ</b>
-              </button>
-              <button id="starterSearch" class="starter-choice-card" type="button" data-starter-mode="search">
-                <span><strong>名前で検索する</strong><small>使いたい1匹が決まっている人向け。</small></span><b>検索</b>
-              </button>
+              <details class="starter-more-methods">
+                <summary>別の探し方</summary>
+                <div class="starter-choice-stack compact">
+                  <button id="starterPopular" class="starter-choice-card" type="button" data-starter-mode="popular">
+                    <span><strong>よく見るポケモンから</strong><small>対戦で見かけやすい候補。</small></span><b>選ぶ</b>
+                  </button>
+                  <button id="starterAll" class="starter-choice-card" type="button" data-starter-mode="all">
+                    <span><strong>画像から全部見る</strong><small>名前が分からなくても探せます。</small></span><b>選ぶ</b>
+                  </button>
+                  <button id="starterSearch" class="starter-choice-card" type="button" data-starter-mode="search">
+                    <span><strong>名前で検索する</strong><small>使いたい1匹が決まっている人向け。</small></span><b>検索</b>
+                  </button>
+                </div>
+              </details>
             </div>
           </section>
 
