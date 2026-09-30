@@ -1174,7 +1174,7 @@
     state.matches.push(...samples); saveState(); renderAll(); el('settingsDialog').close();
   });
 
-  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js?v=0.8.4-poc.1').catch(()=>{});
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js?v=0.8.4-ui.1').catch(()=>{});
   restoreLiveAssistDraft();
   initializeScreenshotRecognition();
   loadFallbackCompetitiveMeta(); setToday(); renderAll();
