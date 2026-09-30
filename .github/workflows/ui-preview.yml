@@ -1,0 +1,120 @@
+name: Capture Champion Coach UI Preview
+
+on:
+  push:
+    branches:
+      - candidate/v0.8.4-ui-ux-optimization
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Install browser
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Start local site
+        run: |
+          python3 -m http.server 4173 > /tmp/champion-coach-http.log 2>&1 &
+          echo $! > /tmp/champion-coach-http.pid
+
+      - name: Capture iPhone-size screens
+        run: |
+          mkdir -p ui-preview
+          cat > capture-ui.mjs <<'EOF'
+          import { chromium } from 'playwright';
+
+          const browser=await chromium.launch({headless:true});
+          const context=await browser.newContext({
+            viewport:{width:390,height:844},
+            deviceScaleFactor:1,
+            isMobile:true,
+            hasTouch:true,
+            locale:'ja-JP'
+          });
+          const page=await context.newPage();
+          const base='http://127.0.0.1:4173/';
+
+          async function settle(){
+            await page.waitForLoadState('domcontentloaded');
+            await page.waitForTimeout(900);
+          }
+          async function shot(name){
+            await page.screenshot({path:'ui-preview/'+name+'.png',fullPage:true});
+          }
+          async function setStorage(state,liveAssist=null){
+            await page.goto(base);
+            await page.evaluate(({state,liveAssist})=>{
+              localStorage.clear();
+              if(state) localStorage.setItem('championCoach.v1',JSON.stringify(state));
+              if(liveAssist) localStorage.setItem('championCoach.liveAssist.v1',JSON.stringify(liveAssist));
+            },{state,liveAssist});
+          }
+
+          const readyState={
+            version:5,
+            rank:'',
+            team:{
+              name:'シングル練習',
+              format:'single',
+              members:['ガブリアス','アシレーヌ','サーフゴー','カイリュー','ミミッキュ','カバルドン'],
+              favorite:'ガブリアス',
+              plan:'',
+              weak:''
+            },
+            inventory:{unowned:[]},
+            matches:[],
+            onboarding:{trainingComplete:true},
+            metaNotes:[]
+          };
+
+          await setStorage(null);
+          await page.reload(); await settle();
+          await shot('01-home-beginner');
+          await page.click('#quickStartButton'); await page.waitForTimeout(300);
+          await shot('02-team-starter');
+
+          await setStorage(readyState);
+          await page.reload(); await settle();
+          await shot('03-home-ready');
+          await page.click('#quickStartButton'); await page.waitForTimeout(300);
+          await shot('04-assist-input');
+
+          const liveAssist={
+            opponent:['ボーマンダ','ガブリアス','アシレーヌ','グソクムシャ','カバルドン','サーフゴー'],
+            format:'single',
+            updatedAt:new Date().toISOString()
+          };
+          await setStorage(readyState,liveAssist);
+          await page.reload(); await settle();
+          await page.click('#analyzeAssistButton');
+          await page.waitForTimeout(350);
+          await shot('05-assist-result');
+          await page.click('#copyAssistToLog');
+          await page.waitForTimeout(300);
+          await shot('06-match-result-first');
+
+          await browser.close();
+          EOF
+          node capture-ui.mjs
+
+      - name: Upload UI preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: champion-coach-ui-preview-v0.8.4-ui.1
+          path: ui-preview/*.png
+          if-no-files-found: error
