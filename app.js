@@ -141,7 +141,8 @@
     badge.className='tag '+(ready?'low':error?'high':'mid');
     text(badge,ready?'準備済み':busy?'準備中':error?'要確認':'未準備');
     trigger.disabled=!ready;
-    prepare.disabled=busy;
+    prepare.disabled=busy||ready;
+    text(prepare,ready?'準備済み':'初回準備');
     text(el('assistScreenshotStatus'),message||'');
   }
 
@@ -188,7 +189,8 @@
       assistOpponentDraft=normalizedMemberNames(names.filter(Boolean));
       persistLiveAssistDraft();
       renderOpponentDraft('assist');
-      text(el('assistScreenshotStatus'),'認識結果 '+confirmed+'/6。候補が不確かな枠だけタップしてください。候補にない場合は「手動で6匹を選ぶ」から残りだけ追加できます。');
+      const manual=el('assistManualEntry'); if(manual) manual.open=true;
+      text(el('assistScreenshotStatus'),'認識結果 '+confirmed+'/6。候補が不確かな枠だけ確認してください。候補にない場合は下の手動補正で残りだけ追加できます。');
       return;
     }
     const normalized=normalizedMemberNames(names);
@@ -199,7 +201,8 @@
     assistOpponentDraft=normalized;
     persistLiveAssistDraft();
     renderOpponentDraft('assist');
-    text(el('assistScreenshotStatus'),'6匹を確定しました。選出診断を表示します。');
+    const manual=el('assistManualEntry'); if(manual) manual.open=false;
+    text(el('assistScreenshotStatus'),'6匹を確定しました。選出を表示します。');
     runAssistAnalysis();
   }
 
@@ -381,7 +384,12 @@
     const button=el('saveMatchButton'); if(!button) return;
     const max=el('matchFormat')?.value==='single'?3:4;
     const result=!!document.querySelector('input[name="result"]:checked');
-    button.disabled=logOpponentDraft.length!==6 || selectedTeamDraft.length!==max || !result;
+    const opponentReady=logOpponentDraft.length===6;
+    const selectionReady=selectedTeamDraft.length===max;
+    button.disabled=!opponentReady || !selectionReady || !result;
+    text(button,!result?'勝敗を選ぶ':!opponentReady||!selectionReady?'対戦内容を確認する':'この結果を記録する');
+    const summary=el('matchBattleSummary');
+    if(summary) text(summary,'相手 '+logOpponentDraft.length+'/6・選出 '+selectedTeamDraft.length+'/'+max);
   }
 
   function renderOpponentDraft(kind) {
@@ -389,8 +397,11 @@
     syncShadow(isAssist?'assistOpponentTeam':'opponentTeam',draft);
     text(el(isAssist?'assistOpponentCount':'logOpponentCount'),`${draft.length}/6`);
     renderMemberSlots(isAssist?'assistOpponentBuilder':'logOpponentBuilder',draft,{max:6,onRemove:value=>{if(isAssist){assistOpponentDraft=assistOpponentDraft.filter(v=>v!==value);persistLiveAssistDraft();}else logOpponentDraft=logOpponentDraft.filter(v=>v!==value);renderOpponentDraft(kind);}});
-    if(isAssist){const b=el('analyzeAssistButton');if(b)b.disabled=draft.length!==6;}
-    else updateMatchSaveState();
+    if(isAssist){
+      const b=el('analyzeAssistButton');if(b)b.disabled=draft.length!==6;
+      const details=el('assistManualEntry'); if(details && draft.length>0 && draft.length<6) details.open=true;
+      const formatSummary=el('assistFormatSummary'); if(formatSummary) text(formatSummary,el('assistFormat')?.value==='double'?'ダブル':'シングル');
+    } else updateMatchSaveState();
   }
 
   function renderOwnSelection() {
@@ -500,6 +511,13 @@
     el(`screen-${name}`).classList.add('active');
     const nav = el(`nav-${name}`); if (nav) nav.classList.add('active');
     if(name==='team') setTeamPane(activeTeamPane);
+    if(name==='log'){
+      const details=el('matchBattleDetails');
+      const max=el('matchFormat')?.value==='single'?3:4;
+      if(details) details.open=logOpponentDraft.length!==6 || selectedTeamDraft.length!==max;
+      updateMatchSaveState();
+    }
+    if(name==='assist') renderOpponentDraft('assist');
     syncHeaderNavigation(name);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -998,7 +1016,7 @@
   el('pokemonSearch').addEventListener('input',()=>{pickerVisibleLimit=48;renderPokemonCatalog();});
   el('pokemonTypeFilter').addEventListener('change',()=>{pickerVisibleLimit=48;renderPokemonCatalog();});
   el('clearTeamMembers').addEventListener('click',()=>{teamDraft=[];favoriteDraft='';renderTeamDraft();});
-  el('clearAssistOpponent').addEventListener('click',()=>{assistOpponentDraft=[];screenshotRecognition=null;localStorage.removeItem(LIVE_ASSIST_KEY);el('assistScreenshotReview').hidden=true;el('assistScreenshotReview').replaceChildren();hideAssistView();renderOpponentDraft('assist');});
+  el('clearAssistOpponent').addEventListener('click',()=>{assistOpponentDraft=[];screenshotRecognition=null;localStorage.removeItem(LIVE_ASSIST_KEY);el('assistScreenshotReview').hidden=true;el('assistScreenshotReview').replaceChildren();const manual=el('assistManualEntry');if(manual)manual.open=false;hideAssistView();renderOpponentDraft('assist');});
   el('clearLogOpponent').addEventListener('click',()=>{logOpponentDraft=[];renderOpponentDraft('log');});
   el('autoCompleteTeam').addEventListener('click',()=>{
     const errorBox=el('teamErrors');
@@ -1074,6 +1092,7 @@
     const required=lastAssist.format==='single'?3:4;
     selectedTeamDraft=lastAssist.recommended.filter(v=>state.team.members.includes(v)).slice(0,required);
     logOpponentDraft=[...lastAssist.opponent]; renderOpponentDraft('log'); renderOwnSelection();
+    const battleDetails=el('matchBattleDetails'); if(battleDetails) battleDetails.open=false;
     const focusNames = lastAssist.beginnerGuide?.priorities?.map(r=>r.name).slice(0,2) || [];
     const parts = [];
     if (focusNames.length) parts.push(`事前警戒: ${focusNames.join(' / ')}`);
