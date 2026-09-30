@@ -678,3 +678,7 @@ button:disabled{opacity:.42;box-shadow:none!important;cursor:not-allowed}
   .decision-result-card{padding:13px}
   .caution-card{padding:12px}
 }
+
+.screenshot-actions{grid-template-columns:1fr}
+.screenshot-actions>button{width:100%}
+.screenshot-actions>button[hidden]{display:none!important}
