@@ -546,3 +546,135 @@ button:disabled{opacity:.42;box-shadow:none!important;cursor:not-allowed}
 .screenshot-candidate span{font-size:8px;font-weight:850;line-height:1.25;text-align:center;overflow-wrap:anywhere}
 .screenshot-candidate small{font-size:7px;color:var(--muted);margin-top:2px}
 @media(max-width:420px){.screenshot-import-card{padding:11px}.screenshot-actions{grid-template-columns:1fr}.screenshot-candidate{min-height:91px}}
+
+
+/* v0.8.4 UI/UX optimization: decision-first hierarchy */
+.home-focus-card{padding:15px 15px 13px}
+.home-focus-card .progress-top{margin-bottom:8px}
+.home-decision{padding:15px 0 5px}
+.home-decision .section-kicker{display:block;margin-bottom:6px}
+.home-decision h1{font-size:22px;line-height:1.42;margin:0 0 13px;letter-spacing:-.015em}
+.home-decision .home-next-btn{width:100%;min-height:50px;margin:0;font-size:13px}
+.route-details{
+  margin-top:10px;border-top:1px solid var(--line);padding-top:2px
+}
+.route-details>summary{
+  list-style:none;padding:10px 2px 4px;color:#708097;font-size:9px;font-weight:850;cursor:pointer
+}
+.route-details>summary::-webkit-details-marker{display:none}
+.route-details>summary:after{content:"見る";float:right;color:var(--blue);font-size:8px}
+.route-details[open]>summary:after{content:"閉じる"}
+.route-details .progress-list{margin-top:8px}
+.route-details .progress-list>[data-route-step]{min-height:34px;padding:4px 6px}
+.route-details .progress-list>[data-route-step] b{width:23px;height:23px}
+#screen-home>.next-card{display:none!important}
+
+.decision-step-head{padding-bottom:10px}
+.decision-step-head h1{font-size:25px;line-height:1.28}
+.decision-step-head p,.guided-log .step-head p{
+  margin:7px 0 0;color:var(--muted);font-size:10px;line-height:1.55
+}
+.realtime-input-panel{padding:12px;border-radius:18px}
+.compact-control{
+  margin:0 0 9px;border:0;background:transparent
+}
+.compact-control>summary{
+  padding:5px 1px 7px;font-size:9px;color:#78869a
+}
+.compact-control[open]{padding-bottom:8px;border-bottom:1px solid var(--line)}
+.compact-control label{padding:0 1px}
+
+.screenshot-import-card{
+  margin:0;padding:15px;border:1px solid #bdd4f7;border-radius:18px;
+  background:linear-gradient(180deg,#f8fbff 0%,#f3f8ff 100%)
+}
+.screenshot-import-head{gap:8px}
+.screenshot-import-head .section-kicker{display:block;margin-bottom:4px}
+.screenshot-import-head strong{font-size:14px;line-height:1.38}
+.screenshot-import-head small{font-size:9px}
+.screenshot-actions{grid-template-columns:minmax(0,1.55fr) minmax(88px,.65fr);gap:7px;margin:12px 0 7px}
+.screenshot-actions .battle-primary-btn{min-height:50px;font-size:12px}
+.screenshot-actions .setup-btn{min-height:50px;font-size:9px}
+#assistScreenshotStatus{margin:4px 1px 0;line-height:1.45}
+
+.manual-entry-details{
+  margin-top:10px;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden
+}
+.manual-entry-details>summary{
+  list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding:11px 12px;font-size:9px;font-weight:850;color:#66768d;cursor:pointer
+}
+.manual-entry-details>summary::-webkit-details-marker{display:none}
+.manual-entry-details>summary:after{content:"+";margin-left:auto;color:#8a98aa;font-size:14px}
+.manual-entry-details[open]>summary:after{content:"−"}
+.manual-entry-details>summary .hint{margin-left:auto}
+.manual-entry-body{padding:0 11px 11px;border-top:1px solid var(--line)}
+.manual-entry-body .team-slots{margin-top:10px}
+.manual-entry-body #analyzeAssistButton{margin-top:9px}
+
+.decision-result-card{
+  margin-top:12px;padding:16px;border-color:#bfe1d1;background:#effaf5;
+  box-shadow:0 12px 30px rgba(27,167,112,.09)
+}
+.decision-result-card .focus-card-title strong{font-size:15px}
+.decision-result-card .recommended-pokemon-grid{margin-top:10px}
+.decision-result-card .recommended-pokemon-card{min-height:100px}
+.decision-result-card .opening-action{margin-top:10px;padding:11px;border-radius:13px}
+.decision-result-card .opening-action strong{font-size:11px;line-height:1.5}
+.caution-card{margin-top:9px;background:#fff8f8;box-shadow:none}
+.caution-card .focus-card-title{margin-bottom:7px}
+.secondary-assist-action{
+  margin-top:12px;padding-top:10px;border-top:1px solid #d6e9df;
+  display:flex;align-items:center;justify-content:space-between;gap:10px
+}
+.secondary-assist-action>span{font-size:8px;color:var(--muted);font-weight:850}
+.secondary-assist-action button{width:auto;min-height:34px;margin:0;padding:0 12px;font-size:9px}
+
+.guided-log{padding-top:13px}
+.result-first{margin:5px 0 12px;padding:12px;border:1px solid #cbdcf8;background:#f7faff;border-radius:15px}
+.result-first legend{font-size:9px;font-weight:900;color:#607087;padding:0 4px}
+.result-first .result-large{margin-top:3px}
+.result-first .result-large label span{min-height:48px;font-size:13px}
+.battle-details{
+  margin:0 0 11px;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden
+}
+.battle-details>summary{
+  list-style:none;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;
+  padding:11px 12px;cursor:pointer
+}
+.battle-details>summary::-webkit-details-marker{display:none}
+.battle-details>summary>span{font-size:10px;font-weight:850}
+.battle-details>summary>small{font-size:8px;color:var(--muted)}
+.battle-details[open]>summary{border-bottom:1px solid var(--line)}
+.battle-details .review-fields{padding:10px}
+.guided-log #saveMatchButton{min-height:48px;margin-top:9px;font-size:12px}
+.guided-log #saveMatchButton:disabled{opacity:.58}
+
+.starter-more-methods{
+  border:1px solid var(--line);border-radius:15px;background:#fbfcfe;overflow:hidden
+}
+.starter-more-methods>summary{
+  list-style:none;padding:11px 13px;font-size:9px;font-weight:850;color:#6d7c91;cursor:pointer
+}
+.starter-more-methods>summary::-webkit-details-marker{display:none}
+.starter-more-methods>summary:after{content:"+";float:right;font-size:13px;color:#8a98aa}
+.starter-more-methods[open]>summary:after{content:"−"}
+.starter-more-methods .starter-choice-stack{padding:0 9px 9px;gap:7px}
+.starter-more-methods .starter-choice-card{min-height:64px;padding:10px 11px;box-shadow:none}
+.starter-more-methods .starter-choice-card strong{font-size:11px}
+
+#teamComposeArea>.picker-field{margin-top:5px}
+#teamComposeArea>.secondary-choice{margin-top:8px}
+#teamComposeArea>.review-details{margin-top:8px}
+#teamComposeArea>button[type="submit"]{min-height:48px;font-size:12px}
+
+@media(max-width:420px){
+  .home-focus-card{padding:14px 13px 12px}
+  .home-decision h1{font-size:20px}
+  .decision-step-head h1{font-size:23px}
+  .screenshot-actions{grid-template-columns:1fr}
+  .screenshot-actions .setup-btn{min-height:40px}
+  .realtime-input-panel{padding:10px}
+  .decision-result-card{padding:13px}
+  .caution-card{padding:12px}
+}
