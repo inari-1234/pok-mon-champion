@@ -356,9 +356,9 @@
     const draftMatchesSaved=teamDraft.length===6 && savedMembers.length===6 && teamDraft.every((v,i)=>v===savedMembers[i]);
     el('teamPrimaryTabs').hidden=!draftMatchesSaved;
     el('teamMoreMenu').hidden=!draftMatchesSaved;
-    text(el('teamScreenTitle'),hasDraft?'6匹のチームを作る。':'使いたいポケモンを1匹選ぶ。');
+    text(el('teamScreenTitle'),'チームを作る');
     text(el('teamBuildKicker'),hasDraft?'STEP 2':'STEP 1');
-    text(el('teamBuildTitle'),!hasDraft?'どうやって1匹目を探しますか？':teamDraft.length>=6?'この6匹を確認する':'残りのポケモンを決める');
+    text(el('teamBuildTitle'),!hasDraft?'最初の1匹を選ぶ':teamDraft.length>=6?'この6匹を確認する':'残りのポケモンを決める');
     const advice=el('teamStarterAdvice');
     if(!teamDraft.length){advice.hidden=true;advice.textContent='';}
     else {advice.hidden=false;advice.textContent=`軸: ${favoriteDraft || teamDraft[0]}　${teamDraft.length}/6匹`;}
@@ -1075,7 +1075,7 @@
     errorBox.hidden=true;
     persistLiveAssistDraft();
     renderAssist(C.buildSelectionAssist(opponent, state.team.members, state.matches, state.metaNotes, format, teamPlanForFormat(format)));
-    el('assistFocusPanel').scrollIntoView({behavior:'smooth',block:'start'});
+    el('assistResult').scrollIntoView({behavior:'smooth',block:'start'});
     return true;
   }
 
