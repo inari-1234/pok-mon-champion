@@ -44,7 +44,7 @@ assert html.index('id="assistResult"') < html.index('id="assistFocusPanel"'), 's
 assert html.index('class="result-first"') < html.index('id="matchBattleDetails"'), 'match result must be first'
 assert '<section class="next-card">' not in html, 'home next action must be merged into the progress card'
 assert 'v0.8.4-ui.1' in html and 'header-text-btn' in style
-assert 'あなたは今ここ' in html and 'homeCoachTitle' in html and 'homeProgressBar' in html
+assert '今のステップ' in html and '今やること' in html and 'homeCoachTitle' in html and 'homeProgressBar' in html
 assert 'data-team-pane="training"' in html and 'assistDetails' in html
 assert 'data-pokemon-category="recommended"' in html
 assert 'data-environment-format="single"' in html
@@ -81,7 +81,7 @@ assert 'FORM_SPRITE_IDS' in app and 'raichualola:10100' in app and 'rotomwash:10
 assert '/sprites/pokemon/other/home/${spriteId}.png' in app
 assert 'trainingComplete' in app
 assert '育成を確認して対戦へ' in app
-assert '対戦が終わったら結果を記録' in html and 'この方針で対戦する' not in html
+assert '結果を記録する' in html and 'この方針で対戦する' not in html
 assert 'id="analyzeAssistButton"' in html and 'disabled' in str(soup.find(id='analyzeAssistButton'))
 assert soup.find(id='assistScreenshotInput') and soup.find(id='assistScreenshotInput').get('accept')=='image/*'
 assert all(soup.find(id=x) for x in ['assistRecognitionPrepare','assistScreenshotTrigger','assistScreenshotStatus','assistScreenshotReview'])
