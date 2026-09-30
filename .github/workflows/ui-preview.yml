@@ -37,6 +37,7 @@ jobs:
           mkdir -p ui-preview
           cat > capture-ui.mjs <<'EOF'
           import { chromium } from 'playwright';
+          import fs from 'node:fs/promises';
 
           const browser=await chromium.launch({headless:true});
           const context=await browser.newContext({
@@ -48,12 +49,19 @@ jobs:
           });
           const page=await context.newPage();
           const base='http://127.0.0.1:4173/';
+          const metrics={};
 
           async function settle(){
             await page.waitForLoadState('domcontentloaded');
             await page.waitForTimeout(900);
           }
           async function shot(name){
+            metrics[name]=await page.evaluate(()=>({
+              activeScreen:document.querySelector('.screen.active')?.id||'',
+              viewportHeight:window.innerHeight,
+              scrollHeight:document.documentElement.scrollHeight,
+              primary:[...document.querySelectorAll('.screen.active .primary-btn')].filter(x=>!x.hidden).map(x=>({id:x.id,text:x.textContent.trim(),disabled:x.disabled,top:Math.round(x.getBoundingClientRect().top)}))
+            }));
             await page.screenshot({path:'ui-preview/'+name+'.png',fullPage:true});
           }
           async function setStorage(state,liveAssist=null){
@@ -101,12 +109,13 @@ jobs:
           };
           await setStorage(readyState,liveAssist);
           await page.reload(); await settle();
-          await page.click('#analyzeAssistButton');
+          await page.evaluate(()=>document.querySelector('#analyzeAssistButton')?.click());
           await page.waitForTimeout(350);
           await shot('05-assist-result');
           await page.click('#copyAssistToLog');
           await page.waitForTimeout(300);
           await shot('06-match-result-first');
+          await fs.writeFile('ui-preview/ui-metrics.json',JSON.stringify(metrics,null,2));
 
           await browser.close();
           EOF
@@ -116,5 +125,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: champion-coach-ui-preview-v0.8.4-ui.1
-          path: ui-preview/*.png
+          path: ui-preview/
           if-no-files-found: error
