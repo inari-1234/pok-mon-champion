@@ -75,7 +75,7 @@
       if(activeTeamPane==='training') text(title,'1匹ずつ対戦用に育てる。');
       else if(activeTeamPane==='plan') text(title,'このチームの戦い方を見る。');
       else if(activeTeamPane==='stats') text(title,'対戦から振り返る。');
-      else text(title,teamDraft.length?'6匹のチームを作る。':'使いたいポケモンを1匹選ぶ。');
+      else text(title,'チームを作る');
     }
   }
   function syncEnvironmentControls() {
