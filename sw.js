@@ -1,5 +1,5 @@
-const VERSION='0.8.4-poc.1';
-const CACHE='champion-coach-v8.4-screenshot-poc1';
+const VERSION='0.8.4-ui.1';
+const CACHE='champion-coach-v8.4-ui1';
 const CORE=[
   './',
   './index.html',
