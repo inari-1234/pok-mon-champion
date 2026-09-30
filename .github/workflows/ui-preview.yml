@@ -60,9 +60,11 @@ jobs:
               activeScreen:document.querySelector('.screen.active')?.id||'',
               viewportHeight:window.innerHeight,
               scrollHeight:document.documentElement.scrollHeight,
+              scrollY:Math.round(window.scrollY),
               primary:[...document.querySelectorAll('.screen.active .primary-btn')].filter(x=>!x.hidden).map(x=>({id:x.id,text:x.textContent.trim(),disabled:x.disabled,top:Math.round(x.getBoundingClientRect().top)}))
             }));
-            await page.screenshot({path:'ui-preview/'+name+'.png',fullPage:true});
+            await page.screenshot({path:'ui-preview/'+name+'-viewport.png',fullPage:false});
+            await page.screenshot({path:'ui-preview/'+name+'-full.png',fullPage:true});
           }
           async function setStorage(state,liveAssist=null){
             await page.goto(base);
