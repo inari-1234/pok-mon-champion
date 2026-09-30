@@ -17,11 +17,11 @@ for src in ['pokemon-data.js','competitive-data.js','single-competitive-data.js'
     assert (root/src).exists(), f'missing {src}'
     node=next((x for x in soup.find_all('script',src=True) if x.get('src','').split('?')[0]==src),None)
     assert node, f'index does not load {src}'
-    assert node.get('src')==f'{src}?v=0.8.4-poc.1', f'{src} is not cache-busted to v0.8.4-poc.1'
+    assert node.get('src')==f'{src}?v=0.8.4-ui.1', f'{src} is not cache-busted to v0.8.4-ui.1'
 assert soup.find('link',rel='manifest'), 'manifest link missing'
 json.loads((root/'manifest.webmanifest').read_text())
 sw=(root/'sw.js').read_text()
-assert 'champion-coach-v8.4-screenshot-poc1' in sw
+assert 'champion-coach-v8.4-ui1' in sw
 assert 'competitive-data.js' in sw
 assert 'single-competitive-data.js' in sw
 assert 'screenshot-recognition.js' in sw
@@ -30,14 +30,20 @@ assert 'latest.json' in sw
 assert (root/'version.json').exists(), 'version.json missing'
 assert (root/'latest.json').exists(), 'latest.json missing'
 latest=json.loads((root/'latest.json').read_text())
-assert latest.get('version')=='0.8.4-poc.1' and latest.get('sw_cache')=='champion-coach-v8.4-screenshot-poc1', 'latest metadata mismatch'
+assert latest.get('version')=='0.8.4-ui.1' and latest.get('sw_cache')=='champion-coach-v8.4-ui1', 'latest metadata mismatch'
 version=json.loads((root/'version.json').read_text())
-assert version.get('version')=='0.8.4-poc.1', 'wrong repository build version'
+assert version.get('version')=='0.8.4-ui.1', 'wrong repository build version'
 assert (root/'.github/workflows/validate.yml').exists(), 'validation workflow missing'
 assert (root/'.github/workflows/pages.yml').exists(), 'pages workflow missing'
 assert 'data-shadow' in style and 'pokemon-grid' in style
 assert 'screenshot-import-card' in style and 'screenshot-candidate' in style
-assert 'v0.8.4-poc.1' in html and 'header-text-btn' in style
+assert 'home-focus-card' in style and 'decision-result-card' in style and 'result-first' in style
+assert 'route-details' in html and 'starter-more-methods' in html
+assert all(soup.find(id=x) for x in ['assistManualEntry','assistFormatSummary','matchBattleDetails','matchBattleSummary'])
+assert html.index('id="assistResult"') < html.index('id="assistFocusPanel"'), 'selection conclusion must precede caution detail'
+assert html.index('class="result-first"') < html.index('id="matchBattleDetails"'), 'match result must be first'
+assert '<section class="next-card">' not in html, 'home next action must be merged into the progress card'
+assert 'v0.8.4-ui.1' in html and 'header-text-btn' in style
 assert 'あなたは今ここ' in html and 'homeCoachTitle' in html and 'homeProgressBar' in html
 assert 'data-team-pane="training"' in html and 'assistDetails' in html
 assert 'data-pokemon-category="recommended"' in html
@@ -59,12 +65,12 @@ assert 'sprite-placeholder' in style and "slot-img sprite-placeholder" in app
 assert '<meta name="theme-color" content="#f5f8fd">' in html
 assert '<meta name="apple-mobile-web-app-status-bar-style" content="default">' in html
 assert html.count('</main>')==1, 'main must close exactly once'
-assert soup.find('link',rel='stylesheet').get('href')=='styles.css?v=0.8.4-poc.1'
-assert soup.find('link',rel='manifest').get('href')=='manifest.webmanifest?v=0.8.4-poc.1'
+assert soup.find('link',rel='stylesheet').get('href')=='styles.css?v=0.8.4-ui.1'
+assert soup.find('link',rel='manifest').get('href')=='manifest.webmanifest?v=0.8.4-ui.1'
 assert '<ol class="progress-list">' not in html and 'role="list"' in html, 'progress must not rely on native numbering'
 assert '[hidden]{display:none!important}' in style
-assert "register('./sw.js?v=0.8.4-poc.1')" in app
-assert "const VERSION='0.8.4-poc.1';" in sw
+assert "register('./sw.js?v=0.8.4-ui.1')" in app
+assert "const VERSION='0.8.4-ui.1';" in sw
 assert 'cacheFirstWithRefresh' not in sw, 'cache-first runtime assets can mix releases'
 assert 'event.respondWith(networkFirst(event.request))' in sw
 manifest=json.loads((root/'manifest.webmanifest').read_text())
